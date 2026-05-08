@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chapter 11: LINQ — Advanced C# &amp; .NET for Newbies</title>
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-header"><a href="../index.html"><div class="book-title">Advanced C# &amp; .NET for Newbies</div><div class="book-subtitle">A beginner-friendly guide</div></a></div>
+    <nav>
+      <div class="nav-part"><a href="../index.html">📖 Table of Contents</a><a href="../introduction.html">Introduction</a><a href="../about-author.html">About the Author</a></div>
+      <div class="nav-part">
+        <div class="nav-part-title">Part 1 — Object-Oriented Programming</div>
+        <a href="../part-1/chapter-1.html">Ch 1 · What is C#?</a><a href="../part-1/chapter-2.html">Ch 2 · Classes &amp; Objects</a><a href="../part-1/chapter-3.html">Ch 3 · Encapsulation</a><a href="../part-1/chapter-4.html">Ch 4 · Inheritance</a><a href="../part-1/chapter-5.html">Ch 5 · Polymorphism</a><a href="../part-1/chapter-6.html">Ch 6 · Abstraction</a><a href="../part-1/exercises.html">Part 1 Exercises</a>
+      </div>
+      <div class="nav-part">
+        <div class="nav-part-title">Part 2 — Advanced C# Concepts</div>
+        <a href="chapter-7.html">Ch 7 · Generics</a><a href="chapter-8.html">Ch 8 · Collections</a><a href="chapter-9.html">Ch 9 · Exceptions</a><a href="chapter-10.html">Ch 10 · Interfaces vs Abstract</a><a href="chapter-11.html">Ch 11 · LINQ</a><a href="chapter-12.html">Ch 12 · Delegates &amp; Lambdas</a><a href="chapter-13.html">Ch 13 · Nullable Types</a><a href="exercises.html">Part 2 Exercises</a>
+      </div>
+      <div class="nav-part">
+        <div class="nav-part-title">Part 3 — ASP.NET Core Basics</div>
+        <a href="../part-3/chapter-14.html">Ch 14 · What is ASP.NET Core?</a><a href="../part-3/chapter-15.html">Ch 15 · Dependency Injection</a><a href="../part-3/chapter-16.html">Ch 16 · REST APIs</a><a href="../part-3/chapter-17.html">Ch 17 · Controllers, Services, Repos</a><a href="../part-3/chapter-18.html">Ch 18 · Entity Framework Core</a><a href="../part-3/chapter-19.html">Ch 19 · Configuration</a><a href="../part-3/exercises.html">Part 3 Exercises</a>
+      </div>
+      <div class="nav-part">
+        <div class="nav-part-title">Part 4 — ASP.NET Core Advanced</div>
+        <a href="../part-4/chapter-20.html">Ch 20 · Authentication &amp; Authorization</a><a href="../part-4/chapter-21.html">Ch 21 · JWT Authentication</a><a href="../part-4/chapter-22.html">Ch 22 · Exception Handling</a><a href="../part-4/chapter-23.html">Ch 23 · Validation</a><a href="../part-4/chapter-24.html">Ch 24 · Microservices</a><a href="../part-4/exercises.html">Part 4 Exercises</a>
+      </div>
+      <div class="nav-part">
+        <div class="nav-part-title">Part 5 — Conclusion</div>
+        <a href="../part-5/chapter-25.html">Ch 25 · The .NET Ecosystem</a><a href="../part-5/chapter-26.html">Ch 26 · What to Learn Next</a><a href="../part-5/conclusion.html">Conclusion</a>
+      </div>
+    </nav>
+  </aside>
+
+  <div class="content-wrapper">
+    <main class="content">
+
+      <div class="chapter-header">
+        <div class="chapter-tag part-2">Part 2 · Chapter 11</div>
+        <h1>LINQ — The Query Language Built Into C#</h1>
+        <p class="chapter-intro">LINQ (Language Integrated Query) is one of the most beloved features in C#. It gives you a powerful, readable way to filter, sort, transform, and aggregate any collection of data — in a single expressive line of code.</p>
+      </div>
+
+      <div class="learn-box">
+        <h4>What you'll learn in this chapter</h4>
+        <ul>
+          <li>What LINQ is and the problem it solves</li>
+          <li>Method syntax vs query syntax — two ways to write the same LINQ</li>
+          <li>Core LINQ methods: <code>Where</code>, <code>Select</code>, <code>OrderBy</code></li>
+          <li>Aggregation: <code>Count</code>, <code>Sum</code>, <code>Average</code>, <code>Min</code>, <code>Max</code></li>
+          <li>Element access: <code>First</code>, <code>FirstOrDefault</code>, <code>Any</code>, <code>All</code></li>
+          <li>Grouping with <code>GroupBy</code></li>
+          <li>How LINQ works on any <code>IEnumerable&lt;T&gt;</code> — including database queries</li>
+        </ul>
+      </div>
+
+      <div class="box analogy">
+        <div class="box-title">🗂️ The Personal Assistant Analogy</div>
+        <p>
+          Imagine you have a personal assistant who can handle any list of things for you.
+          You say: "From my contact list, give me everyone in Lagos, sorted by surname,
+          but only show me their names and phone numbers."
+          <br><br>
+          Without an assistant, you would write a loop, add an if-statement, build a temporary
+          list, then sort it manually. With LINQ, you express the intent directly:
+          <code>.Where(c =&gt; c.City == "Lagos").OrderBy(c =&gt; c.Surname).Select(c =&gt; new { c.Name, c.Phone })</code>.
+          The assistant figures out the details. You just describe what you want.
+        </p>
+      </div>
+
+      <h2>Setup: A Products List</h2>
+      <p>
+        All the examples in this chapter use a list of products. Here is the model and data:
+      </p>
+
+      <pre><span class="kw">public record</span> <span class="type">Product</span>(
+    <span class="kw">string</span>  Name,
+    <span class="kw">string</span>  Category,
+    <span class="kw">decimal</span> Price,
+    <span class="kw">int</span>     Stock,
+    <span class="kw">bool</span>    IsAvailable
+);
+
+<span class="type">List</span><span class="op">&lt;</span><span class="type">Product</span><span class="op">&gt;</span> products <span class="op">=</span>
+[
+    <span class="kw">new</span>(<span class="str">"Laptop Pro"</span>,     <span class="str">"Electronics"</span>, <span class="num">1299.99m</span>, <span class="num">15</span>, <span class="kw">true</span>),
+    <span class="kw">new</span>(<span class="str">"Wireless Mouse"</span>, <span class="str">"Electronics"</span>,   <span class="num">29.99m</span>, <span class="num">200</span>, <span class="kw">true</span>),
+    <span class="kw">new</span>(<span class="str">"Desk Chair"</span>,     <span class="str">"Furniture"</span>,    <span class="num">349.00m</span>,  <span class="num">8</span>, <span class="kw">true</span>),
+    <span class="kw">new</span>(<span class="str">"Standing Desk"</span>,  <span class="str">"Furniture"</span>,    <span class="num">799.00m</span>,  <span class="num">3</span>, <span class="kw">true</span>),
+    <span class="kw">new</span>(<span class="str">"Notebook"</span>,       <span class="str">"Stationery"</span>,     <span class="num">4.99m</span>, <span class="num">500</span>, <span class="kw">true</span>),
+    <span class="kw">new</span>(<span class="str">"USB Hub"</span>,        <span class="str">"Electronics"</span>,   <span class="num">49.99m</span>,  <span class="num">0</span>, <span class="kw">false</span>),
+    <span class="kw">new</span>(<span class="str">"Ergonomic Pad"</span>,  <span class="str">"Furniture"</span>,     <span class="num">24.99m</span>, <span class="num">45</span>, <span class="kw">true</span>),
+    <span class="kw">new</span>(<span class="str">"Whiteboard"</span>,     <span class="str">"Stationery"</span>,    <span class="num">89.99m</span>,  <span class="num">12</span>, <span class="kw">true</span>),
+];</pre>
+
+      <h2>Where — Filtering</h2>
+      <p>
+        <code>Where</code> keeps only the elements that satisfy a condition:
+      </p>
+
+      <pre><span class="cmt">// Products that are in stock and available</span>
+<span class="kw">var</span> available <span class="op">=</span> products
+    .<span class="fn">Where</span>(p <span class="op">=&gt;</span> p.IsAvailable <span class="op">&amp;&amp;</span> p.Stock <span class="op">&gt;</span> <span class="num">0</span>)
+    .<span class="fn">ToList</span>();
+
+<span class="cmt">// Electronics over £50</span>
+<span class="kw">var</span> expensiveElectronics <span class="op">=</span> products
+    .<span class="fn">Where</span>(p <span class="op">=&gt;</span> p.Category <span class="op">==</span> <span class="str">"Electronics"</span> <span class="op">&amp;&amp;</span> p.Price <span class="op">&gt;</span> <span class="num">50m</span>)
+    .<span class="fn">ToList</span>();
+
+<span class="kw">foreach</span> (<span class="kw">var</span> p <span class="kw">in</span> expensiveElectronics)
+    <span class="type">Console</span>.<span class="fn">WriteLine</span>(<span class="op">$</span><span class="str">"{p.Name}: £{p.Price}"</span>);
+<span class="cmt">// Laptop Pro: £1299.99</span></pre>
+
+      <h2>Select — Transforming</h2>
+      <p>
+        <code>Select</code> projects each element into a new form — like SQL's SELECT clause:
+      </p>
+
+      <pre><span class="cmt">// Get just the names</span>
+<span class="type">IEnumerable</span><span class="op">&lt;</span><span class="kw">string</span><span class="op">&gt;</span> names <span class="op">=</span> products.<span class="fn">Select</span>(p <span class="op">=&gt;</span> p.Name);
+
+<span class="cmt">// Project to an anonymous type with only the fields you need</span>
+<span class="kw">var</span> catalogue <span class="op">=</span> products
+    .<span class="fn">Where</span>(p <span class="op">=&gt;</span> p.IsAvailable)
+    .<span class="fn">Select</span>(p <span class="op">=&gt;</span> <span class="kw">new</span> { p.Name, p.Price, p.Category })
+    .<span class="fn">ToList</span>();
+
+<span class="kw">foreach</span> (<span class="kw">var</span> item <span class="kw">in</span> catalogue)
+    <span class="type">Console</span>.<span class="fn">WriteLine</span>(<span class="op">$</span><span class="str">"{item.Name} ({item.Category}) — £{item.Price}"</span>);
+
+<span class="cmt">// Apply a transformation: increase all prices by 10%</span>
+<span class="kw">var</span> pricesRaised <span class="op">=</span> products.<span class="fn">Select</span>(p <span class="op">=&gt;</span> p <span class="kw">with</span> { Price <span class="op">=</span> p.Price <span class="op">*</span> <span class="num">1.1m</span> });</pre>
+
+      <h2>OrderBy and ThenBy — Sorting</h2>
+      <pre><span class="cmt">// Sort by price ascending</span>
+<span class="kw">var</span> byPrice <span class="op">=</span> products.<span class="fn">OrderBy</span>(p <span class="op">=&gt;</span> p.Price).<span class="fn">ToList</span>();
+
+<span class="cmt">// Sort by category, then by price descending within each category</span>
+<span class="kw">var</span> sorted <span class="op">=</span> products
+    .<span class="fn">OrderBy</span>(p <span class="op">=&gt;</span> p.Category)
+    .<span class="fn">ThenByDescending</span>(p <span class="op">=&gt;</span> p.Price)
+    .<span class="fn">ToList</span>();
+
+<span class="kw">foreach</span> (<span class="kw">var</span> p <span class="kw">in</span> sorted)
+    <span class="type">Console</span>.<span class="fn">WriteLine</span>(<span class="op">$</span><span class="str">"{p.Category,-15} {p.Name,-20} £{p.Price,8:F2}"</span>);</pre>
+
+      <h2>Aggregation Methods</h2>
+      <pre><span class="kw">int</span>     total    <span class="op">=</span> products.<span class="fn">Count</span>();
+<span class="kw">int</span>     inStock  <span class="op">=</span> products.<span class="fn">Count</span>(p <span class="op">=&gt;</span> p.Stock <span class="op">&gt;</span> <span class="num">0</span>);
+<span class="kw">decimal</span> sumPrice <span class="op">=</span> products.<span class="fn">Sum</span>(p <span class="op">=&gt;</span> p.Price);
+<span class="kw">decimal</span> avgPrice <span class="op">=</span> products.<span class="fn">Average</span>(p <span class="op">=&gt;</span> p.Price);
+<span class="kw">decimal</span> maxPrice <span class="op">=</span> products.<span class="fn">Max</span>(p <span class="op">=&gt;</span> p.Price);
+<span class="kw">decimal</span> minPrice <span class="op">=</span> products.<span class="fn">Min</span>(p <span class="op">=&gt;</span> p.Price);
+
+<span class="type">Console</span>.<span class="fn">WriteLine</span>(<span class="op">$</span><span class="str">"Total products: {total}"</span>);
+<span class="type">Console</span>.<span class="fn">WriteLine</span>(<span class="op">$</span><span class="str">"In stock: {inStock}"</span>);
+<span class="type">Console</span>.<span class="fn">WriteLine</span>(<span class="op">$</span><span class="str">"Total catalogue value: £{sumPrice:F2}"</span>);
+<span class="type">Console</span>.<span class="fn">WriteLine</span>(<span class="op">$</span><span class="str">"Average price: £{avgPrice:F2}"</span>);
+<span class="type">Console</span>.<span class="fn">WriteLine</span>(<span class="op">$</span><span class="str">"Most expensive: £{maxPrice:F2}"</span>);
+<span class="type">Console</span>.<span class="fn">WriteLine</span>(<span class="op">$</span><span class="str">"Cheapest: £{minPrice:F2}"</span>);</pre>
+
+      <h2>First, Any, All</h2>
+      <pre><span class="cmt">// First matching element — throws if none found</span>
+<span class="type">Product</span> cheapest <span class="op">=</span> products.<span class="fn">OrderBy</span>(p <span class="op">=&gt;</span> p.Price).<span class="fn">First</span>();
+
+<span class="cmt">// FirstOrDefault — returns null if none found (safe)</span>
+<span class="type">Product</span><span class="op">?</span> laptop <span class="op">=</span> products.<span class="fn">FirstOrDefault</span>(p <span class="op">=&gt;</span> p.Name.<span class="fn">Contains</span>(<span class="str">"Laptop"</span>));
+
+<span class="cmt">// Any — does at least one element match?</span>
+<span class="kw">bool</span> hasOutOfStock <span class="op">=</span> products.<span class="fn">Any</span>(p <span class="op">=&gt;</span> p.Stock <span class="op">==</span> <span class="num">0</span>);  <span class="cmt">// true</span>
+
+<span class="cmt">// All — do ALL elements match?</span>
+<span class="kw">bool</span> allAvailable <span class="op">=</span> products.<span class="fn">All</span>(p <span class="op">=&gt;</span> p.IsAvailable);  <span class="cmt">// false</span>
+
+<span class="type">Console</span>.<span class="fn">WriteLine</span>(<span class="op">$</span><span class="str">"Has out-of-stock items: {hasOutOfStock}"</span>);
+<span class="type">Console</span>.<span class="fn">WriteLine</span>(<span class="op">$</span><span class="str">"All available: {allAvailable}"</span>);</pre>
+
+      <h2>GroupBy</h2>
+      <p>
+        <code>GroupBy</code> organises elements into named groups — like SQL's GROUP BY:
+      </p>
+
+      <pre><span class="cmt">// Group products by category and count each group</span>
+<span class="kw">var</span> byCategory <span class="op">=</span> products
+    .<span class="fn">GroupBy</span>(p <span class="op">=&gt;</span> p.Category)
+    .<span class="fn">Select</span>(g <span class="op">=&gt;</span> <span class="kw">new</span>
+    {
+        Category <span class="op">=</span> g.Key,
+        Count    <span class="op">=</span> g.<span class="fn">Count</span>(),
+        AvgPrice <span class="op">=</span> g.<span class="fn">Average</span>(p <span class="op">=&gt;</span> p.Price)
+    })
+    .<span class="fn">OrderBy</span>(g <span class="op">=&gt;</span> g.Category);
+
+<span class="kw">foreach</span> (<span class="kw">var</span> group <span class="kw">in</span> byCategory)
+    <span class="type">Console</span>.<span class="fn">WriteLine</span>(<span class="op">$</span><span class="str">"{group.Category}: {group.Count} items, avg £{group.AvgPrice:F2}"</span>);
+<span class="cmt">// Electronics: 3 items, avg £459.99</span>
+<span class="cmt">// Furniture: 3 items, avg £391.00</span>
+<span class="cmt">// Stationery: 2 items, avg £47.49</span></pre>
+
+      <h2>Method Syntax vs Query Syntax</h2>
+      <p>
+        LINQ has two syntaxes. They compile to exactly the same code — use whichever you find more readable:
+      </p>
+
+      <pre><span class="cmt">// Method syntax — most common in modern C#</span>
+<span class="kw">var</span> resultMethod <span class="op">=</span> products
+    .<span class="fn">Where</span>(p <span class="op">=&gt;</span> p.Category <span class="op">==</span> <span class="str">"Electronics"</span>)
+    .<span class="fn">OrderBy</span>(p <span class="op">=&gt;</span> p.Price)
+    .<span class="fn">Select</span>(p <span class="op">=&gt;</span> p.Name);
+
+<span class="cmt">// Query syntax — reads more like SQL</span>
+<span class="kw">var</span> resultQuery <span class="op">=</span>
+    <span class="kw">from</span> p <span class="kw">in</span> products
+    <span class="kw">where</span> p.Category <span class="op">==</span> <span class="str">"Electronics"</span>
+    <span class="kw">orderby</span> p.Price
+    <span class="kw">select</span> p.Name;
+
+<span class="cmt">// Both produce identical results</span></pre>
+
+      <div class="box tip">
+        <div class="box-title">💡 Which Syntax Should I Use?</div>
+        <p>
+          Most modern C# uses method syntax. It is more composable (easy to chain operations),
+          and many LINQ methods like <code>Count()</code>, <code>Sum()</code>, and
+          <code>GroupBy()</code> have no query-syntax equivalent. Query syntax can be clearer
+          for complex joins. For this book, we use method syntax throughout.
+        </p>
+      </div>
+
+      <h2>LINQ and Deferred Execution</h2>
+      <p>
+        LINQ queries are <strong>lazy</strong> — they don't execute until you actually iterate the
+        results. This is called deferred execution. Calling <code>.ToList()</code>,
+        <code>.ToArray()</code>, or iterating with <code>foreach</code> triggers execution.
+      </p>
+
+      <pre><span class="cmt">// This does NOT query yet — just builds the query description</span>
+<span class="kw">var</span> query <span class="op">=</span> products.<span class="fn">Where</span>(p <span class="op">=&gt;</span> p.Price <span class="op">&gt;</span> <span class="num">100m</span>);
+
+<span class="cmt">// Execution happens here (when iterating)</span>
+<span class="kw">foreach</span> (<span class="kw">var</span> p <span class="kw">in</span> query)
+    <span class="type">Console</span>.<span class="fn">WriteLine</span>(p.Name);
+
+<span class="cmt">// .ToList() forces immediate execution and stores results in memory</span>
+<span class="type">List</span><span class="op">&lt;</span><span class="type">Product</span><span class="op">&gt;</span> snapshot <span class="op">=</span> query.<span class="fn">ToList</span>();  <span class="cmt">// executes now</span></pre>
+
+      <h2>LINQ Works on Databases Too</h2>
+      <p>
+        LINQ works on any <code>IEnumerable&lt;T&gt;</code> or <code>IQueryable&lt;T&gt;</code>.
+        Entity Framework Core (covered in Chapter 18) lets you write LINQ queries against a
+        database and it translates them into SQL automatically:
+      </p>
+
+      <pre><span class="cmt">// LINQ on in-memory list (IEnumerable)</span>
+<span class="kw">var</span> result <span class="op">=</span> products.<span class="fn">Where</span>(p <span class="op">=&gt;</span> p.Price <span class="op">&gt;</span> <span class="num">100m</span>).<span class="fn">ToList</span>();
+
+<span class="cmt">// LINQ on a database table (IQueryable — via Entity Framework Core)</span>
+<span class="cmt">// The C# code looks identical — EF Core translates it to SQL:</span>
+<span class="cmt">// SELECT * FROM Products WHERE Price > 100</span>
+<span class="kw">var</span> dbResult <span class="op">=</span> context.Products.<span class="fn">Where</span>(p <span class="op">=&gt;</span> p.Price <span class="op">&gt;</span> <span class="num">100m</span>).<span class="fn">ToList</span>();</pre>
+
+      <div class="box key-term">
+        <div class="box-title">📚 Key Terms</div>
+        <p><strong>LINQ:</strong> Language Integrated Query — a set of extension methods on IEnumerable&lt;T&gt; that provide a uniform way to query and transform data collections in C#.</p>
+        <p><strong>Where:</strong> Filters a sequence to include only elements matching a predicate.</p>
+        <p><strong>Select:</strong> Projects each element of a sequence into a new form (transformation).</p>
+        <p><strong>OrderBy / OrderByDescending:</strong> Sorts elements ascending or descending.</p>
+        <p><strong>GroupBy:</strong> Groups elements by a key selector, returning groups with a Key property.</p>
+        <p><strong>Deferred execution:</strong> LINQ queries are not evaluated until iterated. Calling ToList() or ToArray() forces immediate evaluation.</p>
+        <p><strong>Lambda expression:</strong> The <code>p =&gt; p.Price &gt; 100</code> syntax used inside LINQ methods. Covered in detail in Chapter 12.</p>
+      </div>
+
+      <div class="summary">
+        <h4>Chapter Summary</h4>
+        <ul>
+          <li>LINQ is a set of extension methods on <code>IEnumerable&lt;T&gt;</code> for filtering, transforming, sorting, and aggregating data.</li>
+          <li><code>Where</code> filters, <code>Select</code> transforms, <code>OrderBy</code> sorts.</li>
+          <li>Aggregation methods: <code>Count</code>, <code>Sum</code>, <code>Average</code>, <code>Min</code>, <code>Max</code>.</li>
+          <li><code>First</code>/<code>FirstOrDefault</code> get one element; <code>Any</code>/<code>All</code> test conditions.</li>
+          <li><code>GroupBy</code> creates named groups — like SQL's GROUP BY.</li>
+          <li>Method syntax and query syntax produce identical code; modern C# prefers method syntax.</li>
+          <li>LINQ is lazy (deferred execution) — queries run only when iterated or forced with <code>ToList()</code>.</li>
+          <li>Entity Framework Core translates LINQ into SQL — the same C# code queries both in-memory lists and databases.</li>
+        </ul>
+      </div>
+
+      <div class="exercises">
+        <h3>Exercises</h3>
+
+        <div class="exercise">
+          <div class="exercise-num">Exercise 11.1 — Interactive Quiz</div>
+          <p>Which LINQ method filters a collection based on a condition, keeping only elements that match?</p>
+          <div class="interactive-exercise">
+            <input type="text" id="q11-1" placeholder="Type your answer here..." />
+            <button onclick="checkAnswer('q11-1', 'out11-1', 'Where', 'Correct! Where(predicate) returns only elements for which the predicate returns true. For example: products.Where(p => p.Price > 100) keeps only products costing more than £100.')">Check Answer</button>
+            <div class="exercise-output" id="out11-1"></div>
+          </div>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-num">Exercise 11.2 — Code Challenge: Employee Report</div>
+          <p>
+            Create an <code>Employee</code> record with: <code>Name</code>, <code>Department</code>,
+            <code>Salary</code> (decimal), and <code>YearsEmployed</code> (int). Make a list of
+            at least 8 employees across 3 departments.
+          </p>
+          <p>Using LINQ, produce:</p>
+          <ol>
+            <li>All employees in the "Engineering" department, sorted by salary descending</li>
+            <li>The average salary per department (GroupBy)</li>
+            <li>The top 3 highest-paid employees overall</li>
+            <li>Whether any employee has been employed for more than 10 years (Any)</li>
+            <li>Total payroll cost (Sum)</li>
+          </ol>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-num">Exercise 11.3 — Rewrite With Query Syntax</div>
+          <p>Rewrite the following method-syntax LINQ query using query syntax:</p>
+          <pre><span class="kw">var</span> result <span class="op">=</span> products
+    .<span class="fn">Where</span>(p <span class="op">=&gt;</span> p.IsAvailable)
+    .<span class="fn">OrderBy</span>(p <span class="op">=&gt;</span> p.Category)
+    .<span class="fn">ThenBy</span>(p <span class="op">=&gt;</span> p.Price)
+    .<span class="fn">Select</span>(p <span class="op">=&gt;</span> <span class="kw">new</span> { p.Name, p.Price });</pre>
+          <p>Then verify that both queries produce the same output by running them on the products list from this chapter.</p>
+        </div>
+
+      </div>
+
+      <div class="chapter-nav">
+        <a href="chapter-10.html">
+          <span class="nav-label">← Previous</span>
+          <span class="nav-title">Chapter 10: Interfaces vs Abstract Classes</span>
+        </a>
+        <a href="chapter-12.html" class="next">
+          <span class="nav-label">Next →</span>
+          <span class="nav-title">Chapter 12: Delegates &amp; Lambdas</span>
+        </a>
+      </div>
+
+    </main>
+  </div>
+</div>
+<button class="menu-btn" aria-label="Open menu">☰</button>
+<script src="../auth.js"></script>
+<script src="../nav.js"></script>
+<script>
+function checkAnswer(inputId, outputId, correctAnswer, explanation) {
+  const input = document.getElementById(inputId);
+  const output = document.getElementById(outputId);
+  const userAnswer = input.value.trim().toLowerCase();
+  const correct = correctAnswer.toLowerCase();
+  if (userAnswer === correct || userAnswer.includes(correct)) {
+    output.textContent = '✓ Correct! ' + explanation;
+    output.style.color = '#16a34a';
+  } else {
+    output.textContent = '✗ Not quite. The answer is "' + correctAnswer + '". ' + explanation;
+    output.style.color = '#dc2626';
+  }
+}
+</script>
+</body>
+</html>

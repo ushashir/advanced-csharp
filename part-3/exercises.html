@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Part 3 Exercises — Advanced C# &amp; .NET for Newbies</title>
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-header"><a href="../index.html"><div class="book-title">Advanced C# &amp; .NET for Newbies</div><div class="book-subtitle">A beginner-friendly guide</div></a></div>
+    <nav>
+      <div class="nav-part"><a href="../index.html">📖 Table of Contents</a><a href="../introduction.html">Introduction</a><a href="../about-author.html">About the Author</a></div>
+      <div class="nav-part">
+        <div class="nav-part-title">Part 1 — Object-Oriented Programming</div>
+        <a href="../part-1/chapter-1.html">Ch 1 · What is C#?</a><a href="../part-1/chapter-2.html">Ch 2 · Classes &amp; Objects</a><a href="../part-1/chapter-3.html">Ch 3 · Encapsulation</a><a href="../part-1/chapter-4.html">Ch 4 · Inheritance</a><a href="../part-1/chapter-5.html">Ch 5 · Polymorphism</a><a href="../part-1/chapter-6.html">Ch 6 · Abstraction</a><a href="../part-1/exercises.html">Part 1 Exercises</a>
+      </div>
+      <div class="nav-part">
+        <div class="nav-part-title">Part 2 — Advanced C# Concepts</div>
+        <a href="../part-2/chapter-7.html">Ch 7 · Generics</a><a href="../part-2/chapter-8.html">Ch 8 · Collections</a><a href="../part-2/chapter-9.html">Ch 9 · Exceptions</a><a href="../part-2/chapter-10.html">Ch 10 · Interfaces vs Abstract</a><a href="../part-2/chapter-11.html">Ch 11 · LINQ</a><a href="../part-2/chapter-12.html">Ch 12 · Delegates &amp; Lambdas</a><a href="../part-2/chapter-13.html">Ch 13 · Nullable Types</a><a href="../part-2/exercises.html">Part 2 Exercises</a>
+      </div>
+      <div class="nav-part">
+        <div class="nav-part-title">Part 3 — ASP.NET Core Basics</div>
+        <a href="chapter-14.html">Ch 14 · What is ASP.NET Core?</a><a href="chapter-15.html">Ch 15 · Dependency Injection</a><a href="chapter-16.html">Ch 16 · REST APIs</a><a href="chapter-17.html">Ch 17 · Controllers, Services, Repos</a><a href="chapter-18.html">Ch 18 · Entity Framework Core</a><a href="chapter-19.html">Ch 19 · Configuration</a><a href="exercises.html">Part 3 Exercises</a>
+      </div>
+      <div class="nav-part">
+        <div class="nav-part-title">Part 4 — ASP.NET Core Advanced</div>
+        <a href="../part-4/chapter-20.html">Ch 20 · Authentication &amp; Authorization</a><a href="../part-4/chapter-21.html">Ch 21 · JWT Authentication</a><a href="../part-4/chapter-22.html">Ch 22 · Exception Handling</a><a href="../part-4/chapter-23.html">Ch 23 · Validation</a><a href="../part-4/chapter-24.html">Ch 24 · Microservices</a><a href="../part-4/exercises.html">Part 4 Exercises</a>
+      </div>
+      <div class="nav-part">
+        <div class="nav-part-title">Part 5 — Conclusion</div>
+        <a href="../part-5/chapter-25.html">Ch 25 · The .NET Ecosystem</a><a href="../part-5/chapter-26.html">Ch 26 · What to Learn Next</a><a href="../part-5/conclusion.html">Conclusion</a>
+      </div>
+    </nav>
+  </aside>
+
+  <div class="content-wrapper">
+    <main class="content">
+
+      <div class="chapter-header">
+        <div class="chapter-tag" style="background:#16a34a">Part 3 · Exercises</div>
+        <h1>Part 3 Exercises — ASP.NET Core Basics</h1>
+        <p class="chapter-intro">These exercises consolidate everything from Part 3: ASP.NET Core fundamentals, Dependency Injection, REST APIs, layered architecture, Entity Framework Core, and configuration management. Some exercises are short quizzes, some require you to write real code, and some ask you to think and design — all valuable skills for a backend developer.</p>
+      </div>
+
+      <div class="learn-box">
+        <h4>What these exercises cover</h4>
+        <ul>
+          <li>DI lifetime selection and reasoning</li>
+          <li>REST HTTP verb and status code matching</li>
+          <li>Designing a layered architecture for a real-world scenario</li>
+          <li>Writing a minimal API endpoint from scratch</li>
+          <li>Understanding what a database migration does</li>
+          <li>Designing an appsettings.json configuration structure</li>
+          <li>Writing LINQ queries against a DbContext</li>
+          <li>Reflection: what makes a REST API truly "RESTful"</li>
+        </ul>
+      </div>
+
+      <div class="exercises">
+        <h3>Exercises</h3>
+
+        <!-- Exercise 1 -->
+        <div class="exercise">
+          <div class="exercise-num">Exercise 3.1 — DI Lifetime Quiz</div>
+          <p>
+            For each of the following services, select the correct DI lifetime from
+            <strong>Transient</strong>, <strong>Scoped</strong>, or <strong>Singleton</strong>,
+            and write one sentence explaining why.
+          </p>
+          <ol>
+            <li>A <code>NotificationService</code> that sends push notifications to a mobile app. It holds no state between calls and is cheap to create.</li>
+            <li>An <code>AppDbContext</code> (Entity Framework Core DbContext). It must be consistent within a request but released and recreated for the next.</li>
+            <li>An <code>InMemoryCache</code> service that stores frequently-read data for the entire life of the application.</li>
+            <li>A <code>RequestCorrelationService</code> that generates and stores a unique correlation ID for each HTTP request, used for distributed tracing.</li>
+            <li>A <code>CurrencyConverter</code> that calls an external API to get live exchange rates and caches them for one hour. Multiple requests in that hour should reuse the same rates.</li>
+          </ol>
+
+          <div class="interactive-exercise">
+            <p>Quick check: What lifetime is appropriate for a DbContext?</p>
+            <input type="text" id="q3-1" placeholder="Transient, Scoped, or Singleton?" />
+            <button onclick="checkAnswer('q3-1', 'out3-1', 'Scoped', 'Scoped is correct for DbContext. One instance per HTTP request ensures that all database operations within a single request share the same tracking context and unit of work, then the context is disposed cleanly at the end of the request.')">Check Answer</button>
+            <div class="exercise-output" id="out3-1"></div>
+          </div>
+        </div>
+
+        <!-- Exercise 2 -->
+        <div class="exercise">
+          <div class="exercise-num">Exercise 3.2 — REST Verb &amp; Status Code Matching</div>
+          <p>
+            Match each API operation to the most appropriate HTTP verb <em>and</em> success
+            status code. Use: GET, POST, PUT, PATCH, DELETE / 200, 201, 204.
+          </p>
+          <table style="width:100%;border-collapse:collapse;margin:1rem 0;">
+            <thead>
+              <tr style="background:#f1f5f9;text-align:left;">
+                <th style="padding:0.5rem 0.75rem;border:1px solid #e2e8f0;">Operation</th>
+                <th style="padding:0.5rem 0.75rem;border:1px solid #e2e8f0;">Verb</th>
+                <th style="padding:0.5rem 0.75rem;border:1px solid #e2e8f0;">Success Code</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td style="padding:0.5rem 0.75rem;border:1px solid #e2e8f0;">Retrieve a list of all customers</td><td style="padding:0.5rem 0.75rem;border:1px solid #e2e8f0;color:#94a3b8;">?</td><td style="padding:0.5rem 0.75rem;border:1px solid #e2e8f0;color:#94a3b8;">?</td></tr>
+              <tr><td style="padding:0.5rem 0.75rem;border:1px solid #e2e8f0;">Create a new order</td><td style="padding:0.5rem 0.75rem;border:1px solid #e2e8f0;color:#94a3b8;">?</td><td style="padding:0.5rem 0.75rem;border:1px solid #e2e8f0;color:#94a3b8;">?</td></tr>
+              <tr><td style="padding:0.5rem 0.75rem;border:1px solid #e2e8f0;">Replace all fields of a product (full update)</td><td style="padding:0.5rem 0.75rem;border:1px solid #e2e8f0;color:#94a3b8;">?</td><td style="padding:0.5rem 0.75rem;border:1px solid #e2e8f0;color:#94a3b8;">?</td></tr>
+              <tr><td style="padding:0.5rem 0.75rem;border:1px solid #e2e8f0;">Update only the price of an existing product</td><td style="padding:0.5rem 0.75rem;border:1px solid #e2e8f0;color:#94a3b8;">?</td><td style="padding:0.5rem 0.75rem;border:1px solid #e2e8f0;color:#94a3b8;">?</td></tr>
+              <tr><td style="padding:0.5rem 0.75rem;border:1px solid #e2e8f0;">Delete a user account</td><td style="padding:0.5rem 0.75rem;border:1px solid #e2e8f0;color:#94a3b8;">?</td><td style="padding:0.5rem 0.75rem;border:1px solid #e2e8f0;color:#94a3b8;">?</td></tr>
+              <tr><td style="padding:0.5rem 0.75rem;border:1px solid #e2e8f0;">Retrieve a single invoice by its ID</td><td style="padding:0.5rem 0.75rem;border:1px solid #e2e8f0;color:#94a3b8;">?</td><td style="padding:0.5rem 0.75rem;border:1px solid #e2e8f0;color:#94a3b8;">?</td></tr>
+            </tbody>
+          </table>
+          <p>After matching, answer: why does "Create a new order" return 201 rather than 200? What additional information should typically accompany a 201 response?</p>
+        </div>
+
+        <!-- Exercise 3 -->
+        <div class="exercise">
+          <div class="exercise-num">Exercise 3.3 — Design a Layered Architecture</div>
+          <p>
+            You are building the backend for a <strong>library management system</strong>. The
+            system needs to:
+          </p>
+          <ul>
+            <li>Allow users to search for books by title, author, or ISBN.</li>
+            <li>Allow staff to add new books and update book details.</li>
+            <li>Allow users to borrow a book — which reduces the available stock and records who borrowed it and when.</li>
+            <li>Send an email to the user confirming their loan.</li>
+            <li>Allow users to return a book — which increases stock and records the return date.</li>
+            <li>Flag overdue books (not returned within 21 days) and send reminder emails.</li>
+          </ul>
+          <p>Design the layered architecture for this system. Your answer should include:</p>
+          <ol>
+            <li>The names of all Controllers, Services, and Repositories you would create.</li>
+            <li>The interface signatures for at least <code>IBookService</code> and <code>ILoanRepository</code> (method names, parameter types, return types).</li>
+            <li>What DTOs you would define (at minimum: request DTOs for creating a book and for borrowing a book; response DTOs).</li>
+            <li>Which services would have DI dependencies on other services (e.g., <code>LoanService</code> depends on <code>IEmailService</code>).</li>
+          </ol>
+          <div class="box tip">
+            <div class="box-title">💡 Draw it First</div>
+            <p>Before writing code, draw a simple box diagram on paper showing the layers and which boxes connect to which. Architecture is best understood visually first. Then translate it into interface signatures.</p>
+          </div>
+        </div>
+
+        <!-- Exercise 4 -->
+        <div class="exercise">
+          <div class="exercise-num">Exercise 3.4 — Write a Minimal API Endpoint</div>
+          <p>
+            Using the Minimal API style from Chapter 14, write a complete <code>Program.cs</code>
+            for a simple "Todo List" API with the following endpoints:
+          </p>
+          <pre><span class="cmt">// Endpoints to implement:</span>
+<span class="cmt">// GET  /todos        — return all todos</span>
+<span class="cmt">// GET  /todos/{id}   — return a single todo by id, or 404</span>
+<span class="cmt">// POST /todos        — create a new todo from the request body</span>
+<span class="cmt">// PUT  /todos/{id}   — mark a todo as complete</span>
+<span class="cmt">// DELETE /todos/{id} — delete a todo</span></pre>
+          <p>Use an in-memory <code>List&lt;TodoItem&gt;</code> as your data store. Define <code>TodoItem</code> with <code>Id</code>, <code>Title</code>, <code>IsComplete</code>, and <code>CreatedAt</code>.</p>
+          <p>Then answer: if you wanted to add persistence (save todos to a database), what would you need to change? Would any of your endpoint lambdas change?</p>
+        </div>
+
+        <!-- Exercise 5 -->
+        <div class="exercise">
+          <div class="exercise-num">Exercise 3.5 — What Does a Migration Do?</div>
+          <p>
+            Explain in your own words — as if explaining to a junior developer who has never
+            used EF Core — what a database migration is, why it is needed, and what happens
+            when you run these two commands:
+          </p>
+          <pre>dotnet ef migrations add AddUserEmailIndex
+dotnet ef database update</pre>
+          <p>
+            Cover all of the following in your explanation:
+          </p>
+          <ul>
+            <li>What file(s) are created by <code>migrations add</code> and what do they contain?</li>
+            <li>What does <code>database update</code> do to the running database?</li>
+            <li>What happens if three developers each run <code>migrations add</code> on their own branches before merging?</li>
+            <li>Why are migration files important to commit to source control?</li>
+          </ul>
+        </div>
+
+        <!-- Exercise 6 -->
+        <div class="exercise">
+          <div class="exercise-num">Exercise 3.6 — Configuration Challenge</div>
+          <p>
+            Design a complete <code>appsettings.json</code> and <code>appsettings.Development.json</code>
+            for a <strong>ride-sharing application</strong>. The app has the following needs:
+          </p>
+          <ul>
+            <li>A SQL Server database for production; SQLite for development.</li>
+            <li>A Google Maps API key (different key for development and production — use <code>"CONFIGURE_VIA_SECRETS"</code> as the placeholder value).</li>
+            <li>Push notification settings: Firebase project ID and server key (secrets — use placeholders).</li>
+            <li>Rate limiting settings: max requests per minute per IP (different in dev vs prod), and whether rate limiting is enabled.</li>
+            <li>Supported country codes list (e.g., <code>["US", "GB", "NG", "KE"]</code>).</li>
+          </ul>
+          <p>
+            Then: write the corresponding strongly-typed <code>MapsSettings</code> and
+            <code>RateLimitSettings</code> options classes. Show how to register and inject
+            <code>RateLimitSettings</code> using the Options pattern. Write a check in
+            <code>Program.cs</code> that reads the <code>RateLimit:IsEnabled</code> flag
+            and only registers rate-limiting middleware if it is true.
+          </p>
+        </div>
+
+        <!-- Exercise 7 -->
+        <div class="exercise">
+          <div class="exercise-num">Exercise 3.7 — EF Core LINQ Query Challenge</div>
+          <p>
+            Given the following entity model (Blog + Post + Tag), write the LINQ queries
+            described below. Each query must be async (using <code>ToListAsync</code>,
+            <code>FirstOrDefaultAsync</code>, etc.).
+          </p>
+          <pre><span class="kw">public class</span> <span class="type">Blog</span>
+{
+    <span class="kw">public int</span>    Id       { <span class="kw">get</span>; <span class="kw">set</span>; }
+    <span class="kw">public string</span> Title    { <span class="kw">get</span>; <span class="kw">set</span>; } <span class="op">=</span> <span class="kw">string</span>.Empty;
+    <span class="kw">public string</span> AuthorId { <span class="kw">get</span>; <span class="kw">set</span>; } <span class="op">=</span> <span class="kw">string</span>.Empty;
+    <span class="kw">public</span> <span class="type">List</span>&lt;<span class="type">Post</span>&gt; Posts { <span class="kw">get</span>; <span class="kw">set</span>; } <span class="op">=</span> <span class="kw">new</span>();
+}
+<span class="kw">public class</span> <span class="type">Post</span>
+{
+    <span class="kw">public int</span>      Id          { <span class="kw">get</span>; <span class="kw">set</span>; }
+    <span class="kw">public string</span>   Title       { <span class="kw">get</span>; <span class="kw">set</span>; } <span class="op">=</span> <span class="kw">string</span>.Empty;
+    <span class="kw">public bool</span>     IsPublished { <span class="kw">get</span>; <span class="kw">set</span>; }
+    <span class="kw">public int</span>      ViewCount   { <span class="kw">get</span>; <span class="kw">set</span>; }
+    <span class="kw">public</span> <span class="type">DateTime</span> PublishedAt { <span class="kw">get</span>; <span class="kw">set</span>; }
+    <span class="kw">public int</span>      BlogId      { <span class="kw">get</span>; <span class="kw">set</span>; }
+    <span class="kw">public</span> <span class="type">Blog</span>     Blog        { <span class="kw">get</span>; <span class="kw">set</span>; } <span class="op">=</span> <span class="kw">null</span>!;
+    <span class="kw">public</span> <span class="type">List</span>&lt;<span class="type">Tag</span>&gt; Tags { <span class="kw">get</span>; <span class="kw">set</span>; } <span class="op">=</span> <span class="kw">new</span>();
+}
+<span class="kw">public class</span> <span class="type">Tag</span>
+{
+    <span class="kw">public int</span>    Id    { <span class="kw">get</span>; <span class="kw">set</span>; }
+    <span class="kw">public string</span> Name  { <span class="kw">get</span>; <span class="kw">set</span>; } <span class="op">=</span> <span class="kw">string</span>.Empty;
+    <span class="kw">public</span> <span class="type">List</span>&lt;<span class="type">Post</span>&gt; Posts { <span class="kw">get</span>; <span class="kw">set</span>; } <span class="op">=</span> <span class="kw">new</span>();
+}</pre>
+          <p>Write LINQ (EF Core) queries for:</p>
+          <ol>
+            <li>All published posts, ordered by <code>PublishedAt</code> descending, including their blog title. (Use <code>.Include()</code> on the Blog navigation property.)</li>
+            <li>The top 5 most-viewed published posts.</li>
+            <li>All blogs that have at least one published post.</li>
+            <li>Total view count across all published posts in a given blog (given <code>int blogId</code>).</li>
+            <li>All posts tagged with "csharp" — you'll need to navigate via the <code>Tags</code> collection.</li>
+          </ol>
+        </div>
+
+        <!-- Exercise 8 -->
+        <div class="exercise">
+          <div class="exercise-num">Exercise 3.8 — Reflection: What Makes REST "RESTful"?</div>
+          <p>
+            The term "REST" is widely used — and widely misunderstood. Many APIs call themselves
+            RESTful while violating several core REST constraints. In this exercise, evaluate
+            the following hypothetical API design and identify which REST constraints it violates:
+          </p>
+          <pre><span class="cmt">// API in question:</span>
+<span class="cmt">// POST /api/getUser?userId=42          ← retrieves a user</span>
+<span class="cmt">// POST /api/doLogin                    ← authenticates, stores session on server</span>
+<span class="cmt">// POST /api/createOrUpdateProduct      ← creates OR updates based on body content</span>
+<span class="cmt">// GET  /api/deleteOrder?orderId=5      ← deletes order 5</span>
+<span class="cmt">// POST /api/processPayment             ← charges a card (no idempotency key)</span></pre>
+          <p>For each endpoint above:</p>
+          <ol>
+            <li>Name the REST constraint it violates (or multiple violations if applicable).</li>
+            <li>Propose the correct RESTful design — the verb, URL, and expected status codes.</li>
+          </ol>
+          <p>
+            Finally, write a short paragraph (3–5 sentences) on the difference between an API
+            that uses HTTP methods and JSON versus a truly RESTful API. What is the additional
+            value of the REST constraints (statelessness, uniform interface, resource-based URLs)?
+          </p>
+          <div class="box analogy">
+            <div class="box-title">🎯 Connecting Back to the Book</div>
+            <p>
+              The concepts in Part 3 — middleware, DI, REST, layered architecture, EF Core,
+              configuration — are not isolated topics. They form a complete system. A request
+              comes in through the middleware pipeline, is routed to a controller (REST layer),
+              which calls a service (business logic), which calls a repository (EF Core), which
+              reads config for its connection string (configuration). DI wires all these layers
+              together. Understanding each piece individually is important, but seeing how they
+              interconnect is what turns knowledge into engineering skill.
+            </p>
+          </div>
+        </div>
+
+      </div><!-- end .exercises -->
+
+      <div class="chapter-nav">
+        <a href="chapter-19.html">
+          <span class="nav-label">← Previous</span>
+          <span class="nav-title">Chapter 19: Configuration</span>
+        </a>
+        <a href="../part-4/chapter-20.html" class="next">
+          <span class="nav-label">Next →</span>
+          <span class="nav-title">Chapter 20: Authentication &amp; Authorization</span>
+        </a>
+      </div>
+
+    </main>
+  </div>
+</div>
+<button class="menu-btn" aria-label="Open menu">☰</button>
+<script src="../auth.js"></script>
+<script src="../nav.js"></script>
+<script>
+function checkAnswer(inputId, outputId, correctAnswer, explanation) {
+  const input = document.getElementById(inputId).value.trim();
+  const output = document.getElementById(outputId);
+  if (input.toLowerCase().includes(correctAnswer.toLowerCase())) {
+    output.innerHTML = '<span style="color:#16a34a;font-weight:600;">✓ Correct!</span> ' + explanation;
+  } else {
+    output.innerHTML = '<span style="color:#dc2626;font-weight:600;">Not quite.</span> Try again — think about the three DI lifetimes: Transient, Scoped, Singleton.';
+  }
+}
+</script>
+</body>
+</html>

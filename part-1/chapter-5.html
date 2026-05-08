@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chapter 5: Polymorphism — Advanced C# &amp; .NET for Newbies</title>
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-header"><a href="../index.html"><div class="book-title">Advanced C# &amp; .NET for Newbies</div><div class="book-subtitle">A beginner-friendly guide</div></a></div>
+    <nav>
+      <div class="nav-part"><a href="../index.html">📖 Table of Contents</a><a href="../introduction.html">Introduction</a><a href="../about-author.html">About the Author</a></div>
+      <div class="nav-part">
+        <div class="nav-part-title">Part 1 — Object-Oriented Programming</div>
+        <a href="chapter-1.html">Ch 1 · What is C#?</a><a href="chapter-2.html">Ch 2 · Classes &amp; Objects</a><a href="chapter-3.html">Ch 3 · Encapsulation</a><a href="chapter-4.html">Ch 4 · Inheritance</a><a href="chapter-5.html">Ch 5 · Polymorphism</a><a href="chapter-6.html">Ch 6 · Abstraction</a><a href="exercises.html">Part 1 Exercises</a>
+      </div>
+      <div class="nav-part">
+        <div class="nav-part-title">Part 2 — Advanced C# Concepts</div>
+        <a href="../part-2/chapter-7.html">Ch 7 · Generics</a><a href="../part-2/chapter-8.html">Ch 8 · Collections</a><a href="../part-2/chapter-9.html">Ch 9 · Exceptions</a><a href="../part-2/chapter-10.html">Ch 10 · Interfaces vs Abstract</a><a href="../part-2/chapter-11.html">Ch 11 · LINQ</a><a href="../part-2/chapter-12.html">Ch 12 · Delegates &amp; Lambdas</a><a href="../part-2/chapter-13.html">Ch 13 · Nullable Types</a><a href="../part-2/exercises.html">Part 2 Exercises</a>
+      </div>
+      <div class="nav-part">
+        <div class="nav-part-title">Part 3 — ASP.NET Core Basics</div>
+        <a href="../part-3/chapter-14.html">Ch 14 · What is ASP.NET Core?</a><a href="../part-3/chapter-15.html">Ch 15 · Dependency Injection</a><a href="../part-3/chapter-16.html">Ch 16 · REST APIs</a><a href="../part-3/chapter-17.html">Ch 17 · Controllers, Services, Repos</a><a href="../part-3/chapter-18.html">Ch 18 · Entity Framework Core</a><a href="../part-3/chapter-19.html">Ch 19 · Configuration</a><a href="../part-3/exercises.html">Part 3 Exercises</a>
+      </div>
+      <div class="nav-part">
+        <div class="nav-part-title">Part 4 — ASP.NET Core Advanced</div>
+        <a href="../part-4/chapter-20.html">Ch 20 · Authentication &amp; Authorization</a><a href="../part-4/chapter-21.html">Ch 21 · JWT Authentication</a><a href="../part-4/chapter-22.html">Ch 22 · Exception Handling</a><a href="../part-4/chapter-23.html">Ch 23 · Validation</a><a href="../part-4/chapter-24.html">Ch 24 · Microservices</a><a href="../part-4/exercises.html">Part 4 Exercises</a>
+      </div>
+      <div class="nav-part">
+        <div class="nav-part-title">Part 5 — Conclusion</div>
+        <a href="../part-5/chapter-25.html">Ch 25 · The .NET Ecosystem</a><a href="../part-5/chapter-26.html">Ch 26 · What to Learn Next</a><a href="../part-5/conclusion.html">Conclusion</a>
+      </div>
+    </nav>
+  </aside>
+
+  <div class="content-wrapper">
+    <main class="content">
+
+      <div class="chapter-header">
+        <div class="chapter-tag part-1">Part 1 · Chapter 5</div>
+        <h1>Polymorphism — One Name, Many Forms</h1>
+        <p class="chapter-intro">The same method call. Dozens of different behaviours. Polymorphism is what makes object-oriented code elegant, flexible, and genuinely powerful.</p>
+      </div>
+
+      <div class="learn-box">
+        <h4>What you'll learn in this chapter</h4>
+        <ul>
+          <li>What polymorphism means (runtime vs compile-time)</li>
+          <li>Runtime polymorphism: virtual/override called through a base reference</li>
+          <li>Compile-time polymorphism: method overloading</li>
+          <li>Using a list of base-type objects and calling methods polymorphically</li>
+          <li>The <code>is</code> keyword for type checking</li>
+          <li>The <code>as</code> keyword for safe casting</li>
+          <li>Upcasting and downcasting explained simply</li>
+        </ul>
+      </div>
+
+      <h2>The Play Button</h2>
+      <p>
+        Think about the "play" button. Every device that can play media has one.
+        Your phone has a play button. Your laptop has a play button. Your TV remote has a play
+        button. Your car stereo has a play button. Same symbol. Same concept.
+        But press play on a phone and music streams from Spotify. Press it on a TV and Netflix
+        starts. Press it on a car stereo and your USB stick begins playing.
+      </p>
+      <p>
+        One button name. Different behaviour depending on what device you are using.
+        That is polymorphism.
+      </p>
+
+      <div class="box analogy">
+        <div class="box-title">▶️ The Play Button Analogy</div>
+        <p>
+          In code, polymorphism means you call the same method — say <code>MakeSound()</code> — on
+          a collection of objects. Each object responds in its own way, even though you are calling
+          the same method name through the same base-type reference.
+          <br><br>
+          You don't need to write an <code>if</code> check for every type. You just call the method,
+          and the right version runs automatically. The runtime figures it out.
+        </p>
+      </div>
+
+      <h2>Two Kinds of Polymorphism</h2>
+      <p>
+        C# has two forms of polymorphism:
+      </p>
+      <ul>
+        <li>
+          <strong>Runtime polymorphism</strong> (also called dynamic dispatch or method overriding):
+          the specific method that runs is determined at runtime, based on the actual type of the object.
+          This is what <code>virtual</code>/<code>override</code> gives you.
+        </li>
+        <li>
+          <strong>Compile-time polymorphism</strong> (also called method overloading):
+          you have multiple methods with the same name but different parameter lists.
+          The compiler chooses which one to call at compile time, based on the arguments you provide.
+        </li>
+      </ul>
+
+      <h2>Runtime Polymorphism — The Power of Virtual</h2>
+      <p>
+        We built our <code>Animal</code> hierarchy in Chapter 4. Now let's see how polymorphism
+        makes it genuinely powerful. We can store any animal in an <code>Animal</code> reference
+        and call <code>MakeSound()</code> — the right version runs automatically:
+      </p>
+
+      <pre><span class="kw">using</span> <span class="type">System.Collections.Generic</span>;
+
+<span class="cmt">// All animals stored as the base type: Animal</span>
+<span class="kw">var</span> animals <span class="op">=</span> <span class="kw">new</span> <span class="type">List</span><span class="op">&lt;</span><span class="type">Animal</span><span class="op">&gt;</span>
+{
+    <span class="kw">new</span> <span class="type">Dog</span>(<span class="str">"Rex"</span>, <span class="num">3</span>, <span class="str">"German Shepherd"</span>),
+    <span class="kw">new</span> <span class="type">Cat</span>(<span class="str">"Whiskers"</span>, <span class="num">5</span>, <span class="kw">true</span>),
+    <span class="kw">new</span> <span class="type">Dog</span>(<span class="str">"Buddy"</span>, <span class="num">2</span>, <span class="str">"Labrador"</span>),
+    <span class="kw">new</span> <span class="type">Cat</span>(<span class="str">"Luna"</span>, <span class="num">1</span>, <span class="kw">false</span>),
+};
+
+<span class="cmt">// One loop. One method call. Four different responses.</span>
+<span class="kw">foreach</span> (<span class="type">Animal</span> animal <span class="kw">in</span> animals)
+{
+    animal.<span class="fn">MakeSound</span>();
+}
+
+<span class="cmt">// Output:</span>
+<span class="cmt">// Rex says: Woof! Woof!</span>
+<span class="cmt">// Whiskers says: Meow!</span>
+<span class="cmt">// Buddy says: Woof! Woof!</span>
+<span class="cmt">// Luna says: Meow!</span></pre>
+
+      <p>
+        Notice: we declared each loop variable as <code>Animal</code>, but the actual object is
+        a <code>Dog</code> or <code>Cat</code>. When we call <code>MakeSound()</code>, C# looks at
+        the <em>actual runtime type</em> of the object — not the declared type of the variable —
+        and calls the correct override. This is the essence of runtime polymorphism.
+      </p>
+
+      <div class="box tip">
+        <div class="box-title">💡 Without Polymorphism — What It Would Look Like</div>
+        <p>
+          Without polymorphism, you would need to check the type of every object yourself:
+        </p>
+        <pre style="margin-top:0.5rem;"><span class="cmt">// Ugly, fragile, does NOT scale</span>
+<span class="kw">foreach</span> (<span class="kw">var</span> animal <span class="kw">in</span> animals)
+{
+    <span class="kw">if</span> (animal <span class="kw">is</span> <span class="type">Dog</span> d) d.<span class="fn">MakeSound</span>();
+    <span class="kw">else if</span> (animal <span class="kw">is</span> <span class="type">Cat</span> c) c.<span class="fn">MakeSound</span>();
+    <span class="cmt">// ... add a new Animal type → must update this code!</span>
+}</pre>
+        <p>
+          Polymorphism eliminates this. Add a <code>Bird</code> class, override <code>MakeSound()</code>,
+          and the loop just works — no changes needed anywhere.
+        </p>
+      </div>
+
+      <h2>Compile-Time Polymorphism — Method Overloading</h2>
+      <p>
+        Method overloading means defining multiple methods with the <em>same name</em> but
+        <em>different parameter signatures</em>. The compiler picks the right one at compile time
+        based on what arguments you pass:
+      </p>
+
+      <pre><span class="kw">public class</span> <span class="type">Calculator</span>
+{
+    <span class="cmt">// Add two integers</span>
+    <span class="kw">public int</span> <span class="fn">Add</span>(<span class="kw">int</span> a, <span class="kw">int</span> b) <span class="op">=&gt;</span> a <span class="op">+</span> b;
+
+    <span class="cmt">// Add two doubles</span>
+    <span class="kw">public double</span> <span class="fn">Add</span>(<span class="kw">double</span> a, <span class="kw">double</span> b) <span class="op">=&gt;</span> a <span class="op">+</span> b;
+
+    <span class="cmt">// Add three integers</span>
+    <span class="kw">public int</span> <span class="fn">Add</span>(<span class="kw">int</span> a, <span class="kw">int</span> b, <span class="kw">int</span> c) <span class="op">=&gt;</span> a <span class="op">+</span> b <span class="op">+</span> c;
+
+    <span class="cmt">// Concatenate strings</span>
+    <span class="kw">public string</span> <span class="fn">Add</span>(<span class="kw">string</span> a, <span class="kw">string</span> b) <span class="op">=&gt;</span> a <span class="op">+</span> b;
+}
+
+<span class="kw">var</span> calc <span class="op">=</span> <span class="kw">new</span> <span class="type">Calculator</span>();
+<span class="type">Console</span>.<span class="fn">WriteLine</span>(calc.<span class="fn">Add</span>(<span class="num">2</span>, <span class="num">3</span>));           <span class="cmt">// 5 (int overload)</span>
+<span class="type">Console</span>.<span class="fn">WriteLine</span>(calc.<span class="fn">Add</span>(<span class="num">2.5</span>, <span class="num">3.1</span>));       <span class="cmt">// 5.6 (double overload)</span>
+<span class="type">Console</span>.<span class="fn">WriteLine</span>(calc.<span class="fn">Add</span>(<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>));        <span class="cmt">// 6 (three-param overload)</span>
+<span class="type">Console</span>.<span class="fn">WriteLine</span>(calc.<span class="fn">Add</span>(<span class="str">"Hello, "</span>, <span class="str">"World!"</span>)); <span class="cmt">// Hello, World!</span></pre>
+
+      <p>
+        The C# compiler looks at the types of the arguments you provide and selects the
+        matching overload automatically. You call <code>Add</code> — the right version runs.
+        Same name, many forms.
+      </p>
+
+      <h2>Upcasting — Treating a Child as a Parent</h2>
+      <p>
+        When we stored <code>Dog</code> and <code>Cat</code> objects in a <code>List&lt;Animal&gt;</code>,
+        that was <strong>upcasting</strong>. You are treating a more specific type as its more
+        general parent type. This always works and is always safe — a Dog IS-AN Animal, so
+        it can always be used as an Animal.
+      </p>
+
+      <pre><span class="type">Dog</span> myDog <span class="op">=</span> <span class="kw">new</span> <span class="type">Dog</span>(<span class="str">"Rex"</span>, <span class="num">3</span>, <span class="str">"German Shepherd"</span>);
+
+<span class="cmt">// Upcast — always safe, no cast needed</span>
+<span class="type">Animal</span> animal <span class="op">=</span> myDog;
+
+animal.<span class="fn">MakeSound</span>(); <span class="cmt">// Rex says: Woof! Woof! — still calls Dog's version!</span>
+animal.<span class="fn">Eat</span>();       <span class="cmt">// Rex is eating. — inherited from Animal</span>
+
+<span class="cmt">// animal.Fetch(); — COMPILE ERROR! Animal type doesn't know about Fetch()</span></pre>
+
+      <p>
+        After upcasting, you can only call methods and properties that exist on <code>Animal</code>
+        (the declared type). But the <em>runtime behaviour</em> is still the Dog's overridden version.
+      </p>
+
+      <h2>Downcasting — Getting Back to the Specific Type</h2>
+      <p>
+        If you have a base-type reference and you know (or need to check) what the actual
+        type is, you can <strong>downcast</strong> — cast it back to the specific type:
+      </p>
+
+      <pre><span class="type">Animal</span> animal <span class="op">=</span> <span class="kw">new</span> <span class="type">Dog</span>(<span class="str">"Rex"</span>, <span class="num">3</span>, <span class="str">"Shepherd"</span>);
+
+<span class="cmt">// Direct cast — will throw InvalidCastException if wrong type</span>
+<span class="type">Dog</span> dog <span class="op">=</span> (<span class="type">Dog</span>)animal;
+dog.<span class="fn">Fetch</span>(); <span class="cmt">// Rex fetches the ball!</span></pre>
+
+      <p>
+        Direct casting is risky — if <code>animal</code> is actually a <code>Cat</code>, this
+        throws a runtime exception. Use the <code>is</code> and <code>as</code> keywords for
+        safer approaches.
+      </p>
+
+      <h2>The <code>is</code> Keyword — Type Checking</h2>
+      <p>
+        The <code>is</code> keyword checks whether an object is of a specific type.
+        Modern C# (version 7+) combines the check and the cast into one clean line using
+        <strong>pattern matching</strong>:
+      </p>
+
+      <pre><span class="kw">foreach</span> (<span class="type">Animal</span> animal <span class="kw">in</span> animals)
+{
+    <span class="cmt">// Pattern matching — checks type AND creates a typed variable in one step</span>
+    <span class="kw">if</span> (animal <span class="kw">is</span> <span class="type">Dog</span> dog)
+    {
+        <span class="type">Console</span>.<span class="fn">WriteLine</span>(<span class="op">$</span><span class="str">"{dog.Name} is a {dog.Breed}"</span>);
+        dog.<span class="fn">Fetch</span>(); <span class="cmt">// Safe! We know it's a Dog here</span>
+    }
+    <span class="kw">else if</span> (animal <span class="kw">is</span> <span class="type">Cat</span> cat)
+    {
+        <span class="type">Console</span>.<span class="fn">WriteLine</span>(<span class="op">$</span><span class="str">"{cat.Name} is indoor: {cat.IsIndoor}"</span>);
+        cat.<span class="fn">Purr</span>();
+    }
+}</pre>
+
+      <p>
+        The <code>is Dog dog</code> syntax checks if <code>animal</code> is a <code>Dog</code>,
+        and if so, assigns it to the variable <code>dog</code> — all in one expression. This is
+        far cleaner and safer than a separate cast.
+      </p>
+
+      <h2>The <code>as</code> Keyword — Safe Casting</h2>
+      <p>
+        The <code>as</code> keyword attempts a cast and returns <code>null</code> if it fails
+        (instead of throwing an exception):
+      </p>
+
+      <pre><span class="type">Animal</span> animal <span class="op">=</span> GetSomeAnimal();  <span class="cmt">// could be Dog or Cat</span>
+
+<span class="type">Dog</span> dog <span class="op">=</span> animal <span class="kw">as</span> <span class="type">Dog</span>;
+
+<span class="kw">if</span> (dog <span class="op">!=</span> <span class="kw">null</span>)
+{
+    dog.<span class="fn">Fetch</span>(); <span class="cmt">// Safe to use</span>
+}
+<span class="kw">else</span>
+{
+    <span class="type">Console</span>.<span class="fn">WriteLine</span>(<span class="str">"Not a dog, skipping fetch."</span>);
+}</pre>
+
+      <div class="box tip">
+        <div class="box-title">💡 Prefer <code>is</code> Pattern Matching in Modern C#</div>
+        <p>
+          In modern C# (7+), the <code>is</code> pattern matching syntax is preferred over <code>as</code>
+          followed by a null check. It is cleaner and less error-prone. Use:
+          <code>if (animal is Dog dog)</code> rather than
+          <code>var dog = animal as Dog; if (dog != null)</code>.
+        </p>
+      </div>
+
+      <h2>Switch Expressions with Pattern Matching (C# 8+)</h2>
+      <p>
+        C# 8 introduced a very elegant way to handle polymorphic type switching using
+        switch expressions with type patterns:
+      </p>
+
+      <pre><span class="kw">string</span> Describe(<span class="type">Animal</span> animal) <span class="op">=&gt;</span> animal <span class="kw">switch</span>
+{
+    <span class="type">Dog</span> d <span class="op">=&gt;</span> <span class="op">$</span><span class="str">"{d.Name} is a {d.Breed} dog"</span>,
+    <span class="type">Cat</span> c <span class="op">=&gt;</span> <span class="op">$</span><span class="str">"{c.Name} is a {(c.IsIndoor ? "indoor" : "outdoor")} cat"</span>,
+    _ <span class="op">=&gt;</span> <span class="op">$</span><span class="str">"{animal.Name} is some kind of animal"</span>
+};
+
+<span class="kw">foreach</span> (<span class="kw">var</span> a <span class="kw">in</span> animals)
+    <span class="type">Console</span>.<span class="fn">WriteLine</span>(<span class="fn">Describe</span>(a));</pre>
+
+      <p>
+        The <code>_</code> is a discard pattern — it matches anything that didn't match
+        the patterns above it. This style is beautifully concise and very idiomatic in
+        modern C#.
+      </p>
+
+      <div class="box fun-fact">
+        <div class="box-title">🌟 The Open/Closed Principle</div>
+        <p>
+          Polymorphism is the engine behind one of the most important design principles in
+          software engineering: the <strong>Open/Closed Principle</strong> (the "O" in SOLID).
+          It says: "software entities should be open for extension, but closed for modification."
+          <br><br>
+          With polymorphism, you can add a new <code>Bird</code> class that overrides
+          <code>MakeSound()</code>, and every existing loop and method that works with
+          <code>Animal</code> objects will automatically handle <code>Bird</code> correctly —
+          without changing a single line of existing code. <em>Open</em> for new types.
+          <em>Closed</em> to breaking changes.
+        </p>
+      </div>
+
+      <div class="box key-term">
+        <div class="box-title">📚 Key Terms</div>
+        <p><strong>Polymorphism:</strong> The ability for one interface (method name/signature) to have different implementations depending on the object type.</p>
+        <p><strong>Runtime polymorphism:</strong> The specific method to run is determined at runtime based on the object's actual type. Enabled by <code>virtual</code>/<code>override</code>.</p>
+        <p><strong>Compile-time polymorphism (overloading):</strong> Multiple methods with the same name but different parameter lists. Resolved at compile time.</p>
+        <p><strong>Upcasting:</strong> Treating a derived type as its base type. Always safe and implicit.</p>
+        <p><strong>Downcasting:</strong> Casting a base-type reference back to a specific derived type. Can fail — use <code>is</code> or <code>as</code>.</p>
+        <p><strong><code>is</code> keyword:</strong> Tests if an object is of a type. With pattern matching: also creates a typed variable in one step.</p>
+        <p><strong><code>as</code> keyword:</strong> Attempts a cast; returns <code>null</code> if the cast fails (does not throw).</p>
+      </div>
+
+      <div class="summary">
+        <h4>Chapter Summary</h4>
+        <ul>
+          <li>Polymorphism means "one name, many forms" — the same method call behaves differently depending on the object.</li>
+          <li>Runtime polymorphism uses <code>virtual</code>/<code>override</code>. The CLR determines at runtime which override to call.</li>
+          <li>Compile-time polymorphism is method overloading — same name, different parameter lists, resolved by the compiler.</li>
+          <li>Objects can be stored as their base type (upcasting) — the overridden methods still run correctly.</li>
+          <li>Use <code>is</code> with pattern matching to safely check and cast types in one step.</li>
+          <li><code>as</code> returns <code>null</code> instead of throwing an exception if the cast fails.</li>
+          <li>Polymorphism is the key to writing code that is open for extension without breaking existing logic.</li>
+        </ul>
+      </div>
+
+      <div class="exercises">
+        <h3>Exercises</h3>
+
+        <div class="exercise">
+          <div class="exercise-num">Exercise 5.1 — Interactive Quiz</div>
+          <p>What keyword makes a base class method overridable in C#?</p>
+          <div class="interactive-exercise">
+            <input type="text" id="q5-1" placeholder="Type your answer here..." />
+            <button onclick="checkAnswer('q5-1', 'out5-1', 'virtual', 'Correct! virtual marks a method as overridable. Derived classes use override to replace it.')">Check Answer</button>
+            <div class="exercise-output" id="out5-1"></div>
+          </div>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-num">Exercise 5.2 — Shape Drawer</div>
+          <p>
+            Create a polymorphic shape-drawing system:
+          </p>
+          <ul>
+            <li>Base class <code>Shape</code> with a <code>virtual</code> method <code>Draw()</code> and a virtual method <code>Area()</code> returning a <code>double</code>.</li>
+            <li><code>Circle</code> inherits <code>Shape</code>. Has <code>Radius</code>. Overrides <code>Draw()</code> to print "Drawing a circle with radius X" and <code>Area()</code> to return π × r².</li>
+            <li><code>Rectangle</code> inherits <code>Shape</code>. Has <code>Width</code> and <code>Height</code>. Overrides both methods appropriately.</li>
+            <li><code>Triangle</code> inherits <code>Shape</code>. Has <code>Base</code> and <code>Height</code>. Overrides both methods appropriately.</li>
+          </ul>
+          <p>
+            Create a <code>List&lt;Shape&gt;</code> with at least two of each type.
+            Use a loop to call <code>Draw()</code> and print the area for each shape.
+          </p>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-num">Exercise 5.3 — Overloading a Printer</div>
+          <p>
+            Create a <code>Printer</code> class with an overloaded <code>Print</code> method that:
+          </p>
+          <ul>
+            <li>Accepts an <code>int</code> and prints "Printing number: X"</li>
+            <li>Accepts a <code>string</code> and prints "Printing text: X"</li>
+            <li>Accepts a <code>double</code> and a <code>string</code> label, printing "Printing [label]: X"</li>
+            <li>Accepts a <code>bool</code> and prints "Printing flag: True/False"</li>
+          </ul>
+          <p>Call all four from a program. Notice how the compiler automatically picks the right one.</p>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-num">Exercise 5.4 — Type Checking with <code>is</code></div>
+          <p>
+            Using the animal hierarchy from Chapter 4, create a mixed list of Dogs and Cats.
+            Loop through them and:
+          </p>
+          <ul>
+            <li>For each <code>Dog</code>, print its name and breed, then call <code>Fetch()</code>.</li>
+            <li>For each <code>Cat</code>, print its name and whether it is indoor, then call <code>Purr()</code>.</li>
+          </ul>
+          <p>Use the <code>is</code> pattern matching syntax (not <code>as</code>).</p>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-num">Exercise 5.5 — Reflection: The Big Picture</div>
+          <p>
+            You've now studied all four OOP pillars: Encapsulation, Inheritance, Polymorphism,
+            and Abstraction (next chapter). Describe in 3–4 sentences how they work together
+            in the Animal/Dog/Cat example in this chapter. Which pillar does each technique
+            (private fields, : Animal, virtual/override, List&lt;Animal&gt; loop) correspond to?
+          </p>
+        </div>
+      </div>
+
+      <div class="chapter-nav">
+        <a href="chapter-4.html">
+          <span class="nav-label">← Previous</span>
+          <span class="nav-title">Chapter 4: Inheritance</span>
+        </a>
+        <a href="chapter-6.html" class="next">
+          <span class="nav-label">Next →</span>
+          <span class="nav-title">Chapter 6: Abstraction</span>
+        </a>
+      </div>
+
+    </main>
+  </div>
+</div>
+<button class="menu-btn" aria-label="Open menu">☰</button>
+<script src="../auth.js"></script>
+<script src="../nav.js"></script>
+</body>
+</html>

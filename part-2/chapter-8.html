@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chapter 8: Collections — Advanced C# &amp; .NET for Newbies</title>
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-header"><a href="../index.html"><div class="book-title">Advanced C# &amp; .NET for Newbies</div><div class="book-subtitle">A beginner-friendly guide</div></a></div>
+    <nav>
+      <div class="nav-part"><a href="../index.html">📖 Table of Contents</a><a href="../introduction.html">Introduction</a><a href="../about-author.html">About the Author</a></div>
+      <div class="nav-part">
+        <div class="nav-part-title">Part 1 — Object-Oriented Programming</div>
+        <a href="../part-1/chapter-1.html">Ch 1 · What is C#?</a><a href="../part-1/chapter-2.html">Ch 2 · Classes &amp; Objects</a><a href="../part-1/chapter-3.html">Ch 3 · Encapsulation</a><a href="../part-1/chapter-4.html">Ch 4 · Inheritance</a><a href="../part-1/chapter-5.html">Ch 5 · Polymorphism</a><a href="../part-1/chapter-6.html">Ch 6 · Abstraction</a><a href="../part-1/exercises.html">Part 1 Exercises</a>
+      </div>
+      <div class="nav-part">
+        <div class="nav-part-title">Part 2 — Advanced C# Concepts</div>
+        <a href="chapter-7.html">Ch 7 · Generics</a><a href="chapter-8.html">Ch 8 · Collections</a><a href="chapter-9.html">Ch 9 · Exceptions</a><a href="chapter-10.html">Ch 10 · Interfaces vs Abstract</a><a href="chapter-11.html">Ch 11 · LINQ</a><a href="chapter-12.html">Ch 12 · Delegates &amp; Lambdas</a><a href="chapter-13.html">Ch 13 · Nullable Types</a><a href="exercises.html">Part 2 Exercises</a>
+      </div>
+      <div class="nav-part">
+        <div class="nav-part-title">Part 3 — ASP.NET Core Basics</div>
+        <a href="../part-3/chapter-14.html">Ch 14 · What is ASP.NET Core?</a><a href="../part-3/chapter-15.html">Ch 15 · Dependency Injection</a><a href="../part-3/chapter-16.html">Ch 16 · REST APIs</a><a href="../part-3/chapter-17.html">Ch 17 · Controllers, Services, Repos</a><a href="../part-3/chapter-18.html">Ch 18 · Entity Framework Core</a><a href="../part-3/chapter-19.html">Ch 19 · Configuration</a><a href="../part-3/exercises.html">Part 3 Exercises</a>
+      </div>
+      <div class="nav-part">
+        <div class="nav-part-title">Part 4 — ASP.NET Core Advanced</div>
+        <a href="../part-4/chapter-20.html">Ch 20 · Authentication &amp; Authorization</a><a href="../part-4/chapter-21.html">Ch 21 · JWT Authentication</a><a href="../part-4/chapter-22.html">Ch 22 · Exception Handling</a><a href="../part-4/chapter-23.html">Ch 23 · Validation</a><a href="../part-4/chapter-24.html">Ch 24 · Microservices</a><a href="../part-4/exercises.html">Part 4 Exercises</a>
+      </div>
+      <div class="nav-part">
+        <div class="nav-part-title">Part 5 — Conclusion</div>
+        <a href="../part-5/chapter-25.html">Ch 25 · The .NET Ecosystem</a><a href="../part-5/chapter-26.html">Ch 26 · What to Learn Next</a><a href="../part-5/conclusion.html">Conclusion</a>
+      </div>
+    </nav>
+  </aside>
+
+  <div class="content-wrapper">
+    <main class="content">
+
+      <div class="chapter-header">
+        <div class="chapter-tag part-2">Part 2 · Chapter 8</div>
+        <h1>Collections — C#'s Toolbox</h1>
+        <p class="chapter-intro">A single variable holds one value. A collection holds many — and different collections organise those values in radically different ways. Choosing the right collection is like choosing the right tool from a toolbox: a screwdriver works for screws, but you would not use it to cut wood.</p>
+      </div>
+
+      <div class="learn-box">
+        <h4>What you'll learn in this chapter</h4>
+        <ul>
+          <li><code>List&lt;T&gt;</code> — the general-purpose, ordered, resizable collection</li>
+          <li><code>Dictionary&lt;TKey,TValue&gt;</code> — fast key-value lookups like a contact book</li>
+          <li><code>HashSet&lt;T&gt;</code> — enforces uniqueness, like a set of stamps</li>
+          <li><code>Queue&lt;T&gt;</code> — first in, first out — like a bank queue</li>
+          <li><code>Stack&lt;T&gt;</code> — last in, first out — like a stack of plates</li>
+          <li>When to use each type</li>
+        </ul>
+      </div>
+
+      <div class="box analogy">
+        <div class="box-title">🧰 The Toolbox Analogy</div>
+        <p>
+          A carpenter's toolbox has many tools — a hammer, a saw, a screwdriver, a tape measure.
+          Each tool is designed for a specific job. You could theoretically drive a screw with
+          a hammer, but it would be ugly and slow.
+          <br><br>
+          C# collections are the same. <code>List&lt;T&gt;</code> is your all-purpose hammer.
+          <code>Dictionary</code> is your measuring tape — fast, precise lookup.
+          <code>HashSet</code> is your stamp collection holder — no duplicates, period.
+          <code>Queue</code> keeps things in line (literally). <code>Stack</code> keeps track
+          of history. Right tool, right job.
+        </p>
+      </div>
+
+      <h2>List&lt;T&gt; — The All-Purpose Collection</h2>
+      <p>
+        <code>List&lt;T&gt;</code> is the collection you will use most often. It is an ordered
+        sequence of elements that can grow and shrink dynamically. You can add, remove, search,
+        and sort it. Duplicates are allowed. Order is preserved (elements stay in the order you add them).
+      </p>
+
+      <pre><span class="kw">using</span> <span class="type">System</span>.<span class="type">Collections</span>.<span class="type">Generic</span>;
+
+<span class="type">List</span><span class="op">&lt;</span><span class="kw">string</span><span class="op">&gt;</span> fruits <span class="op">=</span> <span class="kw">new</span> <span class="type">List</span><span class="op">&lt;</span><span class="kw">string</span><span class="op">&gt;</span>();
+fruits.<span class="fn">Add</span>(<span class="str">"Apple"</span>);
+fruits.<span class="fn">Add</span>(<span class="str">"Banana"</span>);
+fruits.<span class="fn">Add</span>(<span class="str">"Cherry"</span>);
+fruits.<span class="fn">Add</span>(<span class="str">"Apple"</span>);   <span class="cmt">// duplicates allowed</span>
+
+<span class="type">Console</span>.<span class="fn">WriteLine</span>(fruits.<span class="fn">Count</span>);          <span class="cmt">// 4</span>
+<span class="type">Console</span>.<span class="fn">WriteLine</span>(fruits[<span class="num">1</span>]);              <span class="cmt">// Banana (0-indexed)</span>
+<span class="type">Console</span>.<span class="fn">WriteLine</span>(fruits.<span class="fn">Contains</span>(<span class="str">"Cherry"</span>)); <span class="cmt">// True</span>
+
+fruits.<span class="fn">Remove</span>(<span class="str">"Banana"</span>);                  <span class="cmt">// removes first match</span>
+fruits.<span class="fn">Sort</span>();                             <span class="cmt">// alphabetical sort in-place</span>
+
+<span class="kw">foreach</span> (<span class="kw">var</span> fruit <span class="kw">in</span> fruits)
+    <span class="type">Console</span>.<span class="fn">WriteLine</span>(fruit);
+<span class="cmt">// Apple</span>
+<span class="cmt">// Apple</span>
+<span class="cmt">// Cherry</span></pre>
+
+      <p>
+        Use <code>List&lt;T&gt;</code> when you need an ordered collection with random access
+        (getting item by index), when duplicates are fine, and when the size changes frequently.
+      </p>
+
+      <h2>Dictionary&lt;TKey,TValue&gt; — The Contact Book</h2>
+      <p>
+        A <code>Dictionary</code> maps keys to values. Think of a contact book: you look up
+        a person by name (the key) and get their phone number (the value). Lookups are extremely
+        fast — O(1) on average — regardless of how many entries there are.
+      </p>
+
+      <pre><span class="type">Dictionary</span><span class="op">&lt;</span><span class="kw">string</span>, <span class="kw">int</span><span class="op">&gt;</span> population <span class="op">=</span> <span class="kw">new</span>()
+{
+    { <span class="str">"London"</span>, <span class="num">9_000_000</span> },
+    { <span class="str">"Lagos"</span>,  <span class="num">14_800_000</span> },
+    { <span class="str">"Tokyo"</span>,  <span class="num">13_900_000</span> }
+};
+
+<span class="cmt">// Add or update</span>
+population[<span class="str">"Nairobi"</span>] <span class="op">=</span> <span class="num">4_400_000</span>;
+
+<span class="cmt">// Safe lookup with TryGetValue</span>
+<span class="kw">if</span> (population.<span class="fn">TryGetValue</span>(<span class="str">"Lagos"</span>, <span class="kw">out int</span> lag))
+    <span class="type">Console</span>.<span class="fn">WriteLine</span>(<span class="op">$</span><span class="str">"Lagos population: {lag:N0}"</span>);
+
+<span class="cmt">// Iterate over key-value pairs</span>
+<span class="kw">foreach</span> (<span class="kw">var</span> kvp <span class="kw">in</span> population)
+    <span class="type">Console</span>.<span class="fn">WriteLine</span>(<span class="op">$</span><span class="str">"{kvp.Key}: {kvp.Value:N0}"</span>);
+
+<span class="cmt">// Check key existence before accessing (avoids KeyNotFoundException)</span>
+<span class="kw">if</span> (population.<span class="fn">ContainsKey</span>(<span class="str">"Cairo"</span>))
+    <span class="type">Console</span>.<span class="fn">WriteLine</span>(population[<span class="str">"Cairo"</span>]);
+<span class="kw">else</span>
+    <span class="type">Console</span>.<span class="fn">WriteLine</span>(<span class="str">"Cairo not found"</span>);</pre>
+
+      <div class="box tip">
+        <div class="box-title">💡 Always Use TryGetValue</div>
+        <p>
+          If you access a dictionary with <code>dict["key"]</code> and the key doesn't exist,
+          you get a <code>KeyNotFoundException</code> at runtime. The safe pattern is always
+          <code>TryGetValue(key, out var value)</code> — it returns <code>false</code> instead
+          of throwing if the key is missing. Only use the indexer when you are <em>certain</em>
+          the key exists.
+        </p>
+      </div>
+
+      <h2>HashSet&lt;T&gt; — The Stamp Collection</h2>
+      <p>
+        A <code>HashSet&lt;T&gt;</code> stores unique items only. If you try to add a duplicate,
+        it is silently ignored. This makes it perfect for tracking membership, deduplicating data,
+        and set operations (union, intersection, difference).
+      </p>
+
+      <pre><span class="type">HashSet</span><span class="op">&lt;</span><span class="kw">string</span><span class="op">&gt;</span> tags <span class="op">=</span> <span class="kw">new</span>() { <span class="str">"csharp"</span>, <span class="str">"dotnet"</span>, <span class="str">"backend"</span> };
+
+tags.<span class="fn">Add</span>(<span class="str">"api"</span>);
+tags.<span class="fn">Add</span>(<span class="str">"csharp"</span>);   <span class="cmt">// already exists — silently ignored</span>
+<span class="type">Console</span>.<span class="fn">WriteLine</span>(tags.<span class="fn">Count</span>);   <span class="cmt">// 4 (not 5)</span>
+
+<span class="cmt">// O(1) membership test — much faster than List.Contains</span>
+<span class="type">Console</span>.<span class="fn">WriteLine</span>(tags.<span class="fn">Contains</span>(<span class="str">"dotnet"</span>));  <span class="cmt">// True</span>
+
+<span class="cmt">// Set operations</span>
+<span class="type">HashSet</span><span class="op">&lt;</span><span class="kw">int</span><span class="op">&gt;</span> setA <span class="op">=</span> <span class="kw">new</span>() { <span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span> };
+<span class="type">HashSet</span><span class="op">&lt;</span><span class="kw">int</span><span class="op">&gt;</span> setB <span class="op">=</span> <span class="kw">new</span>() { <span class="num">3</span>, <span class="num">4</span>, <span class="num">5</span>, <span class="num">6</span> };
+
+setA.<span class="fn">IntersectWith</span>(setB);   <span class="cmt">// setA is now { 3, 4 }</span>
+setA.<span class="fn">UnionWith</span>(setB);       <span class="cmt">// adds setB items not yet in setA</span>
+setA.<span class="fn">ExceptWith</span>(setB);      <span class="cmt">// removes items that are also in setB</span>
+
+<span class="cmt">// Deduplicate a list in one line</span>
+<span class="type">List</span><span class="op">&lt;</span><span class="kw">int</span><span class="op">&gt;</span> withDupes <span class="op">=</span> <span class="kw">new</span>() { <span class="num">1</span>, <span class="num">2</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">3</span>, <span class="num">3</span> };
+<span class="type">HashSet</span><span class="op">&lt;</span><span class="kw">int</span><span class="op">&gt;</span> unique <span class="op">=</span> <span class="kw">new</span>(withDupes);   <span class="cmt">// { 1, 2, 3 }</span></pre>
+
+      <h2>Queue&lt;T&gt; — The Bank Line</h2>
+      <p>
+        A <code>Queue&lt;T&gt;</code> is a first-in, first-out (FIFO) collection. Imagine customers
+        waiting at a bank: the first person to arrive is the first to be served. The queue is
+        a natural model for task scheduling, message processing, and breadth-first graph traversal.
+      </p>
+
+      <pre><span class="type">Queue</span><span class="op">&lt;</span><span class="kw">string</span><span class="op">&gt;</span> customerQueue <span class="op">=</span> <span class="kw">new</span>();
+
+<span class="cmt">// Enqueue — add to the back of the line</span>
+customerQueue.<span class="fn">Enqueue</span>(<span class="str">"Alice"</span>);
+customerQueue.<span class="fn">Enqueue</span>(<span class="str">"Bob"</span>);
+customerQueue.<span class="fn">Enqueue</span>(<span class="str">"Charlie"</span>);
+
+<span class="type">Console</span>.<span class="fn">WriteLine</span>(<span class="op">$</span><span class="str">"People waiting: {customerQueue.Count}"</span>);  <span class="cmt">// 3</span>
+
+<span class="cmt">// Peek — see who is next without removing them</span>
+<span class="type">Console</span>.<span class="fn">WriteLine</span>(<span class="op">$</span><span class="str">"Next: {customerQueue.Peek()}"</span>);   <span class="cmt">// Alice</span>
+
+<span class="cmt">// Dequeue — serve the front customer (removes them)</span>
+<span class="kw">string</span> served <span class="op">=</span> customerQueue.<span class="fn">Dequeue</span>();
+<span class="type">Console</span>.<span class="fn">WriteLine</span>(<span class="op">$</span><span class="str">"Serving: {served}"</span>);            <span class="cmt">// Alice</span>
+<span class="type">Console</span>.<span class="fn">WriteLine</span>(<span class="op">$</span><span class="str">"Next now: {customerQueue.Peek()}"</span>); <span class="cmt">// Bob</span>
+
+<span class="cmt">// Process the whole queue</span>
+<span class="kw">while</span> (customerQueue.<span class="fn">Count</span> <span class="op">&gt;</span> <span class="num">0</span>)
+{
+    <span class="kw">string</span> customer <span class="op">=</span> customerQueue.<span class="fn">Dequeue</span>();
+    <span class="type">Console</span>.<span class="fn">WriteLine</span>(<span class="op">$</span><span class="str">"Serving {customer}..."</span>);
+}
+<span class="cmt">// Serving Bob...</span>
+<span class="cmt">// Serving Charlie...</span></pre>
+
+      <h2>Stack&lt;T&gt; — The Plate Stack</h2>
+      <p>
+        A <code>Stack&lt;T&gt;</code> is last-in, first-out (LIFO). Imagine a stack of plates in
+        a cafeteria: you always take from the top, and you always add to the top. Stacks are used
+        for undo/redo systems, browser history, expression parsing, and recursive algorithm simulation.
+      </p>
+
+      <pre><span class="type">Stack</span><span class="op">&lt;</span><span class="kw">string</span><span class="op">&gt;</span> browserHistory <span class="op">=</span> <span class="kw">new</span>();
+
+<span class="cmt">// Push — navigate to pages (add to top of stack)</span>
+browserHistory.<span class="fn">Push</span>(<span class="str">"google.com"</span>);
+browserHistory.<span class="fn">Push</span>(<span class="str">"github.com"</span>);
+browserHistory.<span class="fn">Push</span>(<span class="str">"stackoverflow.com"</span>);
+
+<span class="type">Console</span>.<span class="fn">WriteLine</span>(<span class="op">$</span><span class="str">"Current page: {browserHistory.Peek()}"</span>);  <span class="cmt">// stackoverflow.com</span>
+
+<span class="cmt">// Pop — press "Back" (remove top)</span>
+<span class="kw">string</span> back <span class="op">=</span> browserHistory.<span class="fn">Pop</span>();
+<span class="type">Console</span>.<span class="fn">WriteLine</span>(<span class="op">$</span><span class="str">"Went back from: {back}"</span>);                 <span class="cmt">// stackoverflow.com</span>
+<span class="type">Console</span>.<span class="fn">WriteLine</span>(<span class="op">$</span><span class="str">"Now on: {browserHistory.Peek()}"</span>);         <span class="cmt">// github.com</span>
+
+<span class="cmt">// Check if stack is not empty before popping</span>
+<span class="kw">if</span> (browserHistory.<span class="fn">TryPop</span>(<span class="kw">out string</span><span class="op">?</span> page))
+    <span class="type">Console</span>.<span class="fn">WriteLine</span>(<span class="op">$</span><span class="str">"Popped: {page}"</span>);   <span class="cmt">// github.com</span></pre>
+
+      <h2>Choosing the Right Collection</h2>
+      <p>Here is a quick decision guide:</p>
+
+      <ul>
+        <li>
+          <strong>Need ordered items, duplicates OK, and index access?</strong>
+          Use <code>List&lt;T&gt;</code>.
+        </li>
+        <li>
+          <strong>Need to look things up by a key?</strong>
+          Use <code>Dictionary&lt;TKey,TValue&gt;</code>.
+        </li>
+        <li>
+          <strong>Need unique items only, or fast membership tests?</strong>
+          Use <code>HashSet&lt;T&gt;</code>.
+        </li>
+        <li>
+          <strong>Need to process items in the order they arrived?</strong>
+          Use <code>Queue&lt;T&gt;</code>.
+        </li>
+        <li>
+          <strong>Need to process the most recently added item first (undo, history)?</strong>
+          Use <code>Stack&lt;T&gt;</code>.
+        </li>
+      </ul>
+
+      <div class="diagram">
+Collection        | Order       | Duplicates | Fast Access  | Use Case
+------------------|-------------|------------|--------------|---------------------------
+List&lt;T&gt;          | Insertion   | Yes        | By index     | General-purpose ordered list
+Dictionary&lt;K,V&gt;  | Unordered   | No (keys)  | By key O(1)  | Lookup tables, caching
+HashSet&lt;T&gt;        | Unordered   | No         | Contains O(1)| Unique items, set operations
+Queue&lt;T&gt;          | FIFO        | Yes        | Front only   | Task queues, message buses
+Stack&lt;T&gt;          | LIFO        | Yes        | Top only     | Undo/redo, navigation history
+      </div>
+
+      <div class="box fun-fact">
+        <div class="box-title">🎯 Performance Notes</div>
+        <p>
+          <strong>List&lt;T&gt;.Contains()</strong> is O(n) — it checks every element.
+          For large lists where you need frequent membership tests, switch to a
+          <code>HashSet&lt;T&gt;</code> which is O(1).
+          <br><br>
+          <strong>Dictionary</strong> and <strong>HashSet</strong> both use a hash table
+          internally. They are O(1) for Add, Remove, and Contains on average — but O(n) in the
+          worst case if you have many hash collisions. In practice, collisions are extremely rare.
+          <br><br>
+          For a sorted dictionary (keys in order), use <code>SortedDictionary&lt;TKey,TValue&gt;</code>
+          — it's O(log n) instead of O(1) but always keeps keys sorted.
+        </p>
+      </div>
+
+      <h2>Collection Initialiser Syntax</h2>
+      <p>
+        C# lets you initialise any collection inline in a clean, readable way:
+      </p>
+
+      <pre><span class="cmt">// All of these use collection initialisers</span>
+<span class="type">List</span><span class="op">&lt;</span><span class="kw">int</span><span class="op">&gt;</span> numbers <span class="op">=</span> [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>, <span class="num">5</span>];   <span class="cmt">// C# 12 collection expression</span>
+
+<span class="type">Dictionary</span><span class="op">&lt;</span><span class="kw">string</span>, <span class="kw">bool</span><span class="op">&gt;</span> flags <span class="op">=</span> <span class="kw">new</span>()
+{
+    [<span class="str">"debug"</span>]   <span class="op">=</span> <span class="kw">false</span>,
+    [<span class="str">"verbose"</span>] <span class="op">=</span> <span class="kw">true</span>,
+    [<span class="str">"dryRun"</span>]  <span class="op">=</span> <span class="kw">false</span>
+};
+
+<span class="type">HashSet</span><span class="op">&lt;</span><span class="kw">string</span><span class="op">&gt;</span> allowedRoles <span class="op">=</span> [<span class="str">"admin"</span>, <span class="str">"editor"</span>, <span class="str">"viewer"</span>];</pre>
+
+      <div class="box key-term">
+        <div class="box-title">📚 Key Terms</div>
+        <p><strong>List&lt;T&gt;:</strong> Ordered, indexed, resizable collection. Allows duplicates. Best for general-purpose ordered data.</p>
+        <p><strong>Dictionary&lt;TKey,TValue&gt;:</strong> Key-value map with O(1) average lookup. Keys must be unique.</p>
+        <p><strong>HashSet&lt;T&gt;:</strong> Unordered collection of unique items. O(1) for Add/Remove/Contains. Great for membership tests.</p>
+        <p><strong>Queue&lt;T&gt;:</strong> FIFO collection. Enqueue adds to back; Dequeue removes from front.</p>
+        <p><strong>Stack&lt;T&gt;:</strong> LIFO collection. Push adds to top; Pop removes from top.</p>
+        <p><strong>IEnumerable&lt;T&gt;:</strong> The common interface all collections implement. LINQ works on anything that implements IEnumerable&lt;T&gt;.</p>
+      </div>
+
+      <div class="summary">
+        <h4>Chapter Summary</h4>
+        <ul>
+          <li><code>List&lt;T&gt;</code> is the default choice for ordered data — flexible, indexed, and allows duplicates.</li>
+          <li><code>Dictionary&lt;TKey,TValue&gt;</code> gives O(1) key-based lookups; use <code>TryGetValue</code> for safe access.</li>
+          <li><code>HashSet&lt;T&gt;</code> enforces uniqueness and is O(1) for membership tests — much faster than <code>List.Contains</code> for large sets.</li>
+          <li><code>Queue&lt;T&gt;</code> is FIFO — use it for task processing in arrival order.</li>
+          <li><code>Stack&lt;T&gt;</code> is LIFO — use it for undo history, depth-first traversal, and back-navigation.</li>
+          <li>All collections implement <code>IEnumerable&lt;T&gt;</code>, which means LINQ (Chapter 11) works on all of them uniformly.</li>
+        </ul>
+      </div>
+
+      <div class="exercises">
+        <h3>Exercises</h3>
+
+        <div class="exercise">
+          <div class="exercise-num">Exercise 8.1 — Interactive Quiz</div>
+          <p>Which C# collection type does NOT allow duplicate values?</p>
+          <div class="interactive-exercise">
+            <input type="text" id="q8-1" placeholder="Type your answer here..." />
+            <button onclick="checkAnswer('q8-1', 'out8-1', 'HashSet', 'Correct! HashSet&lt;T&gt; enforces uniqueness — adding a duplicate is silently ignored. Dictionary keys are also unique, but a Dictionary stores key-value pairs, not single items.')">Check Answer</button>
+            <div class="exercise-output" id="out8-1"></div>
+          </div>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-num">Exercise 8.2 — Code Challenge: Word Frequency Counter</div>
+          <p>
+            Write a program that takes a sentence (as a string), splits it into words, and uses a
+            <code>Dictionary&lt;string, int&gt;</code> to count how many times each word appears.
+            Then print the words and their counts, sorted by count descending.
+          </p>
+          <p>Test input: <code>"the cat sat on the mat and the cat sat"</code></p>
+          <p>Expected output (order may vary for ties):</p>
+          <pre><span class="cmt">// the: 3</span>
+<span class="cmt">// cat: 2</span>
+<span class="cmt">// sat: 2</span>
+<span class="cmt">// on: 1</span>
+<span class="cmt">// mat: 1</span>
+<span class="cmt">// and: 1</span></pre>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-num">Exercise 8.3 — Think It Through</div>
+          <p>
+            You are building a messaging system that processes incoming messages from thousands of
+            IoT devices. Messages must be handled in the order they arrive. New messages come in
+            faster than they can be processed, so they must wait their turn.
+          </p>
+          <p>Which collection would you use to hold the waiting messages, and why? What would happen
+          if you used a <code>Stack&lt;T&gt;</code> instead — what would go wrong?</p>
+        </div>
+
+      </div>
+
+      <div class="chapter-nav">
+        <a href="chapter-7.html">
+          <span class="nav-label">← Previous</span>
+          <span class="nav-title">Chapter 7: Generics</span>
+        </a>
+        <a href="chapter-9.html" class="next">
+          <span class="nav-label">Next →</span>
+          <span class="nav-title">Chapter 9: Exceptions</span>
+        </a>
+      </div>
+
+    </main>
+  </div>
+</div>
+<button class="menu-btn" aria-label="Open menu">☰</button>
+<script src="../auth.js"></script>
+<script src="../nav.js"></script>
+<script>
+function checkAnswer(inputId, outputId, correctAnswer, explanation) {
+  const input = document.getElementById(inputId);
+  const output = document.getElementById(outputId);
+  const userAnswer = input.value.trim().toLowerCase();
+  const correct = correctAnswer.toLowerCase();
+  if (userAnswer.includes(correct) || correct.includes(userAnswer) && userAnswer.length > 2) {
+    output.textContent = '✓ Correct! ' + explanation;
+    output.style.color = '#16a34a';
+  } else {
+    output.textContent = '✗ Not quite. The answer is "' + correctAnswer + '". ' + explanation;
+    output.style.color = '#dc2626';
+  }
+}
+</script>
+</body>
+</html>

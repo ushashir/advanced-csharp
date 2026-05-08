@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chapter 19: Configuration — Advanced C# &amp; .NET for Newbies</title>
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-header"><a href="../index.html"><div class="book-title">Advanced C# &amp; .NET for Newbies</div><div class="book-subtitle">A beginner-friendly guide</div></a></div>
+    <nav>
+      <div class="nav-part"><a href="../index.html">📖 Table of Contents</a><a href="../introduction.html">Introduction</a><a href="../about-author.html">About the Author</a></div>
+      <div class="nav-part">
+        <div class="nav-part-title">Part 1 — Object-Oriented Programming</div>
+        <a href="../part-1/chapter-1.html">Ch 1 · What is C#?</a><a href="../part-1/chapter-2.html">Ch 2 · Classes &amp; Objects</a><a href="../part-1/chapter-3.html">Ch 3 · Encapsulation</a><a href="../part-1/chapter-4.html">Ch 4 · Inheritance</a><a href="../part-1/chapter-5.html">Ch 5 · Polymorphism</a><a href="../part-1/chapter-6.html">Ch 6 · Abstraction</a><a href="../part-1/exercises.html">Part 1 Exercises</a>
+      </div>
+      <div class="nav-part">
+        <div class="nav-part-title">Part 2 — Advanced C# Concepts</div>
+        <a href="../part-2/chapter-7.html">Ch 7 · Generics</a><a href="../part-2/chapter-8.html">Ch 8 · Collections</a><a href="../part-2/chapter-9.html">Ch 9 · Exceptions</a><a href="../part-2/chapter-10.html">Ch 10 · Interfaces vs Abstract</a><a href="../part-2/chapter-11.html">Ch 11 · LINQ</a><a href="../part-2/chapter-12.html">Ch 12 · Delegates &amp; Lambdas</a><a href="../part-2/chapter-13.html">Ch 13 · Nullable Types</a><a href="../part-2/exercises.html">Part 2 Exercises</a>
+      </div>
+      <div class="nav-part">
+        <div class="nav-part-title">Part 3 — ASP.NET Core Basics</div>
+        <a href="chapter-14.html">Ch 14 · What is ASP.NET Core?</a><a href="chapter-15.html">Ch 15 · Dependency Injection</a><a href="chapter-16.html">Ch 16 · REST APIs</a><a href="chapter-17.html">Ch 17 · Controllers, Services, Repos</a><a href="chapter-18.html">Ch 18 · Entity Framework Core</a><a href="chapter-19.html">Ch 19 · Configuration</a><a href="exercises.html">Part 3 Exercises</a>
+      </div>
+      <div class="nav-part">
+        <div class="nav-part-title">Part 4 — ASP.NET Core Advanced</div>
+        <a href="../part-4/chapter-20.html">Ch 20 · Authentication &amp; Authorization</a><a href="../part-4/chapter-21.html">Ch 21 · JWT Authentication</a><a href="../part-4/chapter-22.html">Ch 22 · Exception Handling</a><a href="../part-4/chapter-23.html">Ch 23 · Validation</a><a href="../part-4/chapter-24.html">Ch 24 · Microservices</a><a href="../part-4/exercises.html">Part 4 Exercises</a>
+      </div>
+      <div class="nav-part">
+        <div class="nav-part-title">Part 5 — Conclusion</div>
+        <a href="../part-5/chapter-25.html">Ch 25 · The .NET Ecosystem</a><a href="../part-5/chapter-26.html">Ch 26 · What to Learn Next</a><a href="../part-5/conclusion.html">Conclusion</a>
+      </div>
+    </nav>
+  </aside>
+
+  <div class="content-wrapper">
+    <main class="content">
+
+      <div class="chapter-header">
+        <div class="chapter-tag part-3">Part 3 · Chapter 19</div>
+        <h1>Configuration — Your App's Settings Book</h1>
+        <p class="chapter-intro">A well-built application never has credentials, URLs, or feature flags baked into its code. Everything that might change between environments — or needs to be secret — belongs in configuration. ASP.NET Core has a rich, flexible configuration system that makes this easy and safe.</p>
+      </div>
+
+      <div class="learn-box">
+        <h4>What you'll learn in this chapter</h4>
+        <ul>
+          <li>appsettings.json — the primary configuration file</li>
+          <li>Environment-specific settings: appsettings.Development.json</li>
+          <li>Reading configuration values in code</li>
+          <li>The Options pattern: IOptions&lt;T&gt; for strongly-typed configuration</li>
+          <li>Environment variables as configuration</li>
+          <li>User Secrets for development — never commit passwords</li>
+          <li>Connection strings and email settings as a real example</li>
+        </ul>
+      </div>
+
+      <h2>The Hotel Guest Preferences Analogy</h2>
+      <p>
+        Picture a luxury hotel. Before you arrive, you fill out a preferences card: "I prefer
+        a firm pillow, I'd like the room at 20°C, I take a newspaper with breakfast, and please
+        do not disturb before 8am." When you check in, the hotel reads your card and sets up
+        your room accordingly — without you having to explain your preferences every day.
+      </p>
+      <p>
+        If you are a VIP guest (think: production environment), the hotel follows strict,
+        locked-down preferences. If you are a journalist on a test visit (development
+        environment), relaxed rules apply — you might get a different setup. The <em>card</em>
+        is your <code>appsettings.json</code>; the special overrides for different visit types
+        are your <code>appsettings.Development.json</code> and environment variables.
+      </p>
+      <div class="box analogy">
+        <div class="box-title">🏨 The Settings Book</div>
+        <p>
+          Your app reads its "preferences card" at startup. The base card
+          (<code>appsettings.json</code>) has defaults. The environment-specific overlay
+          (<code>appsettings.Development.json</code>) overrides those defaults for the
+          current environment. Environment variables override everything — they are the
+          hotel manager's direct instructions that trump any written preferences.
+          <br><br>
+          This layered override system means developers never need to touch production
+          settings, and production settings never bleed into development.
+        </p>
+      </div>
+
+      <h2>appsettings.json</h2>
+      <p>
+        Every ASP.NET Core project is created with an <code>appsettings.json</code> in the
+        project root. It is a JSON file with a hierarchical structure:
+      </p>
+      <pre><span class="cmt">// appsettings.json</span>
+{
+  <span class="str">"ConnectionStrings"</span>: {
+    <span class="str">"DefaultConnection"</span>: <span class="str">"Server=localhost;Database=MyAppDb;Trusted_Connection=true;"</span>
+  },
+  <span class="str">"EmailSettings"</span>: {
+    <span class="str">"SmtpHost"</span>:     <span class="str">"smtp.mycompany.com"</span>,
+    <span class="str">"SmtpPort"</span>:     <span class="num">587</span>,
+    <span class="str">"FromAddress"</span>:  <span class="str">"noreply@mycompany.com"</span>,
+    <span class="str">"FromName"</span>:     <span class="str">"MyApp Notifications"</span>
+  },
+  <span class="str">"Logging"</span>: {
+    <span class="str">"LogLevel"</span>: {
+      <span class="str">"Default"</span>:             <span class="str">"Information"</span>,
+      <span class="str">"Microsoft.AspNetCore"</span>: <span class="str">"Warning"</span>
+    }
+  },
+  <span class="str">"AllowedHosts"</span>: <span class="str">"*"</span>
+}</pre>
+
+      <h2>Environment-Specific Overrides</h2>
+      <p>
+        ASP.NET Core automatically loads <code>appsettings.{EnvironmentName}.json</code>
+        on top of the base file. The environment is set by the
+        <code>ASPNETCORE_ENVIRONMENT</code> environment variable. In development, it
+        defaults to <code>Development</code>.
+      </p>
+      <pre><span class="cmt">// appsettings.Development.json — overrides for local development only</span>
+{
+  <span class="str">"ConnectionStrings"</span>: {
+    <span class="str">"DefaultConnection"</span>: <span class="str">"Data Source=dev.db"</span>
+  },
+  <span class="str">"EmailSettings"</span>: {
+    <span class="str">"SmtpHost"</span>: <span class="str">"localhost"</span>,
+    <span class="str">"SmtpPort"</span>: <span class="num">1025</span>
+  },
+  <span class="str">"Logging"</span>: {
+    <span class="str">"LogLevel"</span>: {
+      <span class="str">"Default"</span>: <span class="str">"Debug"</span>
+    }
+  }
+}</pre>
+      <p>
+        In production, <code>ASPNETCORE_ENVIRONMENT</code> is set to <code>Production</code>,
+        and <code>appsettings.Production.json</code> would override the base — or better yet,
+        secrets are injected as environment variables so they are never stored in files.
+      </p>
+
+      <div class="box tip">
+        <div class="box-title">💡 The Configuration Priority Order</div>
+        <p>
+          ASP.NET Core loads configuration from multiple sources in this priority order
+          (later sources override earlier ones):
+        </p>
+        <ol>
+          <li><code>appsettings.json</code> — lowest priority, safe defaults</li>
+          <li><code>appsettings.{Environment}.json</code> — environment-specific overrides</li>
+          <li>User Secrets (development only)</li>
+          <li>Environment variables — high priority</li>
+          <li>Command-line arguments — highest priority</li>
+        </ol>
+        <p>
+          This means you can always override any setting without changing files — just set an
+          environment variable on the server.
+        </p>
+      </div>
+
+      <h2>Reading Configuration Directly</h2>
+      <p>
+        You can inject <code>IConfiguration</code> anywhere and read values with bracket
+        notation or <code>GetSection</code>. This is the simplest approach but the least type-safe:
+      </p>
+      <pre><span class="cmt">// Inject IConfiguration into a class via constructor</span>
+<span class="kw">public class</span> <span class="type">SomeService</span>
+{
+    <span class="kw">private readonly</span> <span class="type">IConfiguration</span> _config;
+
+    <span class="kw">public</span> <span class="fn">SomeService</span>(<span class="type">IConfiguration</span> config)
+    {
+        _config <span class="op">=</span> config;
+    }
+
+    <span class="kw">public void</span> <span class="fn">DoSomething</span>()
+    {
+        <span class="cmt">// Read a single value using colon-separated path</span>
+        <span class="kw">string</span> host <span class="op">=</span> _config[<span class="str">"EmailSettings:SmtpHost"</span>] <span class="op">??</span> <span class="str">"localhost"</span>;
+        <span class="kw">int</span>    port <span class="op">=</span> _config.<span class="fn">GetValue</span>&lt;<span class="kw">int</span>&gt;(<span class="str">"EmailSettings:SmtpPort"</span>);
+
+        <span class="cmt">// Read the entire EmailSettings section as a dictionary</span>
+        <span class="kw">var</span> emailSection <span class="op">=</span> _config.<span class="fn">GetSection</span>(<span class="str">"EmailSettings"</span>);
+        <span class="kw">string</span>? from <span class="op">=</span> emailSection[<span class="str">"FromAddress"</span>];
+    }
+}</pre>
+
+      <h2>The Options Pattern — Strongly-Typed Configuration</h2>
+      <p>
+        The options pattern is the recommended approach for reading groups of related
+        configuration values. You define a plain C# class that mirrors your config section,
+        then bind it. This gives you type safety, IntelliSense, and validation.
+      </p>
+      <pre><span class="cmt">// 1. Define a strongly-typed options class</span>
+<span class="kw">public class</span> <span class="type">EmailSettings</span>
+{
+    <span class="cmt">// Constant matches the JSON section name (used in AddOptions call)</span>
+    <span class="kw">public const string</span> SectionName <span class="op">=</span> <span class="str">"EmailSettings"</span>;
+
+    <span class="kw">public string</span> SmtpHost    { <span class="kw">get</span>; <span class="kw">set</span>; } <span class="op">=</span> <span class="kw">string</span>.Empty;
+    <span class="kw">public int</span>    SmtpPort    { <span class="kw">get</span>; <span class="kw">set</span>; }
+    <span class="kw">public string</span> FromAddress { <span class="kw">get</span>; <span class="kw">set</span>; } <span class="op">=</span> <span class="kw">string</span>.Empty;
+    <span class="kw">public string</span> FromName    { <span class="kw">get</span>; <span class="kw">set</span>; } <span class="op">=</span> <span class="kw">string</span>.Empty;
+}
+
+<span class="cmt">// 2. Register in Program.cs</span>
+builder.Services
+    .<span class="fn">AddOptions</span>&lt;<span class="type">EmailSettings</span>&gt;()
+    .<span class="fn">BindConfiguration</span>(<span class="type">EmailSettings</span>.SectionName)
+    .<span class="fn">ValidateDataAnnotations</span>()
+    .<span class="fn">ValidateOnStart</span>();
+
+<span class="cmt">// Shorter alternative:</span>
+builder.Services.<span class="fn">Configure</span>&lt;<span class="type">EmailSettings</span>&gt;(
+    builder.Configuration.<span class="fn">GetSection</span>(<span class="type">EmailSettings</span>.SectionName));
+
+<span class="cmt">// 3. Inject and use with IOptions&lt;T&gt;</span>
+<span class="kw">public class</span> <span class="type">SmtpEmailService</span> : <span class="type">IEmailService</span>
+{
+    <span class="kw">private readonly</span> <span class="type">EmailSettings</span> _settings;
+
+    <span class="kw">public</span> <span class="fn">SmtpEmailService</span>(<span class="type">IOptions</span>&lt;<span class="type">EmailSettings</span>&gt; options)
+    {
+        _settings <span class="op">=</span> options.Value;
+    }
+
+    <span class="kw">public void</span> <span class="fn">Send</span>(<span class="kw">string</span> to, <span class="kw">string</span> subject, <span class="kw">string</span> body)
+    {
+        <span class="type">Console</span>.<span class="fn">WriteLine</span>(
+            <span class="op">$</span><span class="str">"Sending via {_settings.SmtpHost}:{_settings.SmtpPort} from {_settings.FromAddress}"</span>);
+        <span class="cmt">// Real SMTP logic here...</span>
+    }
+}</pre>
+
+      <h2>User Secrets — Dev-Only Secure Values</h2>
+      <p>
+        Never put real passwords, API keys, or connection strings with credentials in
+        <code>appsettings.json</code>. That file is typically committed to source control.
+        Instead, use <strong>User Secrets</strong> for development:
+      </p>
+      <pre><span class="cmt"># Enable user secrets in your project (run once)</span>
+dotnet user-secrets init
+
+<span class="cmt"># Store a secret — saved in your OS user profile, NOT in the project folder</span>
+dotnet user-secrets set "EmailSettings:SmtpPassword" "my-real-password"
+dotnet user-secrets set "ConnectionStrings:DefaultConnection" "Server=prod;Password=secret"
+
+<span class="cmt"># List all secrets</span>
+dotnet user-secrets list</pre>
+      <p>
+        User secrets are stored in <code>~/.microsoft/usersecrets/{project-id}/secrets.json</code>
+        on your machine — outside the project directory, so they are never accidentally committed.
+        They are automatically loaded in Development mode.
+      </p>
+
+      <h2>Environment Variables — Production Secrets</h2>
+      <p>
+        In production (on a server or cloud container), use environment variables. ASP.NET Core
+        automatically reads them as configuration. Nested values use double underscores as
+        separators:
+      </p>
+      <pre><span class="cmt"># Setting an environment variable on Linux/macOS</span>
+export EmailSettings__SmtpPassword="production-password"
+export ConnectionStrings__DefaultConnection="Server=prod-db;..."
+
+<span class="cmt"># On Windows (PowerShell)</span>
+$env:EmailSettings__SmtpPassword = "production-password"</pre>
+      <p>
+        In cloud platforms like Azure App Service, AWS ECS, or Kubernetes, you set these in
+        the platform's "environment variables" or "secrets" configuration UI, and ASP.NET Core
+        reads them automatically at startup.
+      </p>
+
+      <div class="box fun-fact">
+        <div class="box-title">🔐 The Golden Rule of Secrets</div>
+        <p>
+          <strong>Never hardcode secrets. Never commit secrets to source control.</strong>
+          Not even for "just testing." Leaked credentials in git history can be found years
+          later. The proper approach:
+          <br><br>
+          Development → User Secrets (local, never committed)<br>
+          CI/CD pipelines → Secret variables in GitHub Actions / Azure DevOps<br>
+          Production servers → Environment variables or a secrets manager (Azure Key Vault,
+          AWS Secrets Manager, HashiCorp Vault)
+        </p>
+      </div>
+
+      <div class="box key-term">
+        <div class="box-title">📚 Key Terms</div>
+        <p><strong>appsettings.json:</strong> The primary configuration file for ASP.NET Core applications. Safe for non-secret settings.</p>
+        <p><strong>appsettings.Development.json:</strong> Environment-specific configuration override loaded only in the Development environment.</p>
+        <p><strong>IOptions&lt;T&gt;:</strong> An interface for injecting strongly-typed configuration. <code>IOptions&lt;T&gt;.Value</code> gives you the bound configuration object.</p>
+        <p><strong>User Secrets:</strong> A development-only mechanism for storing sensitive values outside the project directory so they are never committed to source control.</p>
+        <p><strong>Options Pattern:</strong> The recommended approach in ASP.NET Core for reading groups of related configuration values as a strongly-typed C# class.</p>
+        <p><strong>ASPNETCORE_ENVIRONMENT:</strong> An environment variable that controls which environment-specific configuration file is loaded. Common values: Development, Staging, Production.</p>
+      </div>
+
+      <div class="summary">
+        <h4>Chapter Summary</h4>
+        <ul>
+          <li><code>appsettings.json</code> is the primary configuration file. Use it for non-secret settings with safe defaults.</li>
+          <li><code>appsettings.Development.json</code> automatically overrides the base file in the Development environment — perfect for using a local database during development.</li>
+          <li>Configuration sources are layered: appsettings → environment-specific → User Secrets → environment variables → command line. Later sources win.</li>
+          <li>The Options pattern (<code>IOptions&lt;T&gt;</code>) provides strongly-typed, DI-friendly access to configuration sections — strongly preferred over raw <code>IConfiguration</code> access.</li>
+          <li>User Secrets are the right tool for development-time secrets. They are stored outside the project and never committed.</li>
+          <li>In production, use environment variables or a secrets manager. Never put passwords in files committed to source control.</li>
+        </ul>
+      </div>
+
+      <div class="exercises">
+        <h3>Exercises</h3>
+
+        <div class="exercise">
+          <div class="exercise-num">Exercise 19.1 — Interactive Quiz</div>
+          <p>Which file should you use for development-only configuration settings that override the base appsettings.json?</p>
+          <div class="interactive-exercise">
+            <input type="text" id="q19-1" placeholder="Type the filename..." />
+            <button onclick="checkAnswer('q19-1', 'out19-1', 'appsettings.Development.json', 'appsettings.Development.json is automatically loaded on top of appsettings.json when ASPNETCORE_ENVIRONMENT is set to Development (which is the default in local development). It overrides any values from the base file.')">Check Answer</button>
+            <div class="exercise-output" id="out19-1"></div>
+          </div>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-num">Exercise 19.2 — Model Your Own appsettings.json</div>
+          <p>
+            You are building an e-commerce app. Design a complete <code>appsettings.json</code>
+            with the following sections:
+          </p>
+          <ul>
+            <li>A database connection string (SQL Server for production, SQLite for development).</li>
+            <li>An <code>EmailSettings</code> section with SMTP host, port, from address, and a field for the password (use a placeholder like <code>"SEE_SECRETS"</code> — not a real value).</li>
+            <li>A <code>PaymentSettings</code> section with a <code>Provider</code> name ("Stripe"), <code>ApiKey</code> (placeholder), and <code>WebhookSecret</code> (placeholder).</li>
+            <li>A <code>FeatureFlags</code> section with two boolean values: <code>EnableNewCheckout</code> and <code>EnableBetaDashboard</code>.</li>
+          </ul>
+          <p>
+            Then write the corresponding <code>PaymentSettings</code> options class and show
+            how to register and inject it using the Options pattern.
+          </p>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-num">Exercise 19.3 — IOptions vs IOptionsSnapshot vs IOptionsMonitor</div>
+          <p>
+            ASP.NET Core provides three variations of the options interface:
+            <code>IOptions&lt;T&gt;</code>, <code>IOptionsSnapshot&lt;T&gt;</code>,
+            and <code>IOptionsMonitor&lt;T&gt;</code>. Research the differences and write
+            a table comparing them on these dimensions:
+          </p>
+          <ul>
+            <li>Lifetime they should be injected into (Singleton / Scoped / Transient)</li>
+            <li>Whether they pick up configuration changes without restarting the app</li>
+            <li>Best use case</li>
+          </ul>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-num">Exercise 19.4 — Reflection: Secret Management in Production</div>
+          <p>
+            User Secrets work for development, but what happens in production? Research one
+            cloud-native secrets management solution (Azure Key Vault, AWS Secrets Manager,
+            or HashiCorp Vault) and describe: how does it store secrets, how does an ASP.NET
+            Core application retrieve them at runtime, and what are the main advantages over
+            simply setting environment variables on the server?
+          </p>
+        </div>
+      </div>
+
+      <div class="chapter-nav">
+        <a href="chapter-18.html">
+          <span class="nav-label">← Previous</span>
+          <span class="nav-title">Chapter 18: Entity Framework Core</span>
+        </a>
+        <a href="exercises.html" class="next">
+          <span class="nav-label">Next →</span>
+          <span class="nav-title">Part 3 Exercises</span>
+        </a>
+      </div>
+
+    </main>
+  </div>
+</div>
+<button class="menu-btn" aria-label="Open menu">☰</button>
+<script src="../auth.js"></script>
+<script src="../nav.js"></script>
+<script>
+function checkAnswer(inputId, outputId, correctAnswer, explanation) {
+  const input = document.getElementById(inputId).value.trim();
+  const output = document.getElementById(outputId);
+  if (input.toLowerCase().includes(correctAnswer.toLowerCase())) {
+    output.innerHTML = '<span style="color:#16a34a;font-weight:600;">✓ Correct!</span> ' + explanation;
+  } else {
+    output.innerHTML = '<span style="color:#dc2626;font-weight:600;">Not quite.</span> The filename follows the pattern appsettings.{EnvironmentName}.json';
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chapter 26: What to Learn Next — Advanced C# &amp; .NET for Newbies</title>
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-header"><a href="../index.html"><div class="book-title">Advanced C# &amp; .NET for Newbies</div><div class="book-subtitle">A beginner-friendly guide</div></a></div>
+    <nav>
+      <div class="nav-part"><a href="../index.html">📖 Table of Contents</a><a href="../introduction.html">Introduction</a><a href="../about-author.html">About the Author</a></div>
+      <div class="nav-part">
+        <div class="nav-part-title">Part 1 — Object-Oriented Programming</div>
+        <a href="../part-1/chapter-1.html">Ch 1 · What is C#?</a><a href="../part-1/chapter-2.html">Ch 2 · Classes &amp; Objects</a><a href="../part-1/chapter-3.html">Ch 3 · Encapsulation</a><a href="../part-1/chapter-4.html">Ch 4 · Inheritance</a><a href="../part-1/chapter-5.html">Ch 5 · Polymorphism</a><a href="../part-1/chapter-6.html">Ch 6 · Abstraction</a><a href="../part-1/exercises.html">Part 1 Exercises</a>
+      </div>
+      <div class="nav-part">
+        <div class="nav-part-title">Part 2 — Advanced C# Concepts</div>
+        <a href="../part-2/chapter-7.html">Ch 7 · Generics</a><a href="../part-2/chapter-8.html">Ch 8 · Collections</a><a href="../part-2/chapter-9.html">Ch 9 · Exceptions</a><a href="../part-2/chapter-10.html">Ch 10 · Interfaces vs Abstract</a><a href="../part-2/chapter-11.html">Ch 11 · LINQ</a><a href="../part-2/chapter-12.html">Ch 12 · Delegates &amp; Lambdas</a><a href="../part-2/chapter-13.html">Ch 13 · Nullable Types</a><a href="../part-2/exercises.html">Part 2 Exercises</a>
+      </div>
+      <div class="nav-part">
+        <div class="nav-part-title">Part 3 — ASP.NET Core Basics</div>
+        <a href="../part-3/chapter-14.html">Ch 14 · What is ASP.NET Core?</a><a href="../part-3/chapter-15.html">Ch 15 · Dependency Injection</a><a href="../part-3/chapter-16.html">Ch 16 · REST APIs</a><a href="../part-3/chapter-17.html">Ch 17 · Controllers, Services, Repos</a><a href="../part-3/chapter-18.html">Ch 18 · Entity Framework Core</a><a href="../part-3/chapter-19.html">Ch 19 · Configuration</a><a href="../part-3/exercises.html">Part 3 Exercises</a>
+      </div>
+      <div class="nav-part">
+        <div class="nav-part-title">Part 4 — ASP.NET Core Advanced</div>
+        <a href="../part-4/chapter-20.html">Ch 20 · Authentication &amp; Authorization</a><a href="../part-4/chapter-21.html">Ch 21 · JWT Authentication</a><a href="../part-4/chapter-22.html">Ch 22 · Exception Handling</a><a href="../part-4/chapter-23.html">Ch 23 · Validation</a><a href="../part-4/chapter-24.html">Ch 24 · Microservices</a><a href="../part-4/exercises.html">Part 4 Exercises</a>
+      </div>
+      <div class="nav-part">
+        <div class="nav-part-title">Part 5 — Conclusion</div>
+        <a href="chapter-25.html">Ch 25 · The .NET Ecosystem</a><a href="chapter-26.html">Ch 26 · What to Learn Next</a><a href="conclusion.html">Conclusion</a>
+      </div>
+    </nav>
+  </aside>
+
+  <div class="content-wrapper">
+    <main class="content">
+
+      <div class="chapter-header">
+        <div class="chapter-tag part-5">Part 5 · Chapter 26</div>
+        <h1>What to Learn Next</h1>
+        <p class="chapter-intro">Finishing a book is a beginning, not an ending. You now have a solid foundation in C#, .NET, and ASP.NET Core. The question is: what do you build on top of it? This chapter gives you a realistic, structured roadmap for the next six months.</p>
+      </div>
+
+      <div class="learn-box">
+        <h4>What this chapter covers</h4>
+        <ul>
+          <li>A "Next 30 Days" plan — what to build first to consolidate your learning</li>
+          <li>A "Next 3 Months" plan — deeper skills that will make you job-ready</li>
+          <li>A "Next 6 Months" plan — professional-level topics that set you apart</li>
+          <li>Recommended resources: courses, blogs, YouTube channels, and documentation</li>
+          <li>The right mindset for continued growth as a .NET developer</li>
+        </ul>
+      </div>
+
+      <h2>The Learning Roadmap</h2>
+      <p>
+        Before we dive into the roadmap, one piece of advice: <strong>learning by building beats
+        learning by reading, always</strong>. Every topic in this roadmap will stick far better
+        if you apply it in a project rather than just reading about it. Pick a project idea you
+        care about and use it as the vehicle for learning each new skill.
+      </p>
+      <p>
+        A simple but effective project idea: a personal expense tracker with a REST API backend
+        (users, expenses, categories), authentication, a basic frontend (or just curl), and
+        deployed to Azure. This single project can absorb everything in this roadmap.
+      </p>
+
+      <h2>Next 30 Days — Consolidate and Build</h2>
+      <p>
+        The first 30 days are about making sure what you have learned in this book is truly solid.
+        The best way to do that is to build something end-to-end.
+      </p>
+
+      <div class="box key-term">
+        <div class="box-title">🗓️ 30-Day Action Plan</div>
+        <p>
+          <strong>Week 1–2: Build a Complete CRUD API.</strong><br>
+          Build a task management API from scratch: User registration and login (JWT), a Task
+          resource (create, read, update, delete), Entity Framework Core with SQLite or SQL Server,
+          Data Annotations or FluentValidation, global exception handling. Refer back to this book
+          whenever you get stuck — that is what it is for.
+          <br><br>
+          <strong>Week 3: Add Tests.</strong><br>
+          Write unit tests for your service layer using xUnit. Learn to mock dependencies with
+          Moq. Aim for 60%+ test coverage. Testing is the skill that separates junior developers
+          from mid-level ones more than almost anything else.
+          <br><br>
+          <strong>Week 4: Deploy It.</strong><br>
+          Put your API on the internet. Azure App Service has a free tier. GitHub Actions can
+          automate deployment. Having a live URL you can share with people is motivating and
+          teaches you real-world concerns (environment variables, HTTPS, connection strings
+          in production).
+        </p>
+      </div>
+
+      <h3>Tools and Technologies for This Phase</h3>
+      <pre><span class="cmt">// Install the tools you'll need</span>
+dotnet add package xunit
+dotnet add package Moq
+dotnet add package FluentAssertions  <span class="cmt">// Makes test assertions more readable</span>
+dotnet add package Microsoft.EntityFrameworkCore.InMemory  <span class="cmt">// For integration tests</span></pre>
+
+      <h3>A Minimal xUnit Test to Get You Started</h3>
+      <pre><span class="kw">using</span> <span class="type">Xunit</span>;
+<span class="kw">using</span> <span class="type">Moq</span>;
+<span class="kw">using</span> <span class="type">FluentAssertions</span>;
+
+<span class="kw">public class</span> <span class="type">UserServiceTests</span>
+{
+    <span class="kw">private readonly</span> <span class="type">Mock</span>&lt;<span class="type">IUserRepository</span>&gt; _mockRepo;
+    <span class="kw">private readonly</span> <span class="type">UserService</span> _sut; <span class="cmt">// sut = System Under Test</span>
+
+    <span class="kw">public</span> <span class="fn">UserServiceTests</span>()
+    {
+        _mockRepo <span class="op">=</span> <span class="kw">new</span> <span class="type">Mock</span>&lt;<span class="type">IUserRepository</span>&gt;();
+        _sut <span class="op">=</span> <span class="kw">new</span> <span class="type">UserService</span>(_mockRepo.Object);
+    }
+
+    <span class="ann">[Fact]</span>
+    <span class="kw">public async</span> <span class="type">Task</span> <span class="fn">GetUserById_WhenUserDoesNotExist_ThrowsNotFoundException</span>()
+    {
+        <span class="cmt">// Arrange</span>
+        _mockRepo.<span class="fn">Setup</span>(r <span class="op">=&gt;</span> r.<span class="fn">GetByIdAsync</span>(<span class="num">99</span>)).<span class="fn">ReturnsAsync</span>((<span class="type">User</span>?)<span class="kw">null</span>);
+
+        <span class="cmt">// Act &amp; Assert</span>
+        <span class="kw">await</span> _sut.<span class="fn">Invoking</span>(s <span class="op">=&gt;</span> s.<span class="fn">GetUserByIdAsync</span>(<span class="num">99</span>))
+            .<span class="fn">Should</span>().<span class="fn">ThrowAsync</span>&lt;<span class="type">NotFoundException</span>&gt;();
+    }
+}</pre>
+
+      <h2>Next 3 Months — Become Job-Ready</h2>
+      <p>
+        After you have a working, tested, deployed project, it is time to fill in the gaps that
+        separate a self-taught developer from one who is ready for a professional environment.
+      </p>
+
+      <h3>Docker and Containerisation</h3>
+      <p>
+        Every modern development team uses Docker. Learn to write a <code>Dockerfile</code> for
+        your ASP.NET Core API (we showed a template in Chapter 24). Learn
+        <code>docker-compose</code> to run your API alongside a SQL Server or PostgreSQL container
+        locally. Then deploy a container to Azure Container Apps or Azure Container Instances.
+      </p>
+      <pre><span class="cmt"># docker-compose.yml — run your API and database together</span>
+version: <span class="str">'3.8'</span>
+services:
+  api:
+    build: .
+    ports:
+      - <span class="str">"8080:8080"</span>
+    environment:
+      - ConnectionStrings__Default=Server=db;Database=MyApp;User=sa;Password=YourPass123!
+    depends_on:
+      - db
+
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      SA_PASSWORD: <span class="str">"YourPass123!"</span>
+      ACCEPT_EULA: <span class="str">"Y"</span>
+    ports:
+      - <span class="str">"1433:1433"</span></pre>
+
+      <h3>Async/Await Deeply</h3>
+      <p>
+        This book has used <code>async/await</code> throughout, but we have not gone deep.
+        Understand these topics properly:
+      </p>
+      <ul>
+        <li>The difference between <code>Task</code>, <code>Task&lt;T&gt;</code>, and <code>ValueTask&lt;T&gt;</code></li>
+        <li>What <code>ConfigureAwait(false)</code> does and when to use it</li>
+        <li><code>Task.WhenAll()</code> and <code>Task.WhenAny()</code> for parallel async operations</li>
+        <li><code>CancellationToken</code> — how to propagate cancellation through async call chains</li>
+        <li>How to avoid deadlocks in async code</li>
+      </ul>
+
+      <h3>Caching</h3>
+      <p>
+        Caching is one of the simplest ways to dramatically improve API performance.
+        Learn both levels:
+      </p>
+      <pre><span class="cmt">// In-memory cache — fast, but per-instance (not shared across servers)</span>
+builder.Services.<span class="fn">AddMemoryCache</span>();
+
+<span class="cmt">// In your service</span>
+<span class="kw">if</span> (<span class="op">!</span>_cache.<span class="fn">TryGetValue</span>(<span class="op">$</span><span class="str">"user:{userId}"</span>, <span class="kw">out</span> <span class="type">UserDto</span>? user))
+{
+    user <span class="op">=</span> <span class="kw">await</span> _repo.<span class="fn">GetUserAsync</span>(userId);
+    _cache.<span class="fn">Set</span>(<span class="op">$</span><span class="str">"user:{userId}"</span>, user, <span class="type">TimeSpan</span>.<span class="fn">FromMinutes</span>(<span class="num">5</span>));
+}
+
+<span class="cmt">// Distributed cache (Redis) — shared across multiple server instances</span>
+builder.Services.<span class="fn">AddStackExchangeRedisCache</span>(options <span class="op">=&gt;</span>
+    options.Configuration <span class="op">=</span> builder.Configuration[<span class="str">"Redis:ConnectionString"</span>]);</pre>
+
+      <h3>Message Queues in Practice</h3>
+      <p>
+        Chapter 24 introduced the concept of message queues. Now implement one. MassTransit
+        with RabbitMQ is the recommended starting point — great documentation and abstracts the
+        broker-specific code beautifully.
+      </p>
+      <pre>dotnet add package MassTransit.RabbitMQ</pre>
+
+      <h2>Next 6 Months — Professional-Level Skills</h2>
+      <p>
+        At six months, you should be thinking about the skills that senior developers are expected
+        to have. These take time — they reward patient, deliberate learning.
+      </p>
+
+      <h3>Integration Testing</h3>
+      <p>
+        Unit tests test individual classes in isolation. Integration tests test your actual HTTP
+        endpoints against a real (test) database. ASP.NET Core provides
+        <code>WebApplicationFactory&lt;T&gt;</code> for this:
+      </p>
+      <pre><span class="kw">public class</span> <span class="type">UsersControllerTests</span> : <span class="type">IClassFixture</span>&lt;<span class="type">WebApplicationFactory</span>&lt;<span class="type">Program</span>&gt;&gt;
+{
+    <span class="kw">private readonly</span> <span class="type">HttpClient</span> _client;
+
+    <span class="kw">public</span> <span class="fn">UsersControllerTests</span>(<span class="type">WebApplicationFactory</span>&lt;<span class="type">Program</span>&gt; factory)
+        <span class="op">=&gt;</span> _client <span class="op">=</span> factory.<span class="fn">CreateClient</span>();
+
+    <span class="ann">[Fact]</span>
+    <span class="kw">public async</span> <span class="type">Task</span> <span class="fn">GetUser_ReturnsOk_WhenUserExists</span>()
+    {
+        <span class="kw">var</span> response <span class="op">=</span> <span class="kw">await</span> _client.<span class="fn">GetAsync</span>(<span class="str">"/api/users/1"</span>);
+        response.StatusCode.Should().<span class="fn">Be</span>(<span class="type">HttpStatusCode</span>.OK);
+    }
+}</pre>
+
+      <h3>gRPC for Service-to-Service Communication</h3>
+      <p>
+        REST over HTTP/JSON is the most common protocol for service communication, but it is not
+        the most efficient. gRPC uses Protocol Buffers (binary serialisation) and HTTP/2, giving
+        much higher throughput and lower latency for internal service-to-service calls. ASP.NET
+        Core has excellent gRPC support via the <code>Grpc.AspNetCore</code> package.
+      </p>
+
+      <h3>OpenTelemetry and Observability</h3>
+      <p>
+        In production, you need to understand what your application is doing. Learn the three
+        pillars of observability:
+      </p>
+      <ul>
+        <li><strong>Logs</strong> — structured logging with Serilog, outputting to Azure Monitor or Seq.</li>
+        <li><strong>Metrics</strong> — counters and gauges (request rate, error rate, latency) exported to Prometheus or Azure Monitor.</li>
+        <li><strong>Traces</strong> — distributed request tracing with OpenTelemetry and Jaeger.</li>
+      </ul>
+      <pre>dotnet add package OpenTelemetry.Extensions.Hosting
+dotnet add package OpenTelemetry.Instrumentation.AspNetCore
+dotnet add package OpenTelemetry.Exporter.Console</pre>
+
+      <h3>Domain-Driven Design (DDD) Concepts</h3>
+      <p>
+        As your applications grow, how you structure and name things becomes as important as how
+        you code them. Domain-Driven Design gives you a vocabulary and set of patterns for
+        modelling complex business domains: Aggregates, Value Objects, Repositories, Domain Events,
+        and Bounded Contexts. Read "Domain-Driven Design Distilled" by Vaughn Vernon as a
+        practical starting point.
+      </p>
+
+      <h2>Recommended Resources</h2>
+
+      <h3>Official Documentation</h3>
+      <ul>
+        <li><a href="https://learn.microsoft.com/en-us/dotnet/" target="_blank"><strong>Microsoft Learn (.NET)</strong></a> — The official documentation. Comprehensive, free, and regularly updated. Start here for any topic.</li>
+        <li><a href="https://learn.microsoft.com/en-us/aspnet/core/" target="_blank"><strong>ASP.NET Core documentation</strong></a> — Every feature from routing to gRPC, with code samples.</li>
+      </ul>
+
+      <h3>Blogs</h3>
+      <ul>
+        <li><strong>Andrew Lock — andrewlock.net</strong> — Deeply technical posts about ASP.NET Core internals. He has written about every non-obvious corner of the framework. Essential reading when you want to understand how things really work.</li>
+        <li><strong>Steve Gordon — stevejgordon.co.uk</strong> — High-performance .NET, HttpClient, Channels, and performance tuning.</li>
+        <li><strong>Mark Seemann — blog.ploeh.dk</strong> — Functional design, Clean Architecture, and API design with a strong theoretical foundation.</li>
+      </ul>
+
+      <h3>YouTube Channels</h3>
+      <ul>
+        <li><strong>Nick Chapsas</strong> — @nickchapsas — The best C#/.NET YouTube channel. Practical, fast-paced tutorials on every topic from performance to design patterns. Thousands of developers have levelled up watching his content.</li>
+        <li><strong>Tim Corey (IAmTimCorey)</strong> — Beginner-friendly, thorough, and professional. Great for consolidating fundamentals.</li>
+        <li><strong>Milan Jovanovic</strong> — Clean Architecture, DDD, and practical patterns for production .NET applications.</li>
+      </ul>
+
+      <h3>Books</h3>
+      <ul>
+        <li><strong>C# in Depth</strong> by Jon Skeet — The deepest, most comprehensive C# language book ever written. Read this when you want to truly understand how C# works under the hood.</li>
+        <li><strong>Pro ASP.NET Core 8</strong> by Adam Freeman — Exhaustive coverage of every ASP.NET Core feature.</li>
+        <li><strong>Clean Architecture</strong> by Robert C. Martin — Architectural principles that apply to any language, but resonate strongly with .NET applications.</li>
+      </ul>
+
+      <h2>The Right Mindset</h2>
+      <p>
+        One final piece of advice. The developers who progress fastest are not the ones who read
+        the most — they are the ones who <em>ship the most</em>. Build things. Break things.
+        Read error messages carefully. Search for answers. Fix bugs. Ship again.
+      </p>
+      <p>
+        Imposter syndrome is real in this industry. You will feel like everyone else knows more
+        than you. They don't — they just have a different set of gaps. Every senior developer
+        has things they quietly don't understand. The difference is that experienced developers
+        have learned to be comfortable with not knowing and confident in their ability to figure
+        things out.
+      </p>
+      <p>
+        Build something. Put it on GitHub. Show it to people. Apply for jobs even before you
+        feel ready. The gap between "ready" and "actually ready" is smaller than you think.
+      </p>
+
+      <div class="summary">
+        <h4>Chapter Summary — Your Roadmap</h4>
+        <ul>
+          <li><strong>Next 30 days:</strong> Build a complete CRUD API, add xUnit tests with Moq, deploy to Azure App Service.</li>
+          <li><strong>Next 3 months:</strong> Learn Docker and docker-compose, deepen async/await knowledge, add caching (IMemoryCache then Redis), implement a message queue with MassTransit.</li>
+          <li><strong>Next 6 months:</strong> Write integration tests with WebApplicationFactory, learn gRPC, set up OpenTelemetry for observability, study Domain-Driven Design.</li>
+          <li><strong>Ongoing resources:</strong> Microsoft Learn, Andrew Lock's blog, Nick Chapsas on YouTube, C# in Depth by Jon Skeet.</li>
+          <li><strong>The rule:</strong> Build things. Ship things. Learning accelerates dramatically when you are solving real problems.</li>
+        </ul>
+      </div>
+
+      <div class="chapter-nav">
+        <a href="chapter-25.html">
+          <span class="nav-label">← Previous</span>
+          <span class="nav-title">Chapter 25: The .NET Ecosystem</span>
+        </a>
+        <a href="conclusion.html" class="next">
+          <span class="nav-label">Next →</span>
+          <span class="nav-title">Conclusion</span>
+        </a>
+      </div>
+
+    </main>
+  </div>
+</div>
+<button class="menu-btn" aria-label="Open menu">☰</button>
+<script src="../auth.js"></script>
+<script src="../nav.js"></script>
+</body>
+</html>
