@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chapter A: C# Data Types — Advanced C# &amp; .NET for Newbies</title>
+  <link rel="stylesheet" href="../../assets/style.css">
+  <script>(function(){var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);})()</script>
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-header"><a href="../../../index.html"><div class="book-title">Advanced C# &amp; .NET for Newbies</div><div class="book-subtitle">A beginner-friendly guide</div></a></div>
+    <nav>
+      <div class="nav-part"><a href="../../../index.html">📖 Table of Contents</a><a href="../introduction.html">Introduction</a><a href="../about-author.html">About the Author</a></div>
+      <div class="nav-part"><div class="nav-part-title">Part 0 — C# Fundamentals</div><a href="chapter-1a.html">Ch A · C# Data Types</a><a href="chapter-1b.html">Ch B · Data Structures</a><a href="exercises.html">Part 0 Exercises</a></div>
+      <div class="nav-part"><div class="nav-part-title">Part 1 — Object-Oriented Programming</div><a href="../part-1/chapter-1.html">Ch 1 · What is C#?</a><a href="../part-1/chapter-2.html">Ch 2 · Classes &amp; Objects</a><a href="../part-1/chapter-3.html">Ch 3 · Encapsulation</a><a href="../part-1/chapter-4.html">Ch 4 · Inheritance</a><a href="../part-1/chapter-5.html">Ch 5 · Polymorphism</a><a href="../part-1/chapter-6.html">Ch 6 · Abstraction</a><a href="../part-1/exercises.html">Part 1 Exercises</a></div>
+      <div class="nav-part"><div class="nav-part-title">Part 2 — Advanced C# Concepts</div><a href="../part-2/chapter-7.html">Ch 7 · Generics</a><a href="../part-2/chapter-8.html">Ch 8 · Collections</a><a href="../part-2/chapter-9.html">Ch 9 · Exceptions</a><a href="../part-2/chapter-10.html">Ch 10 · Interfaces vs Abstract</a><a href="../part-2/chapter-11.html">Ch 11 · LINQ</a><a href="../part-2/chapter-12.html">Ch 12 · Delegates &amp; Lambdas</a><a href="../part-2/chapter-13.html">Ch 13 · Nullable Types</a><a href="../part-2/exercises.html">Part 2 Exercises</a></div>
+      <div class="nav-part"><div class="nav-part-title">Part 3 — ASP.NET Core Basics</div><a href="../part-3/chapter-14.html">Ch 14 · What is ASP.NET Core?</a><a href="../part-3/chapter-15.html">Ch 15 · Dependency Injection</a><a href="../part-3/chapter-16.html">Ch 16 · REST APIs</a><a href="../part-3/chapter-17.html">Ch 17 · Controllers, Services, Repos</a><a href="../part-3/chapter-18.html">Ch 18 · Entity Framework Core</a><a href="../part-3/chapter-19.html">Ch 19 · Configuration</a><a href="../part-3/exercises.html">Part 3 Exercises</a></div>
+      <div class="nav-part"><div class="nav-part-title">Part 4 — ASP.NET Core Advanced</div><a href="../part-4/chapter-20.html">Ch 20 · Authentication &amp; Authorization</a><a href="../part-4/chapter-21.html">Ch 21 · JWT Authentication</a><a href="../part-4/chapter-22.html">Ch 22 · Exception Handling</a><a href="../part-4/chapter-23.html">Ch 23 · Validation</a><a href="../part-4/chapter-24.html">Ch 24 · Microservices</a><a href="../part-4/exercises.html">Part 4 Exercises</a></div>
+      <div class="nav-part"><div class="nav-part-title">Part 5 — Conclusion</div><a href="../part-5/chapter-25.html">Ch 25 · The .NET Ecosystem</a><a href="../part-5/chapter-26.html">Ch 26 · What to Learn Next</a><a href="../part-5/conclusion.html">Conclusion</a></div>
+    </nav>
+  </aside>
+
+  <div class="content-wrapper">
+    <main class="content">
+
+      <div class="chapter-header">
+        <div class="chapter-tag part-1">Part 0 · Chapter A</div>
+        <h1>C# Data Types — The Containers</h1>
+        <p class="chapter-intro">Before objects, classes, or APIs — everything in C# is data. This chapter covers every type of container C# gives you to store that data.</p>
+      </div>
+
+      <div class="learn-box">
+        <h4>What you'll learn in this chapter</h4>
+        <ul>
+          <li>The difference between value types and reference types</li>
+          <li>Every built-in numeric type: <code>int</code>, <code>long</code>, <code>double</code>, <code>float</code>, <code>decimal</code></li>
+          <li>Text and character types: <code>string</code> and <code>char</code></li>
+          <li>Boolean and byte types</li>
+          <li>The <code>var</code> keyword and type inference</li>
+          <li>Type conversion: implicit, explicit, and <code>Convert</code></li>
+          <li>Default values and constants</li>
+        </ul>
+      </div>
+
+      <h2>The Kitchen Cupboard Analogy</h2>
+      <p>
+        Think of your kitchen. You don't store cooking oil in a sugar jar or
+        put flour in a bottle. Every ingredient has a specific container shaped for it.
+        You'd never try to pour soup into a pepper shaker.
+      </p>
+      <p>
+        Data types in C# work the same way. Every piece of data has a type — a
+        specific kind of container — and C# enforces that you use the right container
+        for the right data. This makes your programs safer and faster.
+      </p>
+
+      <div class="box analogy">
+        <div class="box-title">🏠 The Storage Room</div>
+        <p>
+          Imagine a storage room with labelled boxes. Each box has a size and a
+          purpose — a small box for coins (byte), a medium box for whole numbers (int),
+          a big box for huge numbers (long), a bottle for precise measurements (decimal),
+          a notepad for text (string). C# won't let you put a paragraph of text into a
+          coin box — it would be wrong and it would break.
+        </p>
+      </div>
+
+      <h2>Value Types vs Reference Types</h2>
+      <p>
+        This is the most important distinction in C# data types. All types fall into one of two categories:
+      </p>
+
+      <h3>Value Types</h3>
+      <p>
+        A value type stores the data itself directly in memory. When you copy a value type,
+        you get a completely independent copy. Changes to the copy do not affect the original.
+      </p>
+      <pre><span class="kw">int</span> a = <span class="num">10</span>;
+<span class="kw">int</span> b = a;   <span class="cmt">// b gets its own copy of 10</span>
+b = <span class="num">20</span>;
+<span class="type">Console</span>.<span class="fn">WriteLine</span>(a);  <span class="cmt">// 10 — unchanged</span>
+<span class="type">Console</span>.<span class="fn">WriteLine</span>(b);  <span class="cmt">// 20</span></pre>
+      <p>Value types include: <code>int</code>, <code>long</code>, <code>double</code>, <code>float</code>, <code>decimal</code>, <code>bool</code>, <code>char</code>, <code>byte</code>, <code>short</code>, and all structs.</p>
+
+      <h3>Reference Types</h3>
+      <p>
+        A reference type stores a <em>pointer</em> (address) to where the data lives in memory.
+        When you copy a reference type, both variables point to the <em>same</em> data.
+        Changing one changes the other.
+      </p>
+      <pre><span class="kw">string</span>[] names1 = { <span class="str">"Alice"</span>, <span class="str">"Bob"</span> };
+<span class="kw">string</span>[] names2 = names1;   <span class="cmt">// both point to the SAME array</span>
+names2[<span class="num">0</span>] = <span class="str">"Charlie"</span>;
+<span class="type">Console</span>.<span class="fn">WriteLine</span>(names1[<span class="num">0</span>]);  <span class="cmt">// "Charlie" — names1 changed too!</span></pre>
+      <p>Reference types include: <code>string</code>, arrays, classes, interfaces, and delegates.</p>
+
+      <div class="box key-term">
+        <div class="box-title">📚 Key Term: Stack vs Heap</div>
+        <p>
+          Value types live on the <strong>stack</strong> — a fast, short-lived block of memory.
+          Reference types live on the <strong>heap</strong> — a larger, longer-lived area managed
+          by the garbage collector. You don't need to manage this manually in C# — the CLR handles
+          it — but knowing the difference helps you understand performance and copying behaviour.
+        </p>
+      </div>
+
+      <h2>Integer Types</h2>
+      <p>
+        C# gives you several integer types depending on how large your numbers need to be:
+      </p>
+
+      <table>
+        <tr><th>Type</th><th>Size</th><th>Range</th><th>When to use</th></tr>
+        <tr><td><code>byte</code></td><td>8 bits</td><td>0 to 255</td><td>Small positive numbers (image pixels, flags)</td></tr>
+        <tr><td><code>short</code></td><td>16 bits</td><td>−32,768 to 32,767</td><td>Rarely used directly</td></tr>
+        <tr><td><code>int</code></td><td>32 bits</td><td>−2.1B to 2.1B</td><td>Your everyday integer. Use this by default.</td></tr>
+        <tr><td><code>long</code></td><td>64 bits</td><td>−9.2 quintillion to 9.2 quintillion</td><td>Large IDs, timestamps, file sizes</td></tr>
+      </table>
+
+      <pre><span class="kw">byte</span> age = <span class="num">25</span>;
+<span class="kw">int</span> population = <span class="num">8_000_000_000</span>;   <span class="cmt">// underscores for readability</span>
+<span class="kw">long</span> distanceToStar = <span class="num">9_461_000_000_000L</span>;  <span class="cmt">// 'L' suffix for long literal</span></pre>
+
+      <div class="box tip">
+        <div class="box-title">💡 Default to <code>int</code></div>
+        <p>
+          Unless you have a specific reason (very large numbers → <code>long</code>,
+          memory-sensitive work → <code>byte</code>), always use <code>int</code> for whole numbers.
+          It matches the CPU's natural register size on most machines and is what C# expects
+          in most contexts.
+        </p>
+      </div>
+
+      <h2>Floating-Point Types</h2>
+      <p>
+        For numbers with decimal points, C# provides three options:
+      </p>
+
+      <table>
+        <tr><th>Type</th><th>Precision</th><th>Suffix</th><th>When to use</th></tr>
+        <tr><td><code>float</code></td><td>~7 digits</td><td><code>f</code></td><td>Graphics, games — speed over precision</td></tr>
+        <tr><td><code>double</code></td><td>~15 digits</td><td>(none)</td><td>Scientific, general-purpose decimals</td></tr>
+        <tr><td><code>decimal</code></td><td>~28 digits</td><td><code>m</code></td><td><strong>Money, finance</strong> — never use float/double for currency</td></tr>
+      </table>
+
+      <pre><span class="kw">float</span> speed = <span class="num">29.5f</span>;           <span class="cmt">// 'f' required for float literals</span>
+<span class="kw">double</span> gravity = <span class="num">9.80665</span>;       <span class="cmt">// default for decimal literals</span>
+<span class="kw">decimal</span> price = <span class="num">19.99m</span>;         <span class="cmt">// 'm' required for decimal literals</span></pre>
+
+      <div class="box warning">
+        <div class="box-title">⚠️ Never Use float or double for Money</div>
+        <p>
+          Try this: <code>Console.WriteLine(0.1 + 0.2);</code>
+          You get <code>0.30000000000000004</code>. This is because computers store decimals
+          in binary, and some fractions cannot be represented exactly. For financial calculations,
+          always use <code>decimal</code> — it avoids these rounding errors.
+        </p>
+      </div>
+
+      <h2>The bool Type</h2>
+      <p>
+        A <code>bool</code> (boolean) holds exactly one of two values: <code>true</code> or <code>false</code>.
+        It is used for conditions, flags, and logical operations.
+      </p>
+      <pre><span class="kw">bool</span> isLoggedIn = <span class="kw">true</span>;
+<span class="kw">bool</span> hasPermission = <span class="kw">false</span>;
+
+<span class="cmt">// Comparisons always return a bool</span>
+<span class="kw">bool</span> isAdult = age >= <span class="num">18</span>;    <span class="cmt">// true if age is 18 or more</span>
+<span class="kw">bool</span> isEmpty = name == <span class="str">""</span>;   <span class="cmt">// true if name is empty</span>
+
+<span class="cmt">// Logical operators</span>
+<span class="kw">bool</span> canEnter = isLoggedIn &amp;&amp; hasPermission;   <span class="cmt">// AND</span>
+<span class="kw">bool</span> canView  = isLoggedIn || isGuest;         <span class="cmt">// OR</span>
+<span class="kw">bool</span> isBlocked = !isLoggedIn;                  <span class="cmt">// NOT</span></pre>
+
+      <h2>The char Type</h2>
+      <p>
+        A <code>char</code> holds a single character. It uses single quotes, not double quotes.
+        Under the hood, a <code>char</code> is a 16-bit Unicode code point.
+      </p>
+      <pre><span class="kw">char</span> grade = <span class="str">'A'</span>;
+<span class="kw">char</span> symbol = <span class="str">'£'</span>;
+<span class="kw">char</span> newline = <span class="str">'\n'</span>;   <span class="cmt">// escape sequences work in char</span>
+
+<span class="cmt">// char can be compared numerically</span>
+<span class="type">Console</span>.<span class="fn">WriteLine</span>(<span class="str">'A'</span> &lt; <span class="str">'Z'</span>);  <span class="cmt">// true — 'A' is 65, 'Z' is 90</span></pre>
+
+      <h2>The string Type</h2>
+      <p>
+        A <code>string</code> is a sequence of characters. It is a <strong>reference type</strong>
+        but it behaves like a value type because strings in C# are <strong>immutable</strong>
+        — once created, a string cannot be changed. Every "modification" creates a new string.
+      </p>
+      <pre><span class="kw">string</span> name = <span class="str">"Ushahemba"</span>;
+<span class="kw">string</span> city = <span class="str">"Lagos"</span>;
+
+<span class="cmt">// String interpolation — embed variables with $</span>
+<span class="kw">string</span> greeting = <span class="op">$</span><span class="str">"Hello, {name}! You are from {city}."</span>;
+
+<span class="cmt">// Useful string methods</span>
+<span class="type">Console</span>.<span class="fn">WriteLine</span>(name.<span class="fn">ToUpper</span>());       <span class="cmt">// "USHAHEMBA"</span>
+<span class="type">Console</span>.<span class="fn">WriteLine</span>(name.<span class="fn">Length</span>);          <span class="cmt">// 9</span>
+<span class="type">Console</span>.<span class="fn">WriteLine</span>(name.<span class="fn">Contains</span>(<span class="str">"ha"</span>));  <span class="cmt">// true</span>
+<span class="type">Console</span>.<span class="fn">WriteLine</span>(name.<span class="fn">Replace</span>(<span class="str">"a"</span>, <span class="str">"@"</span>)); <span class="cmt">// "Ush@hemb@"</span>
+<span class="type">Console</span>.<span class="fn">WriteLine</span>(name[<span class="num">0</span>]);               <span class="cmt">// 'U' — indexing gives a char</span></pre>
+
+      <div class="box fun-fact">
+        <div class="box-title">🎯 String Immutability</div>
+        <p>
+          When you do <code>name = name + " Shir"</code>, C# does not modify the original string.
+          It creates a brand new string <code>"Ushahemba Shir"</code> and points <code>name</code>
+          to it. The old <code>"Ushahemba"</code> string is abandoned and eventually cleaned up
+          by the garbage collector. This is why for heavy string building (thousands of
+          concatenations), you should use <code>StringBuilder</code> instead.
+        </p>
+      </div>
+
+      <h2>The var Keyword — Type Inference</h2>
+      <p>
+        C# can often <em>infer</em> the type of a variable from the value you assign to it.
+        The <code>var</code> keyword tells the compiler: "Figure out the type yourself."
+      </p>
+      <pre><span class="kw">var</span> count = <span class="num">42</span>;          <span class="cmt">// compiler infers: int</span>
+<span class="kw">var</span> name = <span class="str">"Ushahemba"</span>;  <span class="cmt">// compiler infers: string</span>
+<span class="kw">var</span> price = <span class="num">9.99m</span>;       <span class="cmt">// compiler infers: decimal</span>
+<span class="kw">var</span> isReady = <span class="kw">true</span>;       <span class="cmt">// compiler infers: bool</span></pre>
+
+      <div class="box tip">
+        <div class="box-title">💡 var is not dynamic</div>
+        <p>
+          <code>var</code> is <strong>still statically typed</strong> — the type is fixed at
+          compile time, the compiler just works it out for you. You cannot later assign a
+          <code>string</code> to a variable declared as <code>var count = 42</code>. Once inferred
+          as <code>int</code>, it stays <code>int</code>. Use <code>var</code> when the type is
+          obvious from the assignment; use explicit types when clarity matters.
+        </p>
+      </div>
+
+      <h2>Type Conversion</h2>
+      <p>
+        Sometimes you need to convert data from one type to another. C# gives you three ways:
+      </p>
+
+      <h3>Implicit Conversion (Automatic)</h3>
+      <p>C# converts automatically when there is no risk of data loss (small → large).</p>
+      <pre><span class="kw">int</span> age = <span class="num">25</span>;
+<span class="kw">long</span> bigAge = age;      <span class="cmt">// int fits inside long — automatic</span>
+<span class="kw">double</span> d = age;         <span class="cmt">// int fits inside double — automatic</span></pre>
+
+      <h3>Explicit Conversion (Casting)</h3>
+      <p>When there <em>is</em> risk of data loss, you must cast explicitly using <code>(type)</code>.</p>
+      <pre><span class="kw">double</span> pi = <span class="num">3.14159</span>;
+<span class="kw">int</span> truncated = (<span class="kw">int</span>) pi;    <span class="cmt">// 3 — decimal part is lost</span>
+
+<span class="kw">long</span> bigNum = <span class="num">1_000_000_000_000L</span>;
+<span class="kw">int</span> overflow = (<span class="kw">int</span>) bigNum;  <span class="cmt">// data loss — value wraps around!</span></pre>
+
+      <h3>Using Convert and Parse</h3>
+      <p>For conversions involving strings (user input, files, APIs), use <code>Convert</code> or <code>Parse</code>.</p>
+      <pre><span class="kw">string</span> input = <span class="str">"42"</span>;
+
+<span class="cmt">// Parse — throws an exception if the string is not a valid number</span>
+<span class="kw">int</span> number = <span class="kw">int</span>.<span class="fn">Parse</span>(input);
+
+<span class="cmt">// TryParse — returns false instead of throwing</span>
+<span class="kw">if</span> (<span class="kw">int</span>.<span class="fn">TryParse</span>(input, <span class="kw">out int</span> result))
+{
+    <span class="type">Console</span>.<span class="fn">WriteLine</span>(<span class="op">$</span><span class="str">"Parsed: {result}"</span>);
+}
+
+<span class="cmt">// Convert — handles null gracefully (returns 0 instead of throwing)</span>
+<span class="kw">int</span> safe = <span class="type">Convert</span>.<span class="fn">ToInt32</span>(input);</pre>
+
+      <div class="box tip">
+        <div class="box-title">💡 Always Prefer TryParse</div>
+        <p>
+          When parsing user input, always use <code>TryParse</code> instead of <code>Parse</code>.
+          Users type unexpected things. <code>Parse</code> will throw an exception and crash your
+          program if the input is invalid. <code>TryParse</code> lets you handle the failure gracefully.
+        </p>
+      </div>
+
+      <h2>Constants and readonly</h2>
+      <p>
+        Sometimes a value should never change. C# gives you two ways to lock a value:
+      </p>
+      <pre><span class="cmt">// const — compile-time constant, must be a literal value</span>
+<span class="kw">const double</span> Pi = <span class="num">3.14159265358979</span>;
+<span class="kw">const int</span> MaxRetries = <span class="num">3</span>;
+<span class="kw">const string</span> AppName = <span class="str">"My API"</span>;
+
+<span class="cmt">// readonly — set once (in constructor or inline), then immutable</span>
+<span class="kw">readonly</span> <span class="kw">string</span> ServerId = <span class="type">Guid</span>.<span class="fn">NewGuid</span>().<span class="fn">ToString</span>();</pre>
+
+      <div class="box key-term">
+        <div class="box-title">📚 const vs readonly</div>
+        <p>
+          Use <code>const</code> for values that are truly fixed forever — mathematical constants,
+          limits, names that will never change. Use <code>readonly</code> when the value is set
+          at runtime (e.g., from configuration or generated once in a constructor) but should
+          never change after that.
+        </p>
+      </div>
+
+      <div class="summary">
+        <h4>Chapter Summary</h4>
+        <ul>
+          <li>Value types store data directly; reference types store a pointer to data in the heap.</li>
+          <li>For integers, default to <code>int</code>. Use <code>long</code> for large numbers.</li>
+          <li>For decimals, use <code>double</code> for general use and <code>decimal</code> for money.</li>
+          <li>A <code>string</code> is a reference type but behaves like a value type — it is immutable.</li>
+          <li><code>var</code> uses type inference at compile time — the type is still strongly fixed.</li>
+          <li>Use explicit casting <code>(type)</code> when converting between types with potential data loss.</li>
+          <li>Always use <code>TryParse</code> when parsing user-provided strings.</li>
+          <li><code>const</code> locks a compile-time value; <code>readonly</code> locks a runtime value.</li>
+        </ul>
+      </div>
+
+      <div class="chapter-nav">
+        <a href="../about-author.html">
+          <span class="nav-label">← Previous</span>
+          <span class="nav-title">About the Author</span>
+        </a>
+        <a href="chapter-1b.html" class="next">
+          <span class="nav-label">Next →</span>
+          <span class="nav-title">Chapter B: Data Structures</span>
+        </a>
+      </div>
+
+    </main>
+  </div>
+</div>
+<button class="menu-btn" aria-label="Open menu">☰</button>
+<script src="../../assets/auth.js"></script>
+<script src="../../assets/nav.js"></script>
+</body>
+</html>

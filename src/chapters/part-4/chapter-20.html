@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chapter 20: Authentication &amp; Authorization — Advanced C# &amp; .NET for Newbies</title>
+  <link rel="stylesheet" href="../../assets/style.css">
+  <script>(function(){var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);})()</script>
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-header"><a href="../../../index.html"><div class="book-title">Advanced C# &amp; .NET for Newbies</div><div class="book-subtitle">A beginner-friendly guide</div></a></div>
+    <nav>
+      <div class="nav-part"><a href="../../../index.html">📖 Table of Contents</a><a href="../introduction.html">Introduction</a><a href="../about-author.html">About the Author</a></div>
+      <div class="nav-part"><div class="nav-part-title">Part 0 — C# Fundamentals</div><a href="../part-0/chapter-1a.html">Ch A · C# Data Types</a><a href="../part-0/chapter-1b.html">Ch B · Data Structures</a><a href="../part-0/exercises.html">Part 0 Exercises</a></div>
+      <div class="nav-part">
+        <div class="nav-part-title">Part 1 — Object-Oriented Programming</div>
+        <a href="../part-1/chapter-1.html">Ch 1 · What is C#?</a><a href="../part-1/chapter-2.html">Ch 2 · Classes &amp; Objects</a><a href="../part-1/chapter-3.html">Ch 3 · Encapsulation</a><a href="../part-1/chapter-4.html">Ch 4 · Inheritance</a><a href="../part-1/chapter-5.html">Ch 5 · Polymorphism</a><a href="../part-1/chapter-6.html">Ch 6 · Abstraction</a><a href="../part-1/exercises.html">Part 1 Exercises</a>
+      </div>
+      <div class="nav-part">
+        <div class="nav-part-title">Part 2 — Advanced C# Concepts</div>
+        <a href="../part-2/chapter-7.html">Ch 7 · Generics</a><a href="../part-2/chapter-8.html">Ch 8 · Collections</a><a href="../part-2/chapter-9.html">Ch 9 · Exceptions</a><a href="../part-2/chapter-10.html">Ch 10 · Interfaces vs Abstract</a><a href="../part-2/chapter-11.html">Ch 11 · LINQ</a><a href="../part-2/chapter-12.html">Ch 12 · Delegates &amp; Lambdas</a><a href="../part-2/chapter-13.html">Ch 13 · Nullable Types</a><a href="../part-2/exercises.html">Part 2 Exercises</a>
+      </div>
+      <div class="nav-part">
+        <div class="nav-part-title">Part 3 — ASP.NET Core Basics</div>
+        <a href="../part-3/chapter-14.html">Ch 14 · What is ASP.NET Core?</a><a href="../part-3/chapter-15.html">Ch 15 · Dependency Injection</a><a href="../part-3/chapter-16.html">Ch 16 · REST APIs</a><a href="../part-3/chapter-17.html">Ch 17 · Controllers, Services, Repos</a><a href="../part-3/chapter-18.html">Ch 18 · Entity Framework Core</a><a href="../part-3/chapter-19.html">Ch 19 · Configuration</a><a href="../part-3/exercises.html">Part 3 Exercises</a>
+      </div>
+      <div class="nav-part">
+        <div class="nav-part-title">Part 4 — ASP.NET Core Advanced</div>
+        <a href="chapter-20.html">Ch 20 · Authentication &amp; Authorization</a><a href="chapter-21.html">Ch 21 · JWT Authentication</a><a href="chapter-22.html">Ch 22 · Exception Handling</a><a href="chapter-23.html">Ch 23 · Validation</a><a href="chapter-24.html">Ch 24 · Microservices</a><a href="exercises.html">Part 4 Exercises</a>
+      </div>
+      <div class="nav-part">
+        <div class="nav-part-title">Part 5 — Conclusion</div>
+        <a href="../part-5/chapter-25.html">Ch 25 · The .NET Ecosystem</a><a href="../part-5/chapter-26.html">Ch 26 · What to Learn Next</a><a href="../part-5/conclusion.html">Conclusion</a>
+      </div>
+    </nav>
+  </aside>
+
+  <div class="content-wrapper">
+    <main class="content">
+
+      <div class="chapter-header">
+        <div class="chapter-tag part-4">Part 4 · Chapter 20</div>
+        <h1>Authentication &amp; Authorization — The Bouncer and the Guest List</h1>
+        <p class="chapter-intro">Every serious web application needs to know two things about its users: who are you, and what are you allowed to do? These are two separate questions, and ASP.NET Core answers them with a two-layer security system that is both powerful and elegantly designed.</p>
+      </div>
+
+      <div class="learn-box">
+        <h4>What you'll learn in this chapter</h4>
+        <ul>
+          <li>The exact difference between authentication and authorization</li>
+          <li>An overview of ASP.NET Core Identity</li>
+          <li>How to use the <code>[Authorize]</code> attribute to protect endpoints</li>
+          <li>Roles vs Claims — two different ways to model permissions</li>
+          <li>Policy-based authorization with <code>AddAuthorization</code></li>
+          <li>Why middleware order matters (UseAuthentication before UseAuthorization)</li>
+          <li>Cookie authentication vs token authentication — a preview</li>
+        </ul>
+      </div>
+
+      <h2>The Bouncer and the Guest List</h2>
+      <p>
+        Picture a high-end nightclub. At the door stands a bouncer. When you arrive, the first thing
+        the bouncer does is check your ID — your driving licence, your passport, something that proves
+        who you are. That is <strong>authentication</strong>: the process of verifying your identity.
+      </p>
+      <p>
+        Once the bouncer is satisfied that you are who you say you are, they check the guest list.
+        Are you on the regular list? You get in and can use the bar and the dance floor. Are you on
+        the VIP list? You get access to the private lounge upstairs. Not on any list? You stay outside.
+        That is <strong>authorization</strong>: determining what you are allowed to do after your
+        identity has been confirmed.
+      </p>
+
+      <div class="box analogy">
+        <div class="box-title">🚪 The Nightclub Analogy</div>
+        <p>
+          <strong>Authentication = "Are you who you say you are?"</strong><br>
+          The bouncer checks your ID. You prove your identity. This happens once, at the door.
+          In a web app, this is typically the login process — you prove you are "alice@example.com"
+          by providing a password (or a token, or a social login).
+          <br><br>
+          <strong>Authorization = "Are you allowed to do this?"</strong><br>
+          The guest list determines which areas you can access inside the club. In a web app,
+          this is every subsequent check: can this user view the admin dashboard? Can they delete
+          other users' posts? Are they allowed to access the billing API?
+          <br><br>
+          You cannot be authorized without first being authenticated. But being authenticated does
+          not automatically mean you are authorized for everything.
+        </p>
+      </div>
+
+      <h2>ASP.NET Core Identity — The Security Framework</h2>
+      <p>
+        ASP.NET Core ships with a built-in membership system called <strong>ASP.NET Core Identity</strong>.
+        It handles the most common security concerns out of the box:
+      </p>
+      <ul>
+        <li>User registration and login</li>
+        <li>Secure password hashing (PBKDF2 by default — never stored in plain text)</li>
+        <li>Email confirmation and password reset</li>
+        <li>Role management (Admin, User, Manager, etc.)</li>
+        <li>Two-factor authentication (2FA)</li>
+        <li>Account lockout after too many failed login attempts</li>
+        <li>Integration with external providers (Google, Facebook, GitHub via OAuth)</li>
+      </ul>
+      <p>
+        Identity stores user data in a database — typically via Entity Framework Core. The core
+        tables it creates include <code>AspNetUsers</code>, <code>AspNetRoles</code>,
+        <code>AspNetUserRoles</code>, and <code>AspNetUserClaims</code>.
+      </p>
+
+      <p>You add Identity to your project with:</p>
+      <pre><span class="cmt">// In your terminal</span>
+dotnet add package Microsoft.AspNetCore.Identity.EntityFrameworkCore</pre>
+
+      <p>And configure it in <code>Program.cs</code>:</p>
+      <pre><span class="kw">var</span> builder <span class="op">=</span> <span class="type">WebApplication</span>.<span class="fn">CreateBuilder</span>(args);
+
+<span class="cmt">// Register Identity services</span>
+builder.Services
+    .<span class="fn">AddIdentity</span>&lt;<span class="type">IdentityUser</span>, <span class="type">IdentityRole</span>&gt;()
+    .<span class="fn">AddEntityFrameworkStores</span>&lt;<span class="type">AppDbContext</span>&gt;()
+    .<span class="fn">AddDefaultTokenProviders</span>();
+
+<span class="kw">var</span> app <span class="op">=</span> builder.<span class="fn">Build</span>();
+
+<span class="cmt">// IMPORTANT: order matters here</span>
+app.<span class="fn">UseAuthentication</span>();   <span class="cmt">// Who are you?</span>
+app.<span class="fn">UseAuthorization</span>();    <span class="cmt">// What can you do?</span>
+
+app.<span class="fn">Run</span>();</pre>
+
+      <div class="box key-term">
+        <div class="box-title">📚 Key Term: ASP.NET Core Identity</div>
+        <p>
+          A built-in membership system for ASP.NET Core applications. It provides user management,
+          password hashing, role management, and external login provider support. It integrates
+          with Entity Framework Core to persist user data and can be extended to accommodate
+          custom user properties.
+        </p>
+      </div>
+
+      <h2>The [Authorize] Attribute — The VIP Stamp</h2>
+      <p>
+        The <code>[Authorize]</code> attribute is the most fundamental tool in ASP.NET Core security.
+        Apply it to a controller or an individual action method, and ASP.NET Core will reject any
+        unauthenticated request with a <code>401 Unauthorized</code> response before your code even runs.
+      </p>
+
+      <pre><span class="kw">using</span> <span class="type">Microsoft.AspNetCore.Authorization</span>;
+<span class="kw">using</span> <span class="type">Microsoft.AspNetCore.Mvc</span>;
+
+<span class="cmt">// Applied to the whole controller — every action is protected</span>
+<span class="ann">[Authorize]</span>
+<span class="ann">[ApiController]</span>
+<span class="ann">[Route("api/[controller]")]</span>
+<span class="kw">public class</span> <span class="type">ProfileController</span> : <span class="type">ControllerBase</span>
+{
+    <span class="ann">[HttpGet]</span>
+    <span class="kw">public</span> <span class="type">IActionResult</span> <span class="fn">GetProfile</span>()
+    {
+        <span class="kw">var</span> userId <span class="op">=</span> User.<span class="fn">FindFirst</span>(<span class="str">"sub"</span>)<span class="op">?</span>.Value;
+        <span class="kw">return</span> <span class="fn">Ok</span>(<span class="kw">new</span> { UserId <span class="op">=</span> userId, Message <span class="op">=</span> <span class="str">"You are authenticated!"</span> });
+    }
+
+    <span class="cmt">// This specific action allows anonymous access even though the controller is [Authorize]</span>
+    <span class="ann">[AllowAnonymous]</span>
+    <span class="ann">[HttpGet("public")]</span>
+    <span class="kw">public</span> <span class="type">IActionResult</span> <span class="fn">PublicInfo</span>()
+    {
+        <span class="kw">return</span> <span class="fn">Ok</span>(<span class="str">"This is visible to everyone."</span>);
+    }
+}</pre>
+
+      <p>
+        The complementary attribute is <code>[AllowAnonymous]</code>, which explicitly opens an
+        endpoint to unauthenticated users — even when the parent controller is locked with
+        <code>[Authorize]</code>.
+      </p>
+
+      <div class="box tip">
+        <div class="box-title">💡 Secure by Default</div>
+        <p>
+          A common pattern is to apply <code>[Authorize]</code> globally (so every endpoint is
+          protected by default) and then add <code>[AllowAnonymous]</code> only to the specific
+          endpoints that should be public, like the login endpoint or a health check. This
+          "secure by default" approach means you can never accidentally forget to protect an
+          endpoint.
+        </p>
+        <pre><span class="cmt">// Apply [Authorize] globally in Program.cs</span>
+builder.Services.<span class="fn">AddControllers</span>(options <span class="op">=&gt;</span>
+{
+    <span class="kw">var</span> policy <span class="op">=</span> <span class="kw">new</span> <span class="type">AuthorizationPolicyBuilder</span>()
+        .<span class="fn">RequireAuthenticatedUser</span>()
+        .<span class="fn">Build</span>();
+    options.Filters.<span class="fn">Add</span>(<span class="kw">new</span> <span class="type">AuthorizeFilter</span>(policy));
+});</pre>
+      </div>
+
+      <h2>Roles vs Claims — Two Ways to Think About Permissions</h2>
+      <p>
+        ASP.NET Core gives you two complementary models for authorization: <strong>roles</strong>
+        and <strong>claims</strong>. Understanding the difference is important.
+      </p>
+
+      <h3>Roles</h3>
+      <p>
+        A role is a named group that a user belongs to. Common examples: <code>Admin</code>,
+        <code>Manager</code>, <code>User</code>, <code>Editor</code>. You restrict access to
+        a role using:
+      </p>
+      <pre><span class="cmt">// Only users in the "Admin" role can access this</span>
+<span class="ann">[Authorize(Roles = "Admin")]</span>
+<span class="ann">[HttpDelete("{id}")]</span>
+<span class="kw">public</span> <span class="type">IActionResult</span> <span class="fn">DeleteUser</span>(<span class="type">int</span> id) { <span class="op">...</span> }
+
+<span class="cmt">// Accessible to Admin OR Manager</span>
+<span class="ann">[Authorize(Roles = "Admin,Manager")]</span>
+<span class="ann">[HttpGet("reports")]</span>
+<span class="kw">public</span> <span class="type">IActionResult</span> <span class="fn">GetReports</span>() { <span class="op">...</span> }</pre>
+
+      <h3>Claims</h3>
+      <p>
+        A claim is a key-value piece of information about a user — more fine-grained than a role.
+        Examples: <code>email = "alice@example.com"</code>, <code>department = "engineering"</code>,
+        <code>subscription_tier = "premium"</code>. Claims are issued by an identity provider and
+        travel with the user's token.
+      </p>
+      <pre><span class="cmt">// Check a claim in code</span>
+<span class="kw">var</span> department <span class="op">=</span> User.<span class="fn">FindFirst</span>(<span class="str">"department"</span>)<span class="op">?</span>.Value;
+<span class="kw">if</span> (department <span class="op">!=</span> <span class="str">"engineering"</span>)
+    <span class="kw">return</span> <span class="fn">Forbid</span>();</pre>
+
+      <div class="box analogy">
+        <div class="box-title">🏷️ Roles vs Claims Analogy</div>
+        <p>
+          Think of a company badge. Your <strong>role</strong> is your job title printed on the
+          badge: "Engineer", "Manager", "Security". It gives broad access. Your <strong>claims</strong>
+          are all the other details: your employee ID, which floor you have access to, whether you
+          can enter the server room, what department you are in. Claims are more precise and flexible
+          than roles.
+        </p>
+      </div>
+
+      <h2>Policy-Based Authorization — The Rule Book</h2>
+      <p>
+        When role-based authorization isn't expressive enough, ASP.NET Core has a more powerful
+        system: <strong>policies</strong>. A policy is a named set of requirements. You define
+        policies once in <code>Program.cs</code> and reference them by name in your attributes.
+      </p>
+
+      <pre><span class="cmt">// Program.cs — define policies</span>
+builder.Services.<span class="fn">AddAuthorization</span>(options <span class="op">=&gt;</span>
+{
+    <span class="cmt">// Simple role policy</span>
+    options.<span class="fn">AddPolicy</span>(<span class="str">"AdminOnly"</span>, policy <span class="op">=&gt;</span>
+        policy.<span class="fn">RequireRole</span>(<span class="str">"Admin"</span>));
+
+    <span class="cmt">// Claim-based policy</span>
+    options.<span class="fn">AddPolicy</span>(<span class="str">"PremiumUser"</span>, policy <span class="op">=&gt;</span>
+        policy.<span class="fn">RequireClaim</span>(<span class="str">"subscription_tier"</span>, <span class="str">"premium"</span>));
+
+    <span class="cmt">// Combined requirements: authenticated + specific claim</span>
+    options.<span class="fn">AddPolicy</span>(<span class="str">"EngineeringStaff"</span>, policy <span class="op">=&gt;</span>
+        policy
+            .<span class="fn">RequireAuthenticatedUser</span>()
+            .<span class="fn">RequireClaim</span>(<span class="str">"department"</span>, <span class="str">"engineering"</span>));
+
+    <span class="cmt">// Custom requirement using a lambda (minimum age example)</span>
+    options.<span class="fn">AddPolicy</span>(<span class="str">"Over18"</span>, policy <span class="op">=&gt;</span>
+        policy.<span class="fn">RequireAssertion</span>(context <span class="op">=&gt;</span>
+        {
+            <span class="kw">var</span> ageClaim <span class="op">=</span> context.User.<span class="fn">FindFirst</span>(<span class="str">"age"</span>);
+            <span class="kw">return</span> ageClaim <span class="op">!=</span> <span class="kw">null</span> <span class="op">&amp;&amp;</span> <span class="type">int</span>.<span class="fn">Parse</span>(ageClaim.Value) <span class="op">&gt;=</span> <span class="num">18</span>;
+        }));
+});</pre>
+
+      <p>Then use the policy name in your attribute:</p>
+      <pre><span class="ann">[Authorize(Policy = "PremiumUser")]</span>
+<span class="ann">[HttpGet("premium-content")]</span>
+<span class="kw">public</span> <span class="type">IActionResult</span> <span class="fn">GetPremiumContent</span>()
+{
+    <span class="kw">return</span> <span class="fn">Ok</span>(<span class="str">"Here is your exclusive premium content!"</span>);
+}
+
+<span class="ann">[Authorize(Policy = "EngineeringStaff")]</span>
+<span class="ann">[HttpGet("deploys")]</span>
+<span class="kw">public</span> <span class="type">IActionResult</span> <span class="fn">GetDeployments</span>()
+{
+    <span class="kw">return</span> <span class="fn">Ok</span>(<span class="str">"Deployment pipeline access granted."</span>);
+}</pre>
+
+      <div class="box key-term">
+        <div class="box-title">📚 Key Term: Authorization Policy</div>
+        <p>
+          A named set of requirements that a user must satisfy to access a resource. Policies
+          are defined once in <code>AddAuthorization()</code> and referenced by name in
+          <code>[Authorize(Policy = "...")]</code>. They are more flexible and reusable than
+          inline role checks.
+        </p>
+      </div>
+
+      <h2>Why Middleware Order Matters</h2>
+      <p>
+        This is one of the most common mistakes ASP.NET Core beginners make. The middleware
+        pipeline in ASP.NET Core is ordered — each piece of middleware runs in the sequence
+        you register it, and <strong>UseAuthentication must come before UseAuthorization</strong>.
+      </p>
+
+      <pre><span class="cmt">// CORRECT order in Program.cs</span>
+app.<span class="fn">UseRouting</span>();
+
+app.<span class="fn">UseAuthentication</span>();   <span class="cmt">// Step 1: identify the user (set HttpContext.User)</span>
+app.<span class="fn">UseAuthorization</span>();    <span class="cmt">// Step 2: check if the user can do this (requires Step 1)</span>
+
+app.<span class="fn">MapControllers</span>();</pre>
+
+      <pre><span class="cmt">// WRONG — Authorization runs before Authentication has identified the user</span>
+app.<span class="fn">UseAuthorization</span>();    <span class="cmt">// ❌ HttpContext.User is still anonymous</span>
+app.<span class="fn">UseAuthentication</span>();   <span class="cmt">// Too late! The check already happened</span></pre>
+
+      <p>
+        Think of it like a bouncer and a list-checker. The bouncer (authentication) must verify
+        your ID and stamp your hand <em>before</em> the list-checker (authorization) looks at what
+        your stamp says. If the list-checker goes first, they see a blank hand and deny everyone.
+      </p>
+
+      <div class="box fun-fact">
+        <div class="box-title">⚠️ Common Mistake: Wrong Middleware Order</div>
+        <p>
+          If your <code>[Authorize]</code> attributes seem to be doing nothing — or if every
+          request is being rejected regardless of credentials — middleware order is the first
+          thing to check. It has caught many developers off guard, from beginners to experienced
+          engineers switching from other frameworks.
+        </p>
+      </div>
+
+      <h2>Cookie Authentication vs Token Authentication</h2>
+      <p>
+        ASP.NET Core supports multiple authentication schemes. The two most common are:
+      </p>
+
+      <h3>Cookie Authentication</h3>
+      <p>
+        Used primarily for browser-based web applications. When a user logs in, the server creates
+        a session and sets an encrypted cookie in the browser. On subsequent requests, the browser
+        automatically sends the cookie and the server validates it. Works beautifully for traditional
+        web apps with server-rendered pages.
+      </p>
+      <pre><span class="cmt">// Adding cookie authentication</span>
+builder.Services
+    .<span class="fn">AddAuthentication</span>(<span class="type">CookieAuthenticationDefaults</span>.AuthenticationScheme)
+    .<span class="fn">AddCookie</span>(options <span class="op">=&gt;</span>
+    {
+        options.LoginPath <span class="op">=</span> <span class="str">"/account/login"</span>;
+        options.LogoutPath <span class="op">=</span> <span class="str">"/account/logout"</span>;
+        options.ExpireTimeSpan <span class="op">=</span> <span class="type">TimeSpan</span>.<span class="fn">FromHours</span>(<span class="num">8</span>);
+    });</pre>
+
+      <h3>Token Authentication (JWT)</h3>
+      <p>
+        Used for APIs, mobile apps, and single-page applications (SPAs). When a user logs in,
+        the server issues a JSON Web Token (JWT). The client stores this token and sends it with
+        every request in the <code>Authorization: Bearer &lt;token&gt;</code> header. The server
+        validates the token on each request — with no server-side session storage needed. We
+        cover this in depth in the next chapter.
+      </p>
+
+      <div class="box tip">
+        <div class="box-title">💡 Which to Choose?</div>
+        <p>
+          <strong>Cookie auth</strong> is great for traditional web apps where the browser
+          handles everything automatically. <strong>JWT / token auth</strong> is better for APIs
+          consumed by mobile apps, SPAs (React, Angular, Vue), or other services. Most modern
+          full-stack applications use JWT for their API layer.
+        </p>
+      </div>
+
+      <h2>Putting It All Together — A Minimal Secure API</h2>
+      <pre><span class="kw">var</span> builder <span class="op">=</span> <span class="type">WebApplication</span>.<span class="fn">CreateBuilder</span>(args);
+
+<span class="cmt">// 1. Add authentication and authorization services</span>
+builder.Services
+    .<span class="fn">AddAuthentication</span>(<span class="type">JwtBearerDefaults</span>.AuthenticationScheme)
+    .<span class="fn">AddJwtBearer</span>(); <span class="cmt">// configuration covered in Chapter 21</span>
+
+builder.Services.<span class="fn">AddAuthorization</span>(options <span class="op">=&gt;</span>
+{
+    options.<span class="fn">AddPolicy</span>(<span class="str">"AdminOnly"</span>, p <span class="op">=&gt;</span> p.<span class="fn">RequireRole</span>(<span class="str">"Admin"</span>));
+});
+
+builder.Services.<span class="fn">AddControllers</span>();
+
+<span class="kw">var</span> app <span class="op">=</span> builder.<span class="fn">Build</span>();
+
+<span class="cmt">// 2. Register middleware IN THE CORRECT ORDER</span>
+app.<span class="fn">UseAuthentication</span>();
+app.<span class="fn">UseAuthorization</span>();
+app.<span class="fn">MapControllers</span>();
+
+app.<span class="fn">Run</span>();</pre>
+
+      <div class="box key-term">
+        <div class="box-title">📚 Key Terms Summary</div>
+        <p><strong>Authentication (AuthN):</strong> The process of verifying who a user is. "Are you who you claim to be?"</p>
+        <p><strong>Authorization (AuthZ):</strong> The process of determining what a user is allowed to do. "Are you permitted to do this?"</p>
+        <p><strong>[Authorize]:</strong> An ASP.NET Core attribute that restricts access to authenticated (and optionally, specifically permitted) users.</p>
+        <p><strong>[AllowAnonymous]:</strong> Overrides [Authorize] to allow unauthenticated access to a specific endpoint.</p>
+        <p><strong>Claim:</strong> A key-value pair representing a fact about a user (name, email, role, department, etc.) that travels with their identity token.</p>
+        <p><strong>Policy:</strong> A named set of authorization requirements, defined once and reused across the application.</p>
+      </div>
+
+      <div class="summary">
+        <h4>Chapter Summary</h4>
+        <ul>
+          <li>Authentication (AuthN) verifies identity; Authorization (AuthZ) grants or denies access — they are separate concerns that work in sequence.</li>
+          <li>ASP.NET Core Identity provides a complete membership system: users, passwords, roles, 2FA, and external providers.</li>
+          <li>The <code>[Authorize]</code> attribute restricts endpoints to authenticated users; <code>[AllowAnonymous]</code> creates exceptions.</li>
+          <li>Roles group users into broad categories (Admin, User); Claims carry fine-grained key-value facts about a user.</li>
+          <li>Policy-based authorization with <code>AddAuthorization(options =&gt; options.AddPolicy(...))</code> is the most flexible approach.</li>
+          <li><code>UseAuthentication()</code> must always come before <code>UseAuthorization()</code> in the middleware pipeline — order is critical.</li>
+          <li>Cookie auth suits browser applications; JWT / Bearer token auth suits APIs and SPAs.</li>
+        </ul>
+      </div>
+
+      <div class="exercises">
+        <h3>Exercises</h3>
+
+        <div class="exercise">
+          <div class="exercise-num">Exercise 20.1 — Think It Through</div>
+          <p>
+            A user logs into a banking application with their username and password. They are then
+            blocked from transferring money because they haven't set up two-factor authentication.
+            Which part of this scenario is authentication, and which is authorization? Explain
+            your reasoning in 2–3 sentences.
+          </p>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-num">Exercise 20.2 — Interactive Quiz</div>
+          <p>Which ASP.NET Core attribute restricts an endpoint to authenticated users only?</p>
+          <div class="interactive-exercise">
+            <input type="text" id="q20-2" placeholder="Type your answer here..." />
+            <button onclick="checkAnswer('q20-2', 'out20-2', '[Authorize]', 'The [Authorize] attribute — applied to a controller or action method — requires the user to be authenticated. Any unauthenticated request is rejected with a 401 Unauthorized response.', 'Authorize')">Check Answer</button>
+            <div class="exercise-output" id="out20-2"></div>
+          </div>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-num">Exercise 20.3 — Roles vs Claims</div>
+          <p>
+            For a hospital management system, decide whether each of the following should be
+            modelled as a <strong>role</strong> or a <strong>claim</strong>, and explain why:
+          </p>
+          <ul>
+            <li>A user is a "Doctor"</li>
+            <li>A user's employee ID is "EMP-12345"</li>
+            <li>A user is allowed to prescribe controlled substances</li>
+            <li>A user is in the "Administration" department</li>
+            <li>A user has a medical licence number</li>
+          </ul>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-num">Exercise 20.4 — Fix the Bug</div>
+          <p>
+            A developer writes the following middleware pipeline and reports that <code>[Authorize]</code>
+            attributes are not working — every request succeeds regardless of authentication status.
+            Identify and fix the bug:
+          </p>
+          <pre>app.<span class="fn">UseRouting</span>();
+app.<span class="fn">UseAuthorization</span>();
+app.<span class="fn">UseAuthentication</span>();
+app.<span class="fn">MapControllers</span>();</pre>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-num">Exercise 20.5 — Design a Policy</div>
+          <p>
+            Write the <code>AddAuthorization</code> configuration for an e-commerce platform with
+            the following rules:
+          </p>
+          <ul>
+            <li>A <code>"Seller"</code> policy: user must have a claim <code>account_type</code> = <code>"seller"</code></li>
+            <li>An <code>"AdminOrSeller"</code> policy: user must be in the <code>"Admin"</code> role OR have the <code>"account_type"</code> = <code>"seller"</code> claim</li>
+            <li>A <code>"VerifiedSeller"</code> policy: user must have <code>account_type</code> = <code>"seller"</code> AND <code>verified</code> = <code>"true"</code></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="chapter-nav">
+        <a href="../part-3/exercises.html">
+          <span class="nav-label">← Previous</span>
+          <span class="nav-title">Part 3 Exercises</span>
+        </a>
+        <a href="chapter-21.html" class="next">
+          <span class="nav-label">Next →</span>
+          <span class="nav-title">Chapter 21: JWT Authentication</span>
+        </a>
+      </div>
+
+    </main>
+  </div>
+</div>
+<button class="menu-btn" aria-label="Open menu">☰</button>
+<script src="../../assets/auth.js"></script>
+<script src="../../assets/nav.js"></script>
+</body>
+</html>

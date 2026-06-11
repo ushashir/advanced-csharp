@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chapter 3: Encapsulation — Advanced C# &amp; .NET for Newbies</title>
+  <link rel="stylesheet" href="../../assets/style.css">
+  <script>(function(){var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);})()</script>
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-header"><a href="../../../index.html"><div class="book-title">Advanced C# &amp; .NET for Newbies</div><div class="book-subtitle">A beginner-friendly guide</div></a></div>
+    <nav>
+      <div class="nav-part"><a href="../../../index.html">📖 Table of Contents</a><a href="../introduction.html">Introduction</a><a href="../about-author.html">About the Author</a></div>
+      <div class="nav-part"><div class="nav-part-title">Part 0 — C# Fundamentals</div><a href="../part-0/chapter-1a.html">Ch A · C# Data Types</a><a href="../part-0/chapter-1b.html">Ch B · Data Structures</a><a href="../part-0/exercises.html">Part 0 Exercises</a></div>
+      <div class="nav-part">
+        <div class="nav-part-title">Part 1 — Object-Oriented Programming</div>
+        <a href="chapter-1.html">Ch 1 · What is C#?</a><a href="chapter-2.html">Ch 2 · Classes &amp; Objects</a><a href="chapter-3.html">Ch 3 · Encapsulation</a><a href="chapter-4.html">Ch 4 · Inheritance</a><a href="chapter-5.html">Ch 5 · Polymorphism</a><a href="chapter-6.html">Ch 6 · Abstraction</a><a href="exercises.html">Part 1 Exercises</a>
+      </div>
+      <div class="nav-part">
+        <div class="nav-part-title">Part 2 — Advanced C# Concepts</div>
+        <a href="../part-2/chapter-7.html">Ch 7 · Generics</a><a href="../part-2/chapter-8.html">Ch 8 · Collections</a><a href="../part-2/chapter-9.html">Ch 9 · Exceptions</a><a href="../part-2/chapter-10.html">Ch 10 · Interfaces vs Abstract</a><a href="../part-2/chapter-11.html">Ch 11 · LINQ</a><a href="../part-2/chapter-12.html">Ch 12 · Delegates &amp; Lambdas</a><a href="../part-2/chapter-13.html">Ch 13 · Nullable Types</a><a href="../part-2/exercises.html">Part 2 Exercises</a>
+      </div>
+      <div class="nav-part">
+        <div class="nav-part-title">Part 3 — ASP.NET Core Basics</div>
+        <a href="../part-3/chapter-14.html">Ch 14 · What is ASP.NET Core?</a><a href="../part-3/chapter-15.html">Ch 15 · Dependency Injection</a><a href="../part-3/chapter-16.html">Ch 16 · REST APIs</a><a href="../part-3/chapter-17.html">Ch 17 · Controllers, Services, Repos</a><a href="../part-3/chapter-18.html">Ch 18 · Entity Framework Core</a><a href="../part-3/chapter-19.html">Ch 19 · Configuration</a><a href="../part-3/exercises.html">Part 3 Exercises</a>
+      </div>
+      <div class="nav-part">
+        <div class="nav-part-title">Part 4 — ASP.NET Core Advanced</div>
+        <a href="../part-4/chapter-20.html">Ch 20 · Authentication &amp; Authorization</a><a href="../part-4/chapter-21.html">Ch 21 · JWT Authentication</a><a href="../part-4/chapter-22.html">Ch 22 · Exception Handling</a><a href="../part-4/chapter-23.html">Ch 23 · Validation</a><a href="../part-4/chapter-24.html">Ch 24 · Microservices</a><a href="../part-4/exercises.html">Part 4 Exercises</a>
+      </div>
+      <div class="nav-part">
+        <div class="nav-part-title">Part 5 — Conclusion</div>
+        <a href="../part-5/chapter-25.html">Ch 25 · The .NET Ecosystem</a><a href="../part-5/chapter-26.html">Ch 26 · What to Learn Next</a><a href="../part-5/conclusion.html">Conclusion</a>
+      </div>
+    </nav>
+  </aside>
+
+  <div class="content-wrapper">
+    <main class="content">
+
+      <div class="chapter-header">
+        <div class="chapter-tag part-1">Part 1 · Chapter 3</div>
+        <h1>Encapsulation — Private Property</h1>
+        <p class="chapter-intro">The art of hiding what should be hidden, and only showing what the world needs to see. Encapsulation is the safety lock that keeps your objects working correctly.</p>
+      </div>
+
+      <div class="learn-box">
+        <h4>What you'll learn in this chapter</h4>
+        <ul>
+          <li>What encapsulation means and why it matters</li>
+          <li>The four access modifiers: <code>public</code>, <code>private</code>, <code>protected</code>, <code>internal</code></li>
+          <li>Private fields with public properties</li>
+          <li>Adding validation logic inside property setters</li>
+          <li>A complete <code>BankAccount</code> class — a classic encapsulation example</li>
+          <li>The principle of "least privilege"</li>
+        </ul>
+      </div>
+
+      <h2>The Bank Vault</h2>
+      <p>
+        Imagine you walk into a bank to deposit some money. You hand the cash to the teller.
+        The teller records the transaction, checks it is valid, and updates the balance.
+        You do not walk behind the counter, open the vault yourself, and shove the money in.
+        The vault is locked. Only the bank's internal processes can touch what is inside it.
+        You interact through a controlled, safe interface — the teller window.
+      </p>
+      <p>
+        That is encapsulation. Your object's internal data is the vault. Your public methods
+        and properties are the teller windows. The outside world interacts only through those
+        controlled channels.
+      </p>
+
+      <div class="box analogy">
+        <div class="box-title">🏦 The Bank Vault Analogy</div>
+        <p>
+          A <code>BankAccount</code> object holds a balance. That balance is the money in the vault.
+          No one outside the class should be able to set the balance to any arbitrary number —
+          that would allow fraud. Instead, you provide <code>Deposit()</code> and <code>Withdraw()</code>
+          methods — controlled teller windows — that validate every transaction before touching
+          the balance.
+          <br><br>
+          Encapsulation = <strong>hide the data, control the access.</strong>
+        </p>
+      </div>
+
+      <h2>The Problem Without Encapsulation</h2>
+      <p>
+        Let's see what happens when we don't encapsulate. Suppose we naively write:
+      </p>
+
+      <pre><span class="kw">public class</span> <span class="type">BankAccount</span>
+{
+    <span class="kw">public double</span> Balance;  <span class="cmt">// public field — anyone can change it!</span>
+}
+
+<span class="kw">var</span> account <span class="op">=</span> <span class="kw">new</span> <span class="type">BankAccount</span>();
+account.Balance <span class="op">=</span> <span class="num">1000000</span>;   <span class="cmt">// Works! Anyone can set any value</span>
+account.Balance <span class="op">=</span> <span class="op">-</span><span class="num">99999</span>;   <span class="cmt">// Also works! Negative balance — fraud!</span></pre>
+
+      <p>
+        Nothing stops someone from setting a negative balance, adding a billion pounds directly,
+        or bypassing the transaction logic entirely. The class has no defence.
+        This is a data integrity disaster.
+      </p>
+
+      <h2>Access Modifiers</h2>
+      <p>
+        C# provides four main <strong>access modifiers</strong> that control who can see and use
+        a class member:
+      </p>
+
+      <ul>
+        <li>
+          <code><strong>public</strong></code> — accessible from anywhere. Any code that can
+          see the class can use this member.
+        </li>
+        <li>
+          <code><strong>private</strong></code> — accessible only within the same class.
+          Not visible to any outside code, not even subclasses.
+        </li>
+        <li>
+          <code><strong>protected</strong></code> — accessible within the same class and in
+          derived (child) classes. Not visible to completely unrelated code.
+        </li>
+        <li>
+          <code><strong>internal</strong></code> — accessible within the same assembly (project/DLL),
+          but not from other assemblies. Useful for hiding implementation details from external packages.
+        </li>
+      </ul>
+
+      <div class="diagram">
+Modifier       Same Class   Derived Class   Same Assembly   Everywhere
+──────────────────────────────────────────────────────────────────────
+private           ✓              ✗               ✗              ✗
+protected         ✓              ✓               ✗              ✗
+internal          ✓              ✗               ✓              ✗
+public            ✓              ✓               ✓              ✓
+      </div>
+
+      <div class="box tip">
+        <div class="box-title">💡 The Principle of Least Privilege</div>
+        <p>
+          Always give a member the <em>most restrictive</em> access modifier that still lets the
+          code work. Make things <code>private</code> by default. Only widen the access when you
+          have a specific reason to. This minimises the surface area where bugs can enter and
+          makes your code easier to refactor later.
+        </p>
+      </div>
+
+      <h2>The BankAccount Class — Done Right</h2>
+      <p>
+        Now let's build the <code>BankAccount</code> properly. The balance is private.
+        All access goes through controlled methods.
+      </p>
+
+      <pre><span class="kw">public class</span> <span class="type">BankAccount</span>
+{
+    <span class="cmt">// Private field — no one outside can touch this directly</span>
+    <span class="kw">private double</span> _balance;
+
+    <span class="cmt">// Public read-only property — outsiders can READ but not SET</span>
+    <span class="kw">public double</span> Balance <span class="op">=&gt;</span> _balance;
+
+    <span class="kw">public string</span> Owner { <span class="kw">get</span>; }
+
+    <span class="kw">public</span> <span class="fn">BankAccount</span>(<span class="kw">string</span> owner, <span class="kw">double</span> initialDeposit <span class="op">=</span> <span class="num">0</span>)
+    {
+        Owner <span class="op">=</span> owner;
+        <span class="kw">if</span> (initialDeposit <span class="op">&lt;</span> <span class="num">0</span>)
+            <span class="kw">throw new</span> <span class="type">ArgumentException</span>(<span class="str">"Initial deposit cannot be negative."</span>);
+        _balance <span class="op">=</span> initialDeposit;
+    }
+
+    <span class="cmt">// Controlled deposit method</span>
+    <span class="kw">public void</span> <span class="fn">Deposit</span>(<span class="kw">double</span> amount)
+    {
+        <span class="kw">if</span> (amount <span class="op">&lt;=</span> <span class="num">0</span>)
+            <span class="kw">throw new</span> <span class="type">ArgumentException</span>(<span class="str">"Deposit amount must be positive."</span>);
+
+        _balance <span class="op">+=</span> amount;
+        <span class="type">Console</span>.<span class="fn">WriteLine</span>(<span class="op">$</span><span class="str">"Deposited £{amount:N2}. New balance: £{_balance:N2}"</span>);
+    }
+
+    <span class="cmt">// Controlled withdrawal method</span>
+    <span class="kw">public bool</span> <span class="fn">Withdraw</span>(<span class="kw">double</span> amount)
+    {
+        <span class="kw">if</span> (amount <span class="op">&lt;=</span> <span class="num">0</span>)
+            <span class="kw">throw new</span> <span class="type">ArgumentException</span>(<span class="str">"Withdrawal amount must be positive."</span>);
+
+        <span class="kw">if</span> (amount <span class="op">&gt;</span> _balance)
+        {
+            <span class="type">Console</span>.<span class="fn">WriteLine</span>(<span class="str">"Insufficient funds."</span>);
+            <span class="kw">return false</span>;
+        }
+
+        _balance <span class="op">-=</span> amount;
+        <span class="type">Console</span>.<span class="fn">WriteLine</span>(<span class="op">$</span><span class="str">"Withdrew £{amount:N2}. New balance: £{_balance:N2}"</span>);
+        <span class="kw">return true</span>;
+    }
+
+    <span class="kw">public override string</span> <span class="fn">ToString</span>() <span class="op">=&gt;</span>
+        <span class="op">$</span><span class="str">"{Owner}'s account — Balance: £{_balance:N2}"</span>;
+}</pre>
+
+      <p>Now let's use it:</p>
+
+      <pre><span class="kw">var</span> account <span class="op">=</span> <span class="kw">new</span> <span class="type">BankAccount</span>(<span class="str">"Ada Lovelace"</span>, <span class="num">500</span>);
+
+account.<span class="fn">Deposit</span>(<span class="num">250</span>);
+<span class="cmt">// Deposited £250.00. New balance: £750.00</span>
+
+account.<span class="fn">Withdraw</span>(<span class="num">100</span>);
+<span class="cmt">// Withdrew £100.00. New balance: £650.00</span>
+
+account.<span class="fn">Withdraw</span>(<span class="num">1000</span>);
+<span class="cmt">// Insufficient funds.</span>
+
+<span class="cmt">// This would cause a compile error — Balance has no setter!</span>
+<span class="cmt">// account.Balance = 999999;  // Error: property is read-only</span>
+
+<span class="type">Console</span>.<span class="fn">WriteLine</span>(account); <span class="cmt">// Ada Lovelace's account — Balance: £650.00</span></pre>
+
+      <h2>Property Setters with Validation</h2>
+      <p>
+        Sometimes you want outside code to be able to set a property, but only with valid values.
+        You can add validation logic directly inside a property's <code>set</code> accessor:
+      </p>
+
+      <pre><span class="kw">public class</span> <span class="type">Person</span>
+{
+    <span class="kw">private int</span> _age;
+
+    <span class="kw">public string</span> Name { <span class="kw">get</span>; <span class="kw">set</span>; }
+
+    <span class="kw">public int</span> Age
+    {
+        <span class="kw">get</span> <span class="op">=&gt;</span> _age;
+        <span class="kw">set</span>
+        {
+            <span class="kw">if</span> (value <span class="op">&lt;</span> <span class="num">0</span> <span class="op">||</span> value <span class="op">&gt;</span> <span class="num">150</span>)
+                <span class="kw">throw new</span> <span class="type">ArgumentOutOfRangeException</span>(<span class="str">"Age must be between 0 and 150."</span>);
+            _age <span class="op">=</span> value;
+        }
+    }
+
+    <span class="kw">public</span> <span class="fn">Person</span>(<span class="kw">string</span> name, <span class="kw">int</span> age)
+    {
+        Name <span class="op">=</span> name;
+        Age <span class="op">=</span> age;  <span class="cmt">// Goes through the setter validation</span>
+    }
+}
+
+<span class="kw">var</span> p <span class="op">=</span> <span class="kw">new</span> <span class="type">Person</span>(<span class="str">"Grace Hopper"</span>, <span class="num">85</span>);
+p.Age <span class="op">=</span> <span class="num">86</span>;   <span class="cmt">// Fine</span>
+p.Age <span class="op">=</span> <span class="op">-</span><span class="num">5</span>;   <span class="cmt">// Throws ArgumentOutOfRangeException</span></pre>
+
+      <p>
+        Notice the keyword <code>value</code> inside the setter — it automatically refers to
+        whatever the caller is trying to assign. This is a C# built-in contextual keyword
+        for property setters.
+      </p>
+
+      <h2>Init-Only Properties (C# 9+)</h2>
+      <p>
+        Sometimes you want a property that can be set when the object is first created
+        (via object initialiser) but never changed afterwards. C# 9 introduced the
+        <code>init</code> accessor for exactly this:
+      </p>
+
+      <pre><span class="kw">public class</span> <span class="type">Customer</span>
+{
+    <span class="kw">public string</span> Name { <span class="kw">get</span>; <span class="kw">init</span>; }   <span class="cmt">// can set at init, but not later</span>
+    <span class="kw">public string</span> Email { <span class="kw">get</span>; <span class="kw">init</span>; }
+}
+
+<span class="kw">var</span> customer <span class="op">=</span> <span class="kw">new</span> <span class="type">Customer</span> { Name <span class="op">=</span> <span class="str">"Alan Turing"</span>, Email <span class="op">=</span> <span class="str">"alan@example.com"</span> };
+
+<span class="cmt">// customer.Name = "Someone else";  // Compile error! init-only property</span></pre>
+
+      <p>
+        This is perfect for creating immutable (unchangeable after creation) objects.
+        It's one of the features that makes C# great for building safe, predictable data models.
+      </p>
+
+      <div class="box fun-fact">
+        <div class="box-title">🔒 Records — The Ultimate Immutable Type</div>
+        <p>
+          C# 9 also introduced <strong>records</strong> — a special type designed for immutable
+          data. A record automatically gives you a constructor, properties, equality comparison,
+          and a <code>ToString()</code> — all in one line:
+        </p>
+        <pre style="margin-top:0.5rem;"><span class="kw">public record</span> <span class="type">Point</span>(<span class="kw">double</span> X, <span class="kw">double</span> Y);</pre>
+        <p>
+          We won't go deep into records in this chapter, but they are a powerful example of
+          how C# uses encapsulation principles to enforce immutability at the language level.
+        </p>
+      </div>
+
+      <h2>Access Modifiers in Practice — Quick Reference</h2>
+
+      <pre><span class="kw">public class</span> <span class="type">Example</span>
+{
+    <span class="kw">public string</span> PublicProp { <span class="kw">get</span>; <span class="kw">set</span>; }       <span class="cmt">// Accessible everywhere</span>
+    <span class="kw">private string</span> _privateProp;                  <span class="cmt">// Only inside this class</span>
+    <span class="kw">protected string</span> ProtectedProp { <span class="kw">get</span>; }      <span class="cmt">// This class + subclasses</span>
+    <span class="kw">internal string</span> InternalProp { <span class="kw">get</span>; <span class="kw">set</span>; }   <span class="cmt">// Same assembly only</span>
+
+    <span class="kw">public string</span> ReadOnly { <span class="kw">get</span>; <span class="kw">private set</span>; } <span class="cmt">// Read publicly, set privately</span>
+}</pre>
+
+      <p>
+        The last one — <code>{ get; private set; }</code> — is extremely common in C#.
+        It lets outside code read the value but prevents outside code from changing it.
+        Only the class itself can call the setter.
+      </p>
+
+      <div class="box warning">
+        <div class="box-title">⚠️ Common Mistake: Auto-Property with No Restriction</div>
+        <p>
+          A very common beginner mistake is to make every property <code>public string X { get; set; }</code>
+          without thinking about whether the setter should be accessible. Before making a setter
+          <code>public</code>, ask yourself: "Should outside code be allowed to set this directly?
+          Or should they go through a method that validates the change?" If in doubt,
+          start with <code>private set</code> and widen it only if needed.
+        </p>
+      </div>
+
+      <div class="box key-term">
+        <div class="box-title">📚 Key Terms</div>
+        <p><strong>Encapsulation:</strong> The OOP principle of hiding internal data and only exposing controlled access points (methods/properties).</p>
+        <p><strong>Access modifier:</strong> A keyword (<code>public</code>, <code>private</code>, <code>protected</code>, <code>internal</code>) that controls the visibility of a class member.</p>
+        <p><strong>private:</strong> Only the same class can access this member.</p>
+        <p><strong>public:</strong> Any code anywhere can access this member.</p>
+        <p><strong>protected:</strong> The same class and all derived (child) classes can access this member.</p>
+        <p><strong>internal:</strong> Any code within the same assembly (project) can access this member.</p>
+        <p><strong>value keyword:</strong> Inside a property setter, <code>value</code> refers to the value being assigned.</p>
+        <p><strong>init accessor:</strong> Like <code>set</code>, but only usable during object initialisation. Creates effectively immutable properties.</p>
+      </div>
+
+      <div class="summary">
+        <h4>Chapter Summary</h4>
+        <ul>
+          <li>Encapsulation means hiding data inside a class and controlling access through public methods and properties.</li>
+          <li>Always prefer <code>private</code> fields; expose data through public properties or methods.</li>
+          <li>C# has four access modifiers: <code>public</code>, <code>private</code>, <code>protected</code>, <code>internal</code>.</li>
+          <li>Property setters can contain validation logic to ensure only valid values are stored.</li>
+          <li><code>{ get; private set; }</code> is a common pattern for properties that should be read publicly but set internally.</li>
+          <li><code>init</code>-only properties (C# 9+) allow setting during object creation but prevent changes afterwards.</li>
+          <li>The Principle of Least Privilege: give members the most restrictive access that still works.</li>
+        </ul>
+      </div>
+
+      <div class="exercises">
+        <h3>Exercises</h3>
+
+        <div class="exercise">
+          <div class="exercise-num">Exercise 3.1 — Interactive Quiz</div>
+          <p>Which access modifier makes a member accessible only within its own class?</p>
+          <div class="interactive-exercise">
+            <input type="text" id="q3-1" placeholder="Type your answer here..." />
+            <button onclick="checkAnswer('q3-1', 'out3-1', 'private', 'Correct! private is the most restrictive — only the class itself can see the member.')">Check Answer</button>
+            <div class="exercise-output" id="out3-1"></div>
+          </div>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-num">Exercise 3.2 — Fix the Bank Account</div>
+          <p>
+            The following code has encapsulation problems. Identify at least three issues and
+            rewrite the class correctly:
+          </p>
+          <pre><span class="kw">public class</span> <span class="type">BankAccount</span>
+{
+    <span class="kw">public double</span> Balance;
+    <span class="kw">public string</span> Pin;
+    <span class="kw">public bool</span> IsFrozen;
+
+    <span class="kw">public void</span> <span class="fn">Withdraw</span>(<span class="kw">double</span> amount)
+    {
+        Balance <span class="op">-=</span> amount;  <span class="cmt">// no validation!</span>
+    }
+}</pre>
+          <p>Fix: make <code>Balance</code> read-only from outside; hide <code>Pin</code>; add validation in <code>Withdraw</code>; control how <code>IsFrozen</code> is set.</p>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-num">Exercise 3.3 — Temperature Class</div>
+          <p>
+            Create a <code>Temperature</code> class with:
+          </p>
+          <ul>
+            <li>A private field <code>_celsius</code> (double).</li>
+            <li>A <code>Celsius</code> property with a setter that rejects values below -273.15 (absolute zero).</li>
+            <li>A computed read-only <code>Fahrenheit</code> property (<code>= Celsius * 9 / 5 + 32</code>).</li>
+            <li>A computed read-only <code>Kelvin</code> property (<code>= Celsius + 273.15</code>).</li>
+            <li>A <code>ToString()</code> override that prints all three scales.</li>
+          </ul>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-num">Exercise 3.4 — Access Modifier Table</div>
+          <p>
+            For each of these class members, choose the most appropriate access modifier and
+            explain why:
+          </p>
+          <ul>
+            <li>A user's password hash stored in a <code>User</code> class.</li>
+            <li>A <code>public</code> API method that returns the user's display name.</li>
+            <li>A helper method used only internally by the class to format a date.</li>
+            <li>A base class property that subclasses need to read but shouldn't set.</li>
+          </ul>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-num">Exercise 3.5 — Reflection</div>
+          <p>
+            Why do you think encapsulation is considered one of the "four pillars" of
+            object-oriented programming rather than just a nice-to-have technique?
+            Write a paragraph describing what could go wrong in a large codebase
+            (e.g., a team of 20 developers) if everyone made all fields public.
+          </p>
+        </div>
+      </div>
+
+      <div class="chapter-nav">
+        <a href="chapter-2.html">
+          <span class="nav-label">← Previous</span>
+          <span class="nav-title">Chapter 2: Classes &amp; Objects</span>
+        </a>
+        <a href="chapter-4.html" class="next">
+          <span class="nav-label">Next →</span>
+          <span class="nav-title">Chapter 4: Inheritance</span>
+        </a>
+      </div>
+
+    </main>
+  </div>
+</div>
+<button class="menu-btn" aria-label="Open menu">☰</button>
+<script src="../../assets/auth.js"></script>
+<script src="../../assets/nav.js"></script>
+</body>
+</html>

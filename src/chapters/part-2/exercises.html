@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Part 2 Exercises — Advanced C# &amp; .NET for Newbies</title>
+  <link rel="stylesheet" href="../../assets/style.css">
+  <script>(function(){var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);})()</script>
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-header"><a href="../../../index.html"><div class="book-title">Advanced C# &amp; .NET for Newbies</div><div class="book-subtitle">A beginner-friendly guide</div></a></div>
+    <nav>
+      <div class="nav-part"><a href="../../../index.html">📖 Table of Contents</a><a href="../introduction.html">Introduction</a><a href="../about-author.html">About the Author</a></div>
+      <div class="nav-part"><div class="nav-part-title">Part 0 — C# Fundamentals</div><a href="../part-0/chapter-1a.html">Ch A · C# Data Types</a><a href="../part-0/chapter-1b.html">Ch B · Data Structures</a><a href="../part-0/exercises.html">Part 0 Exercises</a></div>
+      <div class="nav-part">
+        <div class="nav-part-title">Part 1 — Object-Oriented Programming</div>
+        <a href="../part-1/chapter-1.html">Ch 1 · What is C#?</a><a href="../part-1/chapter-2.html">Ch 2 · Classes &amp; Objects</a><a href="../part-1/chapter-3.html">Ch 3 · Encapsulation</a><a href="../part-1/chapter-4.html">Ch 4 · Inheritance</a><a href="../part-1/chapter-5.html">Ch 5 · Polymorphism</a><a href="../part-1/chapter-6.html">Ch 6 · Abstraction</a><a href="../part-1/exercises.html">Part 1 Exercises</a>
+      </div>
+      <div class="nav-part">
+        <div class="nav-part-title">Part 2 — Advanced C# Concepts</div>
+        <a href="chapter-7.html">Ch 7 · Generics</a><a href="chapter-8.html">Ch 8 · Collections</a><a href="chapter-9.html">Ch 9 · Exceptions</a><a href="chapter-10.html">Ch 10 · Interfaces vs Abstract</a><a href="chapter-11.html">Ch 11 · LINQ</a><a href="chapter-12.html">Ch 12 · Delegates &amp; Lambdas</a><a href="chapter-13.html">Ch 13 · Nullable Types</a><a href="exercises.html">Part 2 Exercises</a>
+      </div>
+      <div class="nav-part">
+        <div class="nav-part-title">Part 3 — ASP.NET Core Basics</div>
+        <a href="../part-3/chapter-14.html">Ch 14 · What is ASP.NET Core?</a><a href="../part-3/chapter-15.html">Ch 15 · Dependency Injection</a><a href="../part-3/chapter-16.html">Ch 16 · REST APIs</a><a href="../part-3/chapter-17.html">Ch 17 · Controllers, Services, Repos</a><a href="../part-3/chapter-18.html">Ch 18 · Entity Framework Core</a><a href="../part-3/chapter-19.html">Ch 19 · Configuration</a><a href="../part-3/exercises.html">Part 3 Exercises</a>
+      </div>
+      <div class="nav-part">
+        <div class="nav-part-title">Part 4 — ASP.NET Core Advanced</div>
+        <a href="../part-4/chapter-20.html">Ch 20 · Authentication &amp; Authorization</a><a href="../part-4/chapter-21.html">Ch 21 · JWT Authentication</a><a href="../part-4/chapter-22.html">Ch 22 · Exception Handling</a><a href="../part-4/chapter-23.html">Ch 23 · Validation</a><a href="../part-4/chapter-24.html">Ch 24 · Microservices</a><a href="../part-4/exercises.html">Part 4 Exercises</a>
+      </div>
+      <div class="nav-part">
+        <div class="nav-part-title">Part 5 — Conclusion</div>
+        <a href="../part-5/chapter-25.html">Ch 25 · The .NET Ecosystem</a><a href="../part-5/chapter-26.html">Ch 26 · What to Learn Next</a><a href="../part-5/conclusion.html">Conclusion</a>
+      </div>
+    </nav>
+  </aside>
+
+  <div class="content-wrapper">
+    <main class="content">
+
+      <div class="chapter-header">
+        <div class="chapter-tag" style="background:#0891b2">Part 2 · Exercises</div>
+        <h1>Part 2 Exercises — Advanced C# Concepts</h1>
+        <p class="chapter-intro">These exercises cover everything from Part 2: Generics, Collections, Exception Handling, Interfaces, LINQ, Delegates &amp; Lambdas, and Nullable Types. Work through them in order — each one builds on the concepts you have studied. Some are code challenges, some are written reflections, and some are interactive quizzes.</p>
+      </div>
+
+      <div class="learn-box">
+        <h4>What these exercises cover</h4>
+        <ul>
+          <li>Generics — fixing and extending a broken generic class</li>
+          <li>LINQ — filtering, transforming, and chaining queries on real data</li>
+          <li>Collections — choosing the right collection type for the job</li>
+          <li>Exception handling — structured try/catch/finally patterns</li>
+          <li>Custom exceptions — designing your own exception hierarchy</li>
+          <li>Delegates &amp; Lambdas — writing expressive functional-style code</li>
+          <li>Nullable types — safe null handling with ? and ?? operators</li>
+          <li>Reflection — synthesising what you have learned</li>
+        </ul>
+      </div>
+
+      <div class="exercises">
+        <h3>Exercises</h3>
+
+        <!-- Exercise 1 -->
+        <div class="exercise">
+          <div class="exercise-num">Exercise 2.1 — Fix the Broken Generic Class</div>
+          <p>The following generic class has three bugs. Identify and fix each one:</p>
+          <pre><span class="cmt">// Buggy version — do NOT copy this directly!</span>
+<span class="kw">public class</span> <span class="type">Stack</span>&lt;<span class="type">T</span>&gt;
+{
+    <span class="kw">private</span> <span class="type">T</span>[] _items <span class="op">=</span> <span class="kw">new</span> <span class="type">T</span>[<span class="num">10</span>];
+    <span class="kw">private int</span> _count <span class="op">=</span> <span class="num">0</span>;
+
+    <span class="kw">public void</span> <span class="fn">Push</span>(<span class="type">string</span> item)   <span class="cmt">// Bug 1</span>
+    {
+        _items[_count] <span class="op">=</span> item;
+        _count<span class="op">++</span>;
+    }
+
+    <span class="kw">public</span> <span class="type">T</span> <span class="fn">Pop</span>()
+    {
+        <span class="kw">if</span> (_count <span class="op">==</span> <span class="num">0</span>)
+            <span class="kw">return</span> <span class="kw">default</span>;          <span class="cmt">// Bug 2 — how should we signal empty?</span>
+
+        _count<span class="op">--</span>;
+        <span class="kw">return</span> _items[_count <span class="op">+</span> <span class="num">1</span>];  <span class="cmt">// Bug 3</span>
+    }
+
+    <span class="kw">public int</span> Count <span class="op">=&gt;</span> _count;
+}</pre>
+          <p>
+            After fixing all three bugs, add a <code>Peek()</code> method that returns the top
+            item without removing it, and a <code>IsEmpty</code> property. Then write a small
+            test that pushes three integers, peeks at the top, then pops all three and prints
+            each one.
+          </p>
+          <div class="box tip">
+            <div class="box-title">💡 Hint</div>
+            <p>Bug 1: the parameter type should use the type parameter <code>T</code>, not a concrete type. Bug 2: when the stack is empty you should throw an <code>InvalidOperationException</code> rather than silently returning a default value — callers need to know something went wrong. Bug 3: check the index arithmetic carefully after decrementing.</p>
+          </div>
+        </div>
+
+        <!-- Exercise 2 -->
+        <div class="exercise">
+          <div class="exercise-num">Exercise 2.2 — LINQ Challenge: Filter and Transform</div>
+          <p>
+            You have the following list of products. Using LINQ method syntax (not query syntax),
+            write the queries described below.
+          </p>
+          <pre><span class="kw">var</span> products <span class="op">=</span> <span class="kw">new</span> <span class="type">List</span>&lt;<span class="type">Product</span>&gt;
+{
+    <span class="kw">new</span> <span class="type">Product</span> { <span class="fn">Name</span> <span class="op">=</span> <span class="str">"Laptop"</span>,    <span class="fn">Price</span> <span class="op">=</span> <span class="num">1200.00m</span>, <span class="fn">Category</span> <span class="op">=</span> <span class="str">"Electronics"</span>, <span class="fn">InStock</span> <span class="op">=</span> <span class="kw">true</span>  },
+    <span class="kw">new</span> <span class="type">Product</span> { <span class="fn">Name</span> <span class="op">=</span> <span class="str">"Desk Chair"</span>, <span class="fn">Price</span> <span class="op">=</span>  350.00m, <span class="fn">Category</span> <span class="op">=</span> <span class="str">"Furniture"</span>,    <span class="fn">InStock</span> <span class="op">=</span> <span class="kw">true</span>  },
+    <span class="kw">new</span> <span class="type">Product</span> { <span class="fn">Name</span> <span class="op">=</span> <span class="str">"Monitor"</span>,   <span class="fn">Price</span> <span class="op">=</span>  450.00m, <span class="fn">Category</span> <span class="op">=</span> <span class="str">"Electronics"</span>, <span class="fn">InStock</span> <span class="op">=</span> <span class="kw">false</span> },
+    <span class="kw">new</span> <span class="type">Product</span> { <span class="fn">Name</span> <span class="op">=</span> <span class="str">"Keyboard"</span>,  <span class="fn">Price</span> <span class="op">=</span>   89.99m, <span class="fn">Category</span> <span class="op">=</span> <span class="str">"Electronics"</span>, <span class="fn">InStock</span> <span class="op">=</span> <span class="kw">true</span>  },
+    <span class="kw">new</span> <span class="type">Product</span> { <span class="fn">Name</span> <span class="op">=</span> <span class="str">"Bookshelf"</span>, <span class="fn">Price</span> <span class="op">=</span>  199.00m, <span class="fn">Category</span> <span class="op">=</span> <span class="str">"Furniture"</span>,    <span class="fn">InStock</span> <span class="op">=</span> <span class="kw">true</span>  },
+    <span class="kw">new</span> <span class="type">Product</span> { <span class="fn">Name</span> <span class="op">=</span> <span class="str">"Mouse"</span>,     <span class="fn">Price</span> <span class="op">=</span>   39.99m, <span class="fn">Category</span> <span class="op">=</span> <span class="str">"Electronics"</span>, <span class="fn">InStock</span> <span class="op">=</span> <span class="kw">true</span>  },
+};</pre>
+          <p>Write individual LINQ queries to answer each of the following:</p>
+          <ol>
+            <li>Get all in-stock Electronics products, sorted by price descending.</li>
+            <li>Get the names of all products priced under $200, as a <code>List&lt;string&gt;</code>.</li>
+            <li>Calculate the total value of all in-stock products (sum of prices).</li>
+            <li>Find the most expensive product overall. Use <code>MaxBy</code>.</li>
+            <li>Group all products by category. For each group, print the category name and the average price.</li>
+            <li>Check whether <em>any</em> product is out of stock. Check whether <em>all</em> electronics are in stock.</li>
+          </ol>
+          <div class="box fun-fact">
+            <div class="box-title">🔎 LINQ Reminder</div>
+            <p>For grouping, remember: <code>.GroupBy(p =&gt; p.Category)</code> returns an <code>IEnumerable&lt;IGrouping&lt;string, Product&gt;&gt;</code>. You can iterate each group with a <code>foreach</code>, and each group has a <code>Key</code> property (the category name) plus all its members.</p>
+          </div>
+        </div>
+
+        <!-- Exercise 3 -->
+        <div class="exercise">
+          <div class="exercise-num">Exercise 2.3 — Collection Selection Quiz</div>
+          <p>
+            For each scenario below, name the most appropriate .NET collection type and explain why.
+            Choose from: <code>List&lt;T&gt;</code>, <code>Dictionary&lt;TKey, TValue&gt;</code>,
+            <code>HashSet&lt;T&gt;</code>, <code>Queue&lt;T&gt;</code>, <code>Stack&lt;T&gt;</code>,
+            <code>SortedDictionary&lt;TKey, TValue&gt;</code>, <code>LinkedList&lt;T&gt;</code>.
+          </p>
+          <ol>
+            <li>You are building a job processing system. Jobs must be processed in the order they arrive (first in, first out).</li>
+            <li>You need to track which usernames have already been taken. Lookups must be O(1) and you don't need duplicates.</li>
+            <li>You are implementing an "undo" feature in a text editor. The most recently made change must be reversed first.</li>
+            <li>You need to cache user profiles by their user ID (integer), looking them up by ID in O(1) time.</li>
+            <li>You are maintaining a leaderboard where players are always sorted by score. New entries should remain sorted automatically.</li>
+            <li>You want a simple ordered list of items that you will iterate over frequently and occasionally add/remove at the end.</li>
+          </ol>
+
+          <div class="interactive-exercise">
+            <p>Quick check: What collection type provides O(1) average-case lookup by a unique key?</p>
+            <input type="text" id="q2-3" placeholder="Type the collection type name..." />
+            <button onclick="checkAnswer('q2-3', 'out2-3', 'Dictionary', 'Dictionary&lt;TKey, TValue&gt; uses a hash table internally, giving O(1) average-case lookups by key.')">Check Answer</button>
+            <div class="exercise-output" id="out2-3"></div>
+          </div>
+        </div>
+
+        <!-- Exercise 4 -->
+        <div class="exercise">
+          <div class="exercise-num">Exercise 2.4 — Exception Handling Practice</div>
+          <p>
+            The following method reads a number from the user, divides 100 by it, and prints the result.
+            It has no error handling at all. Rewrite it with proper exception handling:
+          </p>
+          <pre><span class="cmt">// Original — no error handling</span>
+<span class="kw">static void</span> <span class="fn">DivideByUserInput</span>()
+{
+    <span class="type">Console</span>.<span class="fn">Write</span>(<span class="str">"Enter a number: "</span>);
+    <span class="kw">string</span> input <span class="op">=</span> <span class="type">Console</span>.<span class="fn">ReadLine</span>();
+    <span class="kw">int</span> number <span class="op">=</span> <span class="type">int</span>.<span class="fn">Parse</span>(input);
+    <span class="kw">int</span> result <span class="op">=</span> <span class="num">100</span> <span class="op">/</span> number;
+    <span class="type">Console</span>.<span class="fn">WriteLine</span>(<span class="op">$</span><span class="str">"100 / {number} = {result}"</span>);
+}</pre>
+          <p>Your rewritten version must:</p>
+          <ul>
+            <li>Catch <code>FormatException</code> if the user types something that isn't a number, printing a friendly message.</li>
+            <li>Catch <code>DivideByZeroException</code> if the user enters 0, printing a different friendly message.</li>
+            <li>Use a <code>finally</code> block to always print "Thank you for using the calculator."</li>
+            <li>Use <code>int.TryParse</code> instead of <code>int.Parse</code> as an alternative approach — rewrite a second version using <code>TryParse</code> and explain the trade-offs.</li>
+          </ul>
+        </div>
+
+        <!-- Exercise 5 -->
+        <div class="exercise">
+          <div class="exercise-num">Exercise 2.5 — Write a Custom Exception</div>
+          <p>
+            Design a custom exception hierarchy for an online banking application. The base exception
+            should be <code>BankingException</code>. Derive at least three specific exceptions from it:
+            one for insufficient funds, one for an invalid account number, and one for a daily
+            withdrawal limit being exceeded.
+          </p>
+          <p>
+            Each exception class should:
+          </p>
+          <ul>
+            <li>Inherit from <code>BankingException</code> (which itself inherits from <code>Exception</code>).</li>
+            <li>Include a meaningful constructor that passes a descriptive message to the base.</li>
+            <li>The <code>InsufficientFundsException</code> should carry two extra properties: <code>RequestedAmount</code> (decimal) and <code>AvailableBalance</code> (decimal), so callers can log exactly what happened.</li>
+          </ul>
+          <p>
+            Then write a <code>Withdraw(decimal amount)</code> method on a fake <code>BankAccount</code>
+            class that throws the appropriate exception in each error case. Show a usage example
+            catching the specific exception types in the correct order (most specific first).
+          </p>
+          <div class="box key-term">
+            <div class="box-title">📚 Reminder: Exception Hierarchy Matters</div>
+            <p>Always catch more specific exceptions before more general ones. If you catch <code>BankingException</code> before <code>InsufficientFundsException</code>, the specific catch block will never be reached — the compiler may warn you, but it's still a logical bug in your intent.</p>
+          </div>
+        </div>
+
+        <!-- Exercise 6 -->
+        <div class="exercise">
+          <div class="exercise-num">Exercise 2.6 — Lambda Expression Challenge</div>
+          <p>
+            Convert each of the following traditional delegate/method usages into concise lambda expressions. Then go one step further and chain them where possible.
+          </p>
+          <pre><span class="cmt">// Part A — Convert this named method to a lambda assigned to a Func&lt;&gt;</span>
+<span class="kw">static bool</span> <span class="fn">IsEven</span>(<span class="kw">int</span> n) <span class="op">=&gt;</span> n <span class="op">%</span> <span class="num">2</span> <span class="op">==</span> <span class="num">0</span>;
+
+<span class="cmt">// Part B — Convert this to an Action&lt;string&gt; lambda</span>
+<span class="kw">static void</span> <span class="fn">PrintUpperCase</span>(<span class="kw">string</span> s)
+{
+    <span class="type">Console</span>.<span class="fn">WriteLine</span>(s.<span class="fn">ToUpper</span>());
+}
+
+<span class="cmt">// Part C — Convert this to a Func&lt;int, int, int&gt; lambda</span>
+<span class="kw">static int</span> <span class="fn">Multiply</span>(<span class="kw">int</span> a, <span class="kw">int</span> b) <span class="op">=&gt;</span> a <span class="op">*</span> b;</pre>
+          <p>
+            After converting all three, write a method called <code>ApplyTwice</code> that takes
+            a <code>Func&lt;int, int&gt;</code> and an <code>int</code>, and applies the function
+            twice. For example, <code>ApplyTwice(x =&gt; x * 2, 3)</code> should return 12
+            (3 × 2 = 6, then 6 × 2 = 12).
+          </p>
+          <p>
+            Finally, use <code>ApplyTwice</code> with three different lambdas: double the value,
+            add 10, and square the value. Print the results.
+          </p>
+        </div>
+
+        <!-- Exercise 7 -->
+        <div class="exercise">
+          <div class="exercise-num">Exercise 2.7 — Nullable Handling</div>
+          <p>
+            The method below has several potential null reference problems. Identify each one and
+            rewrite the method using nullable reference types, the null-conditional operator
+            (<code>?.</code>), the null-coalescing operator (<code>??</code>), and null-coalescing
+            assignment (<code>??=</code>) where appropriate.
+          </p>
+          <pre><span class="cmt">// Risky version</span>
+<span class="kw">public static string</span> <span class="fn">FormatUserDisplay</span>(<span class="type">User</span> user)
+{
+    <span class="kw">string</span> name <span class="op">=</span> user.Profile.DisplayName;
+    <span class="kw">string</span> city <span class="op">=</span> user.Profile.Address.City;
+    <span class="kw">string</span> bio  <span class="op">=</span> user.Bio;
+
+    <span class="kw">return</span> <span class="op">$</span><span class="str">"{name} from {city}: {bio}"</span>;
+}
+
+<span class="cmt">// Assume these types:</span>
+<span class="kw">public class</span> <span class="type">User</span>   { <span class="kw">public</span> <span class="type">Profile</span><span class="op">?</span> Profile { <span class="kw">get</span>; <span class="kw">set</span>; } <span class="kw">public string</span><span class="op">?</span> Bio { <span class="kw">get</span>; <span class="kw">set</span>; } }
+<span class="kw">public class</span> <span class="type">Profile</span> { <span class="kw">public string</span><span class="op">?</span> DisplayName { <span class="kw">get</span>; <span class="kw">set</span>; } <span class="kw">public</span> <span class="type">Address</span><span class="op">?</span> Address { <span class="kw">get</span>; <span class="kw">set</span>; } }
+<span class="kw">public class</span> <span class="type">Address</span> { <span class="kw">public string</span><span class="op">?</span> City { <span class="kw">get</span>; <span class="kw">set</span>; } }</pre>
+          <p>
+            Your safe version should:
+          </p>
+          <ul>
+            <li>Return <code>"Anonymous"</code> if the display name is null.</li>
+            <li>Return <code>"Unknown location"</code> if the city is null or if Address or Profile is null.</li>
+            <li>Return <code>"No bio provided"</code> if Bio is null.</li>
+            <li>Never throw a <code>NullReferenceException</code> regardless of which properties are null.</li>
+          </ul>
+          <div class="interactive-exercise">
+            <p>Quick check: What operator do you use to safely access a property that might be null, returning null instead of throwing?</p>
+            <input type="text" id="q2-7" placeholder="Type the operator..." />
+            <button onclick="checkAnswer('q2-7', 'out2-7', '?.', 'The null-conditional operator ?. — for example, user?.Profile?.DisplayName returns null instead of throwing NullReferenceException if any part is null.')">Check Answer</button>
+            <div class="exercise-output" id="out2-7"></div>
+          </div>
+        </div>
+
+        <!-- Exercise 8 -->
+        <div class="exercise">
+          <div class="exercise-num">Exercise 2.8 — Reflection: Advanced C# in the Real World</div>
+          <p>
+            This is an open-ended written exercise. Pick <strong>two</strong> of the following
+            real-world scenarios and describe, in 2–4 paragraphs each, which C# features from
+            Part 2 you would use and why.
+          </p>
+          <ol>
+            <li>
+              <strong>An e-commerce recommendation engine</strong> that takes a list of a user's
+              past purchases (each with a category, price, and date) and produces a ranked list
+              of recommendations from a product catalogue.
+            </li>
+            <li>
+              <strong>A file import service</strong> that reads CSV files from different sources,
+              each with a different schema, and maps them all to a common internal model.
+              Some files may be malformed; the service must log errors without crashing.
+            </li>
+            <li>
+              <strong>An event notification system</strong> that allows any part of the application
+              to subscribe to events (like "order placed" or "payment received") and react
+              asynchronously — for example, by sending an email or updating a dashboard.
+            </li>
+          </ol>
+          <p>
+            In your answer, explicitly mention: which generic collection types you would use and
+            why, how LINQ would simplify the data queries, how you would handle errors robustly,
+            and how delegates or lambdas might feature in your design.
+          </p>
+          <div class="box analogy">
+            <div class="box-title">🎯 What a Strong Answer Looks Like</div>
+            <p>
+              A strong answer doesn't just name the features — it justifies <em>why</em> each one
+              is the right tool. "I would use a <code>Dictionary&lt;string, List&lt;Product&gt;&gt;</code>
+              to group products by category because dictionary lookups are O(1) and I'll be
+              accessing categories repeatedly during scoring…" is much better than "I would use
+              a Dictionary and LINQ."
+            </p>
+          </div>
+        </div>
+
+      </div><!-- end .exercises -->
+
+      <div class="chapter-nav">
+        <a href="chapter-13.html">
+          <span class="nav-label">← Previous</span>
+          <span class="nav-title">Chapter 13: Nullable Types</span>
+        </a>
+        <a href="../part-3/chapter-14.html" class="next">
+          <span class="nav-label">Next →</span>
+          <span class="nav-title">Chapter 14: What is ASP.NET Core?</span>
+        </a>
+      </div>
+
+    </main>
+  </div>
+</div>
+<button class="menu-btn" aria-label="Open menu">☰</button>
+<script src="../../assets/auth.js"></script>
+<script src="../../assets/nav.js"></script>
+<script>
+function checkAnswer(inputId, outputId, correctAnswer, explanation) {
+  const input = document.getElementById(inputId).value.trim();
+  const output = document.getElementById(outputId);
+  if (input.toLowerCase().includes(correctAnswer.toLowerCase())) {
+    output.innerHTML = '<span style="color:#16a34a;font-weight:600;">✓ Correct!</span> ' + explanation;
+  } else {
+    output.innerHTML = '<span style="color:#dc2626;font-weight:600;">Not quite.</span> Try again — think about the data structure described.';
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chapter B: Data Structures — Advanced C# &amp; .NET for Newbies</title>
+  <link rel="stylesheet" href="../../assets/style.css">
+  <script>(function(){var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);})()</script>
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-header"><a href="../../../index.html"><div class="book-title">Advanced C# &amp; .NET for Newbies</div><div class="book-subtitle">A beginner-friendly guide</div></a></div>
+    <nav>
+      <div class="nav-part"><a href="../../../index.html">📖 Table of Contents</a><a href="../introduction.html">Introduction</a><a href="../about-author.html">About the Author</a></div>
+      <div class="nav-part"><div class="nav-part-title">Part 0 — C# Fundamentals</div><a href="chapter-1a.html">Ch A · C# Data Types</a><a href="chapter-1b.html">Ch B · Data Structures</a><a href="exercises.html">Part 0 Exercises</a></div>
+      <div class="nav-part"><div class="nav-part-title">Part 1 — Object-Oriented Programming</div><a href="../part-1/chapter-1.html">Ch 1 · What is C#?</a><a href="../part-1/chapter-2.html">Ch 2 · Classes &amp; Objects</a><a href="../part-1/chapter-3.html">Ch 3 · Encapsulation</a><a href="../part-1/chapter-4.html">Ch 4 · Inheritance</a><a href="../part-1/chapter-5.html">Ch 5 · Polymorphism</a><a href="../part-1/chapter-6.html">Ch 6 · Abstraction</a><a href="../part-1/exercises.html">Part 1 Exercises</a></div>
+      <div class="nav-part"><div class="nav-part-title">Part 2 — Advanced C# Concepts</div><a href="../part-2/chapter-7.html">Ch 7 · Generics</a><a href="../part-2/chapter-8.html">Ch 8 · Collections</a><a href="../part-2/chapter-9.html">Ch 9 · Exceptions</a><a href="../part-2/chapter-10.html">Ch 10 · Interfaces vs Abstract</a><a href="../part-2/chapter-11.html">Ch 11 · LINQ</a><a href="../part-2/chapter-12.html">Ch 12 · Delegates &amp; Lambdas</a><a href="../part-2/chapter-13.html">Ch 13 · Nullable Types</a><a href="../part-2/exercises.html">Part 2 Exercises</a></div>
+      <div class="nav-part"><div class="nav-part-title">Part 3 — ASP.NET Core Basics</div><a href="../part-3/chapter-14.html">Ch 14 · What is ASP.NET Core?</a><a href="../part-3/chapter-15.html">Ch 15 · Dependency Injection</a><a href="../part-3/chapter-16.html">Ch 16 · REST APIs</a><a href="../part-3/chapter-17.html">Ch 17 · Controllers, Services, Repos</a><a href="../part-3/chapter-18.html">Ch 18 · Entity Framework Core</a><a href="../part-3/chapter-19.html">Ch 19 · Configuration</a><a href="../part-3/exercises.html">Part 3 Exercises</a></div>
+      <div class="nav-part"><div class="nav-part-title">Part 4 — ASP.NET Core Advanced</div><a href="../part-4/chapter-20.html">Ch 20 · Authentication &amp; Authorization</a><a href="../part-4/chapter-21.html">Ch 21 · JWT Authentication</a><a href="../part-4/chapter-22.html">Ch 22 · Exception Handling</a><a href="../part-4/chapter-23.html">Ch 23 · Validation</a><a href="../part-4/chapter-24.html">Ch 24 · Microservices</a><a href="../part-4/exercises.html">Part 4 Exercises</a></div>
+      <div class="nav-part"><div class="nav-part-title">Part 5 — Conclusion</div><a href="../part-5/chapter-25.html">Ch 25 · The .NET Ecosystem</a><a href="../part-5/chapter-26.html">Ch 26 · What to Learn Next</a><a href="../part-5/conclusion.html">Conclusion</a></div>
+    </nav>
+  </aside>
+
+  <div class="content-wrapper">
+    <main class="content">
+
+      <div class="chapter-header">
+        <div class="chapter-tag part-1">Part 0 · Chapter B</div>
+        <h1>Data Structures — The Toolbox</h1>
+        <p class="chapter-intro">Every tradesperson needs the right tool for the job. C# gives you a full toolbox of data structures — each one built for a different situation.</p>
+      </div>
+
+      <div class="learn-box">
+        <h4>What you'll learn in this chapter</h4>
+        <ul>
+          <li>Arrays — the fixed-size, indexed container</li>
+          <li><code>List&lt;T&gt;</code> — the flexible, resizable list</li>
+          <li><code>Dictionary&lt;TKey, TValue&gt;</code> — lookup by key</li>
+          <li><code>Stack&lt;T&gt;</code> — last in, first out (LIFO)</li>
+          <li><code>Queue&lt;T&gt;</code> — first in, first out (FIFO)</li>
+          <li><code>HashSet&lt;T&gt;</code> — unique values, no duplicates</li>
+          <li>When to choose which structure</li>
+        </ul>
+      </div>
+
+      <h2>The Tradesperson Analogy</h2>
+      <p>
+        A plumber, an electrician, and a carpenter all carry toolboxes — but the tools inside
+        are completely different. A plumber doesn't reach for a saw when they need to tighten a pipe.
+        They know which tool fits which job.
+      </p>
+      <p>
+        C# data structures are the same. Each one was designed for a specific kind of work.
+        Using the right one means faster code, cleaner logic, and fewer bugs.
+      </p>
+
+      <h2>Arrays — The Fixed Grid</h2>
+      <p>
+        An array is the most basic data structure: a fixed-size, ordered collection of items
+        of the same type. Think of it as a parking garage — it has a fixed number of spaces
+        (set when you build it) and each space is numbered from 0.
+      </p>
+      <pre><span class="cmt">// Declare and initialise an array of 5 integers</span>
+<span class="kw">int</span>[] scores = <span class="kw">new int</span>[<span class="num">5</span>];
+scores[<span class="num">0</span>] = <span class="num">90</span>;
+scores[<span class="num">1</span>] = <span class="num">85</span>;
+scores[<span class="num">2</span>] = <span class="num">78</span>;
+
+<span class="cmt">// Initialise with values directly</span>
+<span class="kw">string</span>[] names = { <span class="str">"Alice"</span>, <span class="str">"Bob"</span>, <span class="str">"Carol"</span> };
+
+<span class="cmt">// Access elements by index (0-based)</span>
+<span class="type">Console</span>.<span class="fn">WriteLine</span>(names[<span class="num">0</span>]);   <span class="cmt">// "Alice"</span>
+<span class="type">Console</span>.<span class="fn">WriteLine</span>(names.<span class="fn">Length</span>); <span class="cmt">// 3</span>
+
+<span class="cmt">// Loop through an array</span>
+<span class="kw">foreach</span> (<span class="kw">string</span> name <span class="kw">in</span> names)
+{
+    <span class="type">Console</span>.<span class="fn">WriteLine</span>(name);
+}
+
+<span class="cmt">// 2D array</span>
+<span class="kw">int</span>[,] grid = <span class="kw">new int</span>[<span class="num">3</span>, <span class="num">3</span>];
+grid[<span class="num">0</span>, <span class="num">0</span>] = <span class="num">1</span>;  <span class="cmt">// row 0, column 0</span></pre>
+
+      <div class="box analogy">
+        <div class="box-title">🅿️ The Parking Garage</div>
+        <p>
+          When you build a parking garage, you decide upfront how many spaces it has — you cannot
+          add more floors later. Each space has a number. An array works the same way: fixed size,
+          numbered slots. Fast to access (just go straight to space #42), but you cannot grow it.
+        </p>
+      </div>
+
+      <h2>List&lt;T&gt; — The Resizable List</h2>
+      <p>
+        A <code>List&lt;T&gt;</code> is like an array that can grow. Under the hood it is an array,
+        but when it runs out of space it automatically creates a larger one and copies everything over.
+        You never have to think about the size.
+      </p>
+      <pre><span class="kw">using</span> <span class="type">System</span>.Collections.Generic;
+
+<span class="kw">var</span> fruits = <span class="kw">new</span> <span class="type">List</span>&lt;<span class="kw">string</span>&gt;();
+
+<span class="cmt">// Add items</span>
+fruits.<span class="fn">Add</span>(<span class="str">"Apple"</span>);
+fruits.<span class="fn">Add</span>(<span class="str">"Banana"</span>);
+fruits.<span class="fn">Add</span>(<span class="str">"Cherry"</span>);
+
+<span class="cmt">// Access by index</span>
+<span class="type">Console</span>.<span class="fn">WriteLine</span>(fruits[<span class="num">1</span>]);   <span class="cmt">// "Banana"</span>
+
+<span class="cmt">// Check and remove</span>
+<span class="type">Console</span>.<span class="fn">WriteLine</span>(fruits.<span class="fn">Contains</span>(<span class="str">"Apple"</span>));  <span class="cmt">// true</span>
+fruits.<span class="fn">Remove</span>(<span class="str">"Banana"</span>);
+<span class="type">Console</span>.<span class="fn">WriteLine</span>(fruits.<span class="fn">Count</span>);  <span class="cmt">// 2</span>
+
+<span class="cmt">// Initialise with values</span>
+<span class="kw">var</span> numbers = <span class="kw">new</span> <span class="type">List</span>&lt;<span class="kw">int</span>&gt; { <span class="num">10</span>, <span class="num">20</span>, <span class="num">30</span>, <span class="num">40</span> };
+
+<span class="cmt">// Loop</span>
+<span class="kw">foreach</span> (<span class="kw">var</span> n <span class="kw">in</span> numbers)
+    <span class="type">Console</span>.<span class="fn">WriteLine</span>(n);</pre>
+
+      <div class="box tip">
+        <div class="box-title">💡 List&lt;T&gt; is Your Everyday Default</div>
+        <p>
+          When you need a collection of things and aren't sure which structure to use,
+          start with <code>List&lt;T&gt;</code>. It handles most everyday needs:
+          ordered, resizable, allows duplicates, indexed access. Only switch to a
+          different structure when you have a specific reason.
+        </p>
+      </div>
+
+      <h2>Dictionary&lt;TKey, TValue&gt; — The Contact Book</h2>
+      <p>
+        A <code>Dictionary</code> stores key-value pairs. You look up a value by its key,
+        just like looking up a phone number by a person's name. Every key must be unique.
+        Lookups are extremely fast — essentially instant — regardless of how many entries you have.
+      </p>
+      <pre><span class="kw">var</span> capitals = <span class="kw">new</span> <span class="type">Dictionary</span>&lt;<span class="kw">string</span>, <span class="kw">string</span>&gt;
+{
+    { <span class="str">"Nigeria"</span>,  <span class="str">"Abuja"</span>     },
+    { <span class="str">"Germany"</span>,  <span class="str">"Berlin"</span>    },
+    { <span class="str">"Japan"</span>,    <span class="str">"Tokyo"</span>     }
+};
+
+<span class="cmt">// Look up by key</span>
+<span class="type">Console</span>.<span class="fn">WriteLine</span>(capitals[<span class="str">"Japan"</span>]);  <span class="cmt">// "Tokyo"</span>
+
+<span class="cmt">// Check before accessing to avoid KeyNotFoundException</span>
+<span class="kw">if</span> (capitals.<span class="fn">ContainsKey</span>(<span class="str">"France"</span>))
+    <span class="type">Console</span>.<span class="fn">WriteLine</span>(capitals[<span class="str">"France"</span>]);
+
+<span class="cmt">// Safer: TryGetValue</span>
+<span class="kw">if</span> (capitals.<span class="fn">TryGetValue</span>(<span class="str">"Brazil"</span>, <span class="kw">out string</span> capital))
+    <span class="type">Console</span>.<span class="fn">WriteLine</span>(capital);
+
+<span class="cmt">// Add and update</span>
+capitals[<span class="str">"France"</span>] = <span class="str">"Paris"</span>;   <span class="cmt">// adds if missing, updates if exists</span>
+
+<span class="cmt">// Iterate over all key-value pairs</span>
+<span class="kw">foreach</span> (<span class="kw">var</span> entry <span class="kw">in</span> capitals)
+    <span class="type">Console</span>.<span class="fn">WriteLine</span>(<span class="op">$</span><span class="str">"{entry.Key} → {entry.Value}"</span>);</pre>
+
+      <div class="box analogy">
+        <div class="box-title">📒 The Contact Book</div>
+        <p>
+          A phone book is a dictionary — you look up a name (key) and get a phone number (value).
+          You would never scan every entry to find someone's number — you go straight to the name.
+          C#'s <code>Dictionary</code> does exactly this: instant lookup by key, regardless of
+          how many entries are stored.
+        </p>
+      </div>
+
+      <h2>Stack&lt;T&gt; — Last In, First Out</h2>
+      <p>
+        A <code>Stack&lt;T&gt;</code> is a collection where the last item you added is the
+        first item you can remove. Think of a stack of plates — you can only take from the top.
+        This is called LIFO (Last In, First Out).
+      </p>
+      <pre><span class="kw">var</span> history = <span class="kw">new</span> <span class="type">Stack</span>&lt;<span class="kw">string</span>&gt;();
+
+<span class="cmt">// Push adds to the top</span>
+history.<span class="fn">Push</span>(<span class="str">"Page 1"</span>);
+history.<span class="fn">Push</span>(<span class="str">"Page 2"</span>);
+history.<span class="fn">Push</span>(<span class="str">"Page 3"</span>);
+
+<span class="cmt">// Peek looks at the top without removing</span>
+<span class="type">Console</span>.<span class="fn">WriteLine</span>(history.<span class="fn">Peek</span>());  <span class="cmt">// "Page 3"</span>
+
+<span class="cmt">// Pop removes from the top</span>
+<span class="type">Console</span>.<span class="fn">WriteLine</span>(history.<span class="fn">Pop</span>());   <span class="cmt">// "Page 3"</span>
+<span class="type">Console</span>.<span class="fn">WriteLine</span>(history.<span class="fn">Pop</span>());   <span class="cmt">// "Page 2"</span>
+<span class="type">Console</span>.<span class="fn">WriteLine</span>(history.<span class="fn">Count</span>);  <span class="cmt">// 1</span></pre>
+
+      <div class="box analogy">
+        <div class="box-title">🍽️ The Plate Stack</div>
+        <p>
+          In a cafeteria, clean plates are stacked. You always take from the top, and
+          dirty plates are returned to the top. You can't grab the plate at the bottom without
+          removing everything above it. A <code>Stack&lt;T&gt;</code> works identically.
+          Common use case: undo history (most recent action undone first), call stacks, expression parsers.
+        </p>
+      </div>
+
+      <h2>Queue&lt;T&gt; — First In, First Out</h2>
+      <p>
+        A <code>Queue&lt;T&gt;</code> is the opposite of a Stack. The first item you add is the
+        first item you remove — like a queue at a bank. This is called FIFO (First In, First Out).
+      </p>
+      <pre><span class="kw">var</span> printQueue = <span class="kw">new</span> <span class="type">Queue</span>&lt;<span class="kw">string</span>&gt;();
+
+<span class="cmt">// Enqueue adds to the back</span>
+printQueue.<span class="fn">Enqueue</span>(<span class="str">"Document A"</span>);
+printQueue.<span class="fn">Enqueue</span>(<span class="str">"Document B"</span>);
+printQueue.<span class="fn">Enqueue</span>(<span class="str">"Document C"</span>);
+
+<span class="cmt">// Dequeue removes from the front</span>
+<span class="type">Console</span>.<span class="fn">WriteLine</span>(printQueue.<span class="fn">Dequeue</span>());  <span class="cmt">// "Document A"</span>
+<span class="type">Console</span>.<span class="fn">WriteLine</span>(printQueue.<span class="fn">Dequeue</span>());  <span class="cmt">// "Document B"</span>
+
+<span class="cmt">// Peek looks at the front without removing</span>
+<span class="type">Console</span>.<span class="fn">WriteLine</span>(printQueue.<span class="fn">Peek</span>());    <span class="cmt">// "Document C"</span></pre>
+
+      <h2>HashSet&lt;T&gt; — Unique Values Only</h2>
+      <p>
+        A <code>HashSet&lt;T&gt;</code> stores a collection of unique items. If you try to add
+        something that already exists, it is silently ignored. Lookups are as fast as a Dictionary.
+        There is no ordering or indexing — it just tells you whether something is in the set or not.
+      </p>
+      <pre><span class="kw">var</span> visitors = <span class="kw">new</span> <span class="type">HashSet</span>&lt;<span class="kw">string</span>&gt;();
+
+visitors.<span class="fn">Add</span>(<span class="str">"Alice"</span>);
+visitors.<span class="fn">Add</span>(<span class="str">"Bob"</span>);
+visitors.<span class="fn">Add</span>(<span class="str">"Alice"</span>);   <span class="cmt">// duplicate — silently ignored</span>
+<span class="type">Console</span>.<span class="fn">WriteLine</span>(visitors.<span class="fn">Count</span>);  <span class="cmt">// 2 — Alice counted once</span>
+
+<span class="cmt">// Fast membership check</span>
+<span class="type">Console</span>.<span class="fn">WriteLine</span>(visitors.<span class="fn">Contains</span>(<span class="str">"Bob"</span>));   <span class="cmt">// true</span>
+<span class="type">Console</span>.<span class="fn">WriteLine</span>(visitors.<span class="fn">Contains</span>(<span class="str">"Carol"</span>)); <span class="cmt">// false</span>
+
+<span class="cmt">// Set operations</span>
+<span class="kw">var</span> admins = <span class="kw">new</span> <span class="type">HashSet</span>&lt;<span class="kw">string</span>&gt; { <span class="str">"Alice"</span>, <span class="str">"David"</span> };
+visitors.<span class="fn">IntersectWith</span>(admins);   <span class="cmt">// visitors who are also admins</span>
+<span class="type">Console</span>.<span class="fn">WriteLine</span>(visitors.<span class="fn">Count</span>); <span class="cmt">// 1 — only "Alice"</span></pre>
+
+      <h2>When to Choose Which Structure</h2>
+
+      <table>
+        <tr>
+          <th>Structure</th>
+          <th>Ordered?</th>
+          <th>Duplicates?</th>
+          <th>Best for</th>
+        </tr>
+        <tr>
+          <td><code>int[]</code> / array</td>
+          <td>Yes</td>
+          <td>Yes</td>
+          <td>Fixed-size collections, performance-critical loops</td>
+        </tr>
+        <tr>
+          <td><code>List&lt;T&gt;</code></td>
+          <td>Yes</td>
+          <td>Yes</td>
+          <td>Most everyday needs — ordered, resizable, general-purpose</td>
+        </tr>
+        <tr>
+          <td><code>Dictionary&lt;K,V&gt;</code></td>
+          <td>No</td>
+          <td>Keys: No</td>
+          <td>Fast key-based lookup (user IDs, settings, caches)</td>
+        </tr>
+        <tr>
+          <td><code>Stack&lt;T&gt;</code></td>
+          <td>LIFO</td>
+          <td>Yes</td>
+          <td>Undo history, call tracking, expression parsing</td>
+        </tr>
+        <tr>
+          <td><code>Queue&lt;T&gt;</code></td>
+          <td>FIFO</td>
+          <td>Yes</td>
+          <td>Task queues, print queues, message buffers</td>
+        </tr>
+        <tr>
+          <td><code>HashSet&lt;T&gt;</code></td>
+          <td>No</td>
+          <td>No</td>
+          <td>Fast membership tests, deduplication, set operations</td>
+        </tr>
+      </table>
+
+      <div class="box fun-fact">
+        <div class="box-title">🔍 What About LinkedList?</div>
+        <p>
+          C# also has <code>LinkedList&lt;T&gt;</code> — a doubly linked list where each node
+          points to the previous and next. It is great when you need to insert or remove items
+          in the middle frequently (O(1) insertion after a known node). However, it lacks random
+          access (no <code>list[5]</code>) and is rarely needed in everyday web API work.
+          You'll know when you need it.
+        </p>
+      </div>
+
+      <div class="summary">
+        <h4>Chapter Summary</h4>
+        <ul>
+          <li>Arrays are fixed-size and fast; use when size is known upfront.</li>
+          <li><code>List&lt;T&gt;</code> is your general-purpose, resizable ordered collection.</li>
+          <li><code>Dictionary&lt;TKey, TValue&gt;</code> provides near-instant lookup by key — ideal for caches and settings.</li>
+          <li><code>Stack&lt;T&gt;</code> is LIFO — the last item in is the first out. Use for undo, history, recursion simulation.</li>
+          <li><code>Queue&lt;T&gt;</code> is FIFO — the first item in is the first out. Use for task and message processing.</li>
+          <li><code>HashSet&lt;T&gt;</code> stores only unique items and provides fast membership checks.</li>
+          <li>Part 2 (Chapters 7–8) dives deeper into Generics and Collections with real-world API examples.</li>
+        </ul>
+      </div>
+
+      <div class="chapter-nav">
+        <a href="chapter-1a.html">
+          <span class="nav-label">← Previous</span>
+          <span class="nav-title">Chapter A: C# Data Types</span>
+        </a>
+        <a href="exercises.html" class="next">
+          <span class="nav-label">Next →</span>
+          <span class="nav-title">Part 0 Exercises</span>
+        </a>
+      </div>
+
+    </main>
+  </div>
+</div>
+<button class="menu-btn" aria-label="Open menu">☰</button>
+<script src="../../assets/auth.js"></script>
+<script src="../../assets/nav.js"></script>
+</body>
+</html>

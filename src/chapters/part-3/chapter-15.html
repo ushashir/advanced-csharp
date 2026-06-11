@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chapter 15: Dependency Injection — Advanced C# &amp; .NET for Newbies</title>
+  <link rel="stylesheet" href="../../assets/style.css">
+  <script>(function(){var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);})()</script>
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-header"><a href="../../../index.html"><div class="book-title">Advanced C# &amp; .NET for Newbies</div><div class="book-subtitle">A beginner-friendly guide</div></a></div>
+    <nav>
+      <div class="nav-part"><a href="../../../index.html">📖 Table of Contents</a><a href="../introduction.html">Introduction</a><a href="../about-author.html">About the Author</a></div>
+      <div class="nav-part"><div class="nav-part-title">Part 0 — C# Fundamentals</div><a href="../part-0/chapter-1a.html">Ch A · C# Data Types</a><a href="../part-0/chapter-1b.html">Ch B · Data Structures</a><a href="../part-0/exercises.html">Part 0 Exercises</a></div>
+      <div class="nav-part">
+        <div class="nav-part-title">Part 1 — Object-Oriented Programming</div>
+        <a href="../part-1/chapter-1.html">Ch 1 · What is C#?</a><a href="../part-1/chapter-2.html">Ch 2 · Classes &amp; Objects</a><a href="../part-1/chapter-3.html">Ch 3 · Encapsulation</a><a href="../part-1/chapter-4.html">Ch 4 · Inheritance</a><a href="../part-1/chapter-5.html">Ch 5 · Polymorphism</a><a href="../part-1/chapter-6.html">Ch 6 · Abstraction</a><a href="../part-1/exercises.html">Part 1 Exercises</a>
+      </div>
+      <div class="nav-part">
+        <div class="nav-part-title">Part 2 — Advanced C# Concepts</div>
+        <a href="../part-2/chapter-7.html">Ch 7 · Generics</a><a href="../part-2/chapter-8.html">Ch 8 · Collections</a><a href="../part-2/chapter-9.html">Ch 9 · Exceptions</a><a href="../part-2/chapter-10.html">Ch 10 · Interfaces vs Abstract</a><a href="../part-2/chapter-11.html">Ch 11 · LINQ</a><a href="../part-2/chapter-12.html">Ch 12 · Delegates &amp; Lambdas</a><a href="../part-2/chapter-13.html">Ch 13 · Nullable Types</a><a href="../part-2/exercises.html">Part 2 Exercises</a>
+      </div>
+      <div class="nav-part">
+        <div class="nav-part-title">Part 3 — ASP.NET Core Basics</div>
+        <a href="chapter-14.html">Ch 14 · What is ASP.NET Core?</a><a href="chapter-15.html">Ch 15 · Dependency Injection</a><a href="chapter-16.html">Ch 16 · REST APIs</a><a href="chapter-17.html">Ch 17 · Controllers, Services, Repos</a><a href="chapter-18.html">Ch 18 · Entity Framework Core</a><a href="chapter-19.html">Ch 19 · Configuration</a><a href="exercises.html">Part 3 Exercises</a>
+      </div>
+      <div class="nav-part">
+        <div class="nav-part-title">Part 4 — ASP.NET Core Advanced</div>
+        <a href="../part-4/chapter-20.html">Ch 20 · Authentication &amp; Authorization</a><a href="../part-4/chapter-21.html">Ch 21 · JWT Authentication</a><a href="../part-4/chapter-22.html">Ch 22 · Exception Handling</a><a href="../part-4/chapter-23.html">Ch 23 · Validation</a><a href="../part-4/chapter-24.html">Ch 24 · Microservices</a><a href="../part-4/exercises.html">Part 4 Exercises</a>
+      </div>
+      <div class="nav-part">
+        <div class="nav-part-title">Part 5 — Conclusion</div>
+        <a href="../part-5/chapter-25.html">Ch 25 · The .NET Ecosystem</a><a href="../part-5/chapter-26.html">Ch 26 · What to Learn Next</a><a href="../part-5/conclusion.html">Conclusion</a>
+      </div>
+    </nav>
+  </aside>
+
+  <div class="content-wrapper">
+    <main class="content">
+
+      <div class="chapter-header">
+        <div class="chapter-tag part-3">Part 3 · Chapter 15</div>
+        <h1>Dependency Injection — The Supply Chain</h1>
+        <p class="chapter-intro">Dependency Injection is one of those concepts that sounds intimidating until the moment it clicks — and then you wonder how you ever lived without it. ASP.NET Core has DI baked in at the very core, and understanding it deeply will make you a far better backend developer.</p>
+      </div>
+
+      <div class="learn-box">
+        <h4>What you'll learn in this chapter</h4>
+        <ul>
+          <li>What dependency injection is and the problem it solves</li>
+          <li>Why DI leads to loosely-coupled, testable code</li>
+          <li>Constructor injection — the primary DI pattern in ASP.NET Core</li>
+          <li>The three service lifetimes: Transient, Scoped, and Singleton</li>
+          <li>Registering services in Program.cs with builder.Services</li>
+          <li>A real example: EmailService injected into a controller</li>
+        </ul>
+      </div>
+
+      <h2>The Supply Chain Analogy</h2>
+      <p>
+        Imagine a car factory. To build a car, the factory needs hundreds of components: tyres,
+        engines, glass, electronics. A naive factory might decide to manufacture everything
+        itself — spin up its own tyre plant, build its own glass furnace, design its own chips.
+        This is a nightmare: enormously complex, hard to change, and impossible to test.
+      </p>
+      <p>
+        The smart approach is a <strong>supply chain</strong>. The factory decides what it needs
+        and publishes a list of requirements. A logistics team (a supplier) fulfils those
+        requirements and delivers the parts to the factory floor. The factory doesn't care
+        where the tyres came from or how they were made — it just fits them. If you want to
+        switch tyre suppliers, you change one contract, not the entire factory.
+      </p>
+      <div class="box analogy">
+        <div class="box-title">🏭 The Supply Chain</div>
+        <p>
+          Your class (the factory) declares what it needs through its constructor. The
+          DI container (the logistics team) reads those requirements and delivers the right
+          objects. Your class never calls <code>new EmailService()</code> itself — the
+          container handles that. This means:
+          <br><br>
+          1. You can swap implementations without touching the class that uses them.<br>
+          2. In tests, you can provide a fake/mock implementation instead of the real one.<br>
+          3. The lifetime of each object (how long it lives) is managed centrally.<br>
+          <br>
+          This is the essence of <strong>loose coupling</strong> — components depend on
+          abstractions (interfaces), not concrete implementations.
+        </p>
+      </div>
+
+      <h2>The Problem Without DI</h2>
+      <p>
+        Consider a controller that sends a welcome email when a user registers. Without DI,
+        you might write it like this:
+      </p>
+      <pre><span class="cmt">// Tightly coupled — hard to test, hard to change</span>
+<span class="kw">public class</span> <span class="type">UserController</span>
+{
+    <span class="kw">private readonly</span> <span class="type">EmailService</span> _emailService;
+
+    <span class="kw">public</span> <span class="fn">UserController</span>()
+    {
+        <span class="cmt">// The controller creates its own dependency</span>
+        _emailService <span class="op">=</span> <span class="kw">new</span> <span class="type">EmailService</span>(<span class="str">"smtp.myserver.com"</span>, <span class="num">587</span>);
+    }
+
+    <span class="kw">public void</span> <span class="fn">Register</span>(<span class="type">User</span> user)
+    {
+        <span class="cmt">// ... register logic ...</span>
+        _emailService.<span class="fn">Send</span>(user.Email, <span class="str">"Welcome!"</span>, <span class="str">"Thanks for signing up."</span>);
+    }
+}</pre>
+      <p>
+        Problems: to test <code>Register()</code>, you must have a working SMTP server running.
+        If you want to use a different email provider, you must change <code>UserController</code>.
+        If <code>EmailService</code> needs new constructor parameters, every class that creates
+        one must be updated. This is <strong>tight coupling</strong>.
+      </p>
+
+      <h2>Constructor Injection — The Solution</h2>
+      <p>
+        With DI, the controller <em>asks for</em> what it needs — it doesn't create it:
+      </p>
+      <pre><span class="cmt">// Loosely coupled — depends on an interface, not a concrete class</span>
+<span class="kw">public class</span> <span class="type">UserController</span> : <span class="type">ControllerBase</span>
+{
+    <span class="kw">private readonly</span> <span class="type">IEmailService</span> _emailService;
+
+    <span class="cmt">// The DI container will provide the IEmailService implementation</span>
+    <span class="kw">public</span> <span class="fn">UserController</span>(<span class="type">IEmailService</span> emailService)
+    {
+        _emailService <span class="op">=</span> emailService;
+    }
+
+    <span class="ann">[HttpPost]</span>
+    <span class="kw">public</span> <span class="type">IActionResult</span> <span class="fn">Register</span>(<span class="ann">[FromBody]</span> <span class="type">RegisterRequest</span> request)
+    {
+        <span class="cmt">// ... register logic ...</span>
+        _emailService.<span class="fn">Send</span>(request.Email, <span class="str">"Welcome!"</span>, <span class="str">"Thanks for signing up."</span>);
+        <span class="kw">return</span> <span class="fn">Ok</span>();
+    }
+}</pre>
+      <p>
+        Now <code>UserController</code> depends on the <em>interface</em>
+        <code>IEmailService</code>, not the concrete <code>EmailService</code>. In tests,
+        you can pass a <code>FakeEmailService</code> that just records what it was asked to
+        send, without touching any SMTP server.
+      </p>
+
+      <h2>Defining the Interface and Implementation</h2>
+      <pre><span class="cmt">// The contract — what any email service must be able to do</span>
+<span class="kw">public interface</span> <span class="type">IEmailService</span>
+{
+    <span class="kw">void</span> <span class="fn">Send</span>(<span class="kw">string</span> to, <span class="kw">string</span> subject, <span class="kw">string</span> body);
+}
+
+<span class="cmt">// The real implementation</span>
+<span class="kw">public class</span> <span class="type">SmtpEmailService</span> : <span class="type">IEmailService</span>
+{
+    <span class="kw">private readonly</span> <span class="kw">string</span> _smtpHost;
+
+    <span class="kw">public</span> <span class="fn">SmtpEmailService</span>(<span class="kw">string</span> smtpHost)
+    {
+        _smtpHost <span class="op">=</span> smtpHost;
+    }
+
+    <span class="kw">public void</span> <span class="fn">Send</span>(<span class="kw">string</span> to, <span class="kw">string</span> subject, <span class="kw">string</span> body)
+    {
+        <span class="cmt">// Real SMTP sending logic here</span>
+        <span class="type">Console</span>.<span class="fn">WriteLine</span>(<span class="op">$</span><span class="str">"Sending to {to} via {_smtpHost}: {subject}"</span>);
+    }
+}
+
+<span class="cmt">// A fake for testing</span>
+<span class="kw">public class</span> <span class="type">FakeEmailService</span> : <span class="type">IEmailService</span>
+{
+    <span class="kw">public</span> <span class="type">List</span>&lt;<span class="kw">string</span>&gt; SentEmails <span class="op">=</span> <span class="kw">new</span>();
+
+    <span class="kw">public void</span> <span class="fn">Send</span>(<span class="kw">string</span> to, <span class="kw">string</span> subject, <span class="kw">string</span> body)
+    {
+        SentEmails.<span class="fn">Add</span>(<span class="op">$</span><span class="str">"{to}: {subject}"</span>);
+    }
+}</pre>
+
+      <h2>Registering Services in Program.cs</h2>
+      <p>
+        Before the DI container can inject a service, you must register it. You do this in
+        the build phase of <code>Program.cs</code>:
+      </p>
+      <pre><span class="kw">var</span> builder <span class="op">=</span> <span class="type">WebApplication</span>.<span class="fn">CreateBuilder</span>(args);
+
+<span class="cmt">// Register IEmailService → SmtpEmailService</span>
+<span class="cmt">// When anything asks for IEmailService, provide a SmtpEmailService</span>
+builder.Services.<span class="fn">AddScoped</span>&lt;<span class="type">IEmailService</span>, <span class="type">SmtpEmailService</span>&gt;();
+
+<span class="cmt">// Register controllers (UserController, etc.)</span>
+builder.Services.<span class="fn">AddControllers</span>();
+
+<span class="kw">var</span> app <span class="op">=</span> builder.<span class="fn">Build</span>();
+app.<span class="fn">MapControllers</span>();
+app.<span class="fn">Run</span>();</pre>
+      <p>
+        Now when ASP.NET Core creates a <code>UserController</code> to handle a request, it
+        sees the constructor requires an <code>IEmailService</code>, looks up its registry,
+        finds <code>SmtpEmailService</code> is registered, creates one, and passes it in.
+        Your controller never knows or cares about the concrete type.
+      </p>
+
+      <h2>The Three Service Lifetimes</h2>
+      <p>
+        One of the most important decisions when registering a service is choosing its
+        <strong>lifetime</strong> — how long the DI container keeps an instance alive.
+      </p>
+
+      <div class="box key-term">
+        <div class="box-title">📚 Transient — A New Napkin Every Time</div>
+        <p>
+          <strong><code>AddTransient&lt;T&gt;()</code></strong> — A brand new instance is
+          created <em>every single time</em> the service is requested from the container.
+          <br><br>
+          Real-world analogy: like a paper napkin at a restaurant — you use it once and it's
+          gone. Nobody shares napkins. This is for lightweight, stateless services where
+          sharing state between callers would be a problem.
+          <br><br>
+          Use for: operations that are cheap to create and have no shared state.
+        </p>
+      </div>
+
+      <div class="box key-term">
+        <div class="box-title">📚 Scoped — One Per Table (Per Request)</div>
+        <p>
+          <strong><code>AddScoped&lt;T&gt;()</code></strong> — One instance is created per
+          HTTP request. All services within that request get the same instance, but a
+          different one is created for the next request.
+          <br><br>
+          Real-world analogy: like a table at a restaurant. All the diners at your table share
+          the same waiter for the evening, but the next table has their own waiter.
+          <br><br>
+          Use for: database contexts (Entity Framework's DbContext), unit-of-work objects,
+          anything that should be consistent within a single request but not shared across requests.
+          This is the most common lifetime for services in ASP.NET Core.
+        </p>
+      </div>
+
+      <div class="box key-term">
+        <div class="box-title">📚 Singleton — One Instance for the Whole Restaurant</div>
+        <p>
+          <strong><code>AddSingleton&lt;T&gt;()</code></strong> — One instance is created
+          the first time it is requested and that same instance is reused for the lifetime
+          of the application.
+          <br><br>
+          Real-world analogy: like the restaurant manager. There is one manager. Every waiter,
+          every kitchen station, everyone talks to the same manager.
+          <br><br>
+          Use for: expensive-to-create objects, in-memory caches, configuration holders,
+          or services that maintain application-wide state. Be careful: singleton services
+          must be thread-safe because multiple requests may use them simultaneously.
+        </p>
+      </div>
+
+      <pre><span class="cmt">// Registering services with different lifetimes</span>
+builder.Services.<span class="fn">AddTransient</span>&lt;<span class="type">IGuidGenerator</span>, <span class="type">RandomGuidGenerator</span>&gt;();
+builder.Services.<span class="fn">AddScoped</span>&lt;<span class="type">IProductRepository</span>, <span class="type">ProductRepository</span>&gt;();
+builder.Services.<span class="fn">AddScoped</span>&lt;<span class="type">IEmailService</span>, <span class="type">SmtpEmailService</span>&gt;();
+builder.Services.<span class="fn">AddSingleton</span>&lt;<span class="type">IAppCache</span>, <span class="type">InMemoryCache</span>&gt;();
+
+<span class="cmt">// You can also register a concrete type without an interface</span>
+builder.Services.<span class="fn">AddScoped</span>&lt;<span class="type">OrderProcessor</span>&gt;();
+
+<span class="cmt">// Or register a specific instance you created yourself</span>
+<span class="kw">var</span> settings <span class="op">=</span> <span class="kw">new</span> <span class="type">AppSettings</span> { MaxPageSize <span class="op">=</span> <span class="num">100</span> };
+builder.Services.<span class="fn">AddSingleton</span>(settings);</pre>
+
+      <div class="box tip">
+        <div class="box-title">💡 The Captive Dependency Trap</div>
+        <p>
+          Never inject a <strong>Scoped</strong> or <strong>Transient</strong> service into a
+          <strong>Singleton</strong>. The singleton lives forever, and by capturing a scoped
+          service in its constructor, it prevents that scoped service from being properly
+          released after the request ends. ASP.NET Core will even throw an exception in
+          development mode to warn you. The rule: a service's dependencies must have a lifetime
+          <em>equal to or longer</em> than the service itself.
+        </p>
+      </div>
+
+      <div class="box fun-fact">
+        <div class="box-title">🔎 DI is Everywhere in ASP.NET Core</div>
+        <p>
+          The built-in ASP.NET Core services you used in Chapter 14 —
+          <code>AddControllers()</code>, <code>AddEndpointsApiExplorer()</code>,
+          <code>AddSwaggerGen()</code> — are all just calls to register services into
+          the same DI container you are using for your own code. Logging, configuration,
+          the HTTP context — it is all delivered via DI. Once you understand the pattern,
+          the entire framework becomes readable.
+        </p>
+      </div>
+
+      <div class="box key-term">
+        <div class="box-title">📚 Key Terms</div>
+        <p><strong>Dependency Injection (DI):</strong> A design pattern where a class receives its dependencies from an external source rather than creating them itself.</p>
+        <p><strong>DI Container:</strong> The system that manages creating, storing, and delivering service instances. In ASP.NET Core, this is accessed via <code>builder.Services</code>.</p>
+        <p><strong>Constructor Injection:</strong> The preferred DI pattern — dependencies are declared as parameters in the class constructor.</p>
+        <p><strong>Transient:</strong> A new instance is created every time the service is requested.</p>
+        <p><strong>Scoped:</strong> One instance per HTTP request. Different requests get different instances.</p>
+        <p><strong>Singleton:</strong> One instance for the entire application lifetime.</p>
+        <p><strong>Loose Coupling:</strong> A design goal where components depend on abstractions (interfaces) rather than concrete implementations, making them easier to swap and test.</p>
+      </div>
+
+      <div class="summary">
+        <h4>Chapter Summary</h4>
+        <ul>
+          <li>Dependency Injection inverts the responsibility of creating objects — classes declare what they need, and the DI container provides it.</li>
+          <li>ASP.NET Core has DI built in. All services are registered via <code>builder.Services</code> in <code>Program.cs</code>.</li>
+          <li>Constructor injection is the standard pattern: declare your dependency as a constructor parameter and the container fills it in automatically.</li>
+          <li>Depending on interfaces, not concrete classes, gives you loose coupling — easy to swap implementations and easy to test.</li>
+          <li>The three lifetimes are: <strong>Transient</strong> (new per request), <strong>Scoped</strong> (one per HTTP request), and <strong>Singleton</strong> (one for the app's lifetime).</li>
+          <li>Scoped is the most common lifetime for services in web applications — especially for database contexts.</li>
+          <li>Never inject a Scoped or Transient service into a Singleton — this creates a "captive dependency" that can cause subtle bugs.</li>
+        </ul>
+      </div>
+
+      <div class="exercises">
+        <h3>Exercises</h3>
+
+        <div class="exercise">
+          <div class="exercise-num">Exercise 15.1 — Interactive Quiz</div>
+          <p>Which service lifetime creates a new instance for every HTTP request?</p>
+          <div class="interactive-exercise">
+            <input type="text" id="q15-1" placeholder="Type your answer here..." />
+            <button onclick="checkAnswer('q15-1', 'out15-1', 'Scoped', 'Scoped — one instance is created per HTTP request. All components within a single request share the same instance, but the next request gets a fresh one. This is the most common lifetime for database contexts and business services.')">Check Answer</button>
+            <div class="exercise-output" id="out15-1"></div>
+          </div>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-num">Exercise 15.2 — Register and Inject a Logger Service</div>
+          <p>
+            Create an <code>IActivityLogger</code> interface with a single method:
+            <code>void Log(string action, string userId)</code>.
+            Implement it twice: once as <code>ConsoleActivityLogger</code> (prints to console)
+            and once as <code>DatabaseActivityLogger</code> (just prints "Would save to DB: ..."
+            for now).
+          </p>
+          <p>
+            Register the console version as Scoped in <code>Program.cs</code>.
+            Inject it into a controller called <code>OrdersController</code> and call
+            <code>Log("order_placed", userId)</code> inside a <code>POST /orders</code> endpoint.
+          </p>
+          <p>
+            Then: without changing <code>OrdersController</code> at all, switch to using
+            <code>DatabaseActivityLogger</code> by changing one line in <code>Program.cs</code>.
+            Describe how this demonstrates loose coupling.
+          </p>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-num">Exercise 15.3 — Lifetime Reasoning</div>
+          <p>For each of the following services, choose the most appropriate lifetime and justify your choice:</p>
+          <ol>
+            <li>A service that calls an external weather API and caches the result for 10 minutes.</li>
+            <li>A service that wraps a database connection (DbContext).</li>
+            <li>An ID generator that creates random GUIDs — stateless and cheap to create.</li>
+            <li>A service that holds the application's startup configuration (loaded once at boot).</li>
+            <li>A "shopping basket" service that holds items for the current request as a user adds items before checkout.</li>
+          </ol>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-num">Exercise 15.4 — Reflection: Testing with DI</div>
+          <p>
+            One of the biggest benefits of Dependency Injection is testability. Explain, in your
+            own words, how DI makes unit testing easier. Give a concrete example: describe a
+            class you might want to unit-test, what its dependency is, and how you would
+            substitute a fake/stub in a test so that the test doesn't need the real infrastructure
+            (database, email server, etc.) to run.
+          </p>
+        </div>
+      </div>
+
+      <div class="chapter-nav">
+        <a href="chapter-14.html">
+          <span class="nav-label">← Previous</span>
+          <span class="nav-title">Chapter 14: What is ASP.NET Core?</span>
+        </a>
+        <a href="chapter-16.html" class="next">
+          <span class="nav-label">Next →</span>
+          <span class="nav-title">Chapter 16: REST APIs</span>
+        </a>
+      </div>
+
+    </main>
+  </div>
+</div>
+<button class="menu-btn" aria-label="Open menu">☰</button>
+<script src="../../assets/auth.js"></script>
+<script src="../../assets/nav.js"></script>
+<script>
+function checkAnswer(inputId, outputId, correctAnswer, explanation) {
+  const input = document.getElementById(inputId).value.trim();
+  const output = document.getElementById(outputId);
+  if (input.toLowerCase().includes(correctAnswer.toLowerCase())) {
+    output.innerHTML = '<span style="color:#16a34a;font-weight:600;">✓ Correct!</span> ' + explanation;
+  } else {
+    output.innerHTML = '<span style="color:#dc2626;font-weight:600;">Not quite.</span> Try again — there are three lifetimes: Transient, Scoped, and Singleton.';
+  }
+}
+</script>
+</body>
+</html>

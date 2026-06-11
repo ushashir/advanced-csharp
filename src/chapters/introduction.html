@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Introduction — Advanced C# &amp; .NET for Newbies</title>
+  <link rel="stylesheet" href="../assets/style.css">
+  <script>(function(){var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);})()</script>
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-header"><a href="../../index.html"><div class="book-title">Advanced C# &amp; .NET for Newbies</div><div class="book-subtitle">A beginner-friendly guide</div></a></div>
+    <nav>
+      <div class="nav-part"><a href="../../index.html">📖 Table of Contents</a><a href="introduction.html">Introduction</a><a href="about-author.html">About the Author</a></div>
+      <div class="nav-part"><div class="nav-part-title">Part 0 — C# Fundamentals</div><a href="part-0/chapter-1a.html">Ch A · C# Data Types</a><a href="part-0/chapter-1b.html">Ch B · Data Structures</a><a href="part-0/exercises.html">Part 0 Exercises</a></div>
+      <div class="nav-part">
+        <div class="nav-part-title">Part 1 — Object-Oriented Programming</div>
+        <a href="part-1/chapter-1.html">Ch 1 · What is C#?</a><a href="part-1/chapter-2.html">Ch 2 · Classes &amp; Objects</a><a href="part-1/chapter-3.html">Ch 3 · Encapsulation</a><a href="part-1/chapter-4.html">Ch 4 · Inheritance</a><a href="part-1/chapter-5.html">Ch 5 · Polymorphism</a><a href="part-1/chapter-6.html">Ch 6 · Abstraction</a><a href="part-1/exercises.html">Part 1 Exercises</a>
+      </div>
+      <div class="nav-part">
+        <div class="nav-part-title">Part 2 — Advanced C# Concepts</div>
+        <a href="part-2/chapter-7.html">Ch 7 · Generics</a><a href="part-2/chapter-8.html">Ch 8 · Collections</a><a href="part-2/chapter-9.html">Ch 9 · Exceptions</a><a href="part-2/chapter-10.html">Ch 10 · Interfaces vs Abstract</a><a href="part-2/chapter-11.html">Ch 11 · LINQ</a><a href="part-2/chapter-12.html">Ch 12 · Delegates &amp; Lambdas</a><a href="part-2/chapter-13.html">Ch 13 · Nullable Types</a><a href="part-2/exercises.html">Part 2 Exercises</a>
+      </div>
+      <div class="nav-part">
+        <div class="nav-part-title">Part 3 — ASP.NET Core Basics</div>
+        <a href="part-3/chapter-14.html">Ch 14 · What is ASP.NET Core?</a><a href="part-3/chapter-15.html">Ch 15 · Dependency Injection</a><a href="part-3/chapter-16.html">Ch 16 · REST APIs</a><a href="part-3/chapter-17.html">Ch 17 · Controllers, Services, Repos</a><a href="part-3/chapter-18.html">Ch 18 · Entity Framework Core</a><a href="part-3/chapter-19.html">Ch 19 · Configuration</a><a href="part-3/exercises.html">Part 3 Exercises</a>
+      </div>
+      <div class="nav-part">
+        <div class="nav-part-title">Part 4 — ASP.NET Core Advanced</div>
+        <a href="part-4/chapter-20.html">Ch 20 · Authentication &amp; Authorization</a><a href="part-4/chapter-21.html">Ch 21 · JWT Authentication</a><a href="part-4/chapter-22.html">Ch 22 · Exception Handling</a><a href="part-4/chapter-23.html">Ch 23 · Validation</a><a href="part-4/chapter-24.html">Ch 24 · Microservices</a><a href="part-4/exercises.html">Part 4 Exercises</a>
+      </div>
+      <div class="nav-part">
+        <div class="nav-part-title">Part 5 — Conclusion</div>
+        <a href="part-5/chapter-25.html">Ch 25 · The .NET Ecosystem</a><a href="part-5/chapter-26.html">Ch 26 · What to Learn Next</a><a href="part-5/conclusion.html">Conclusion</a>
+      </div>
+    </nav>
+  </aside>
+
+  <div class="content-wrapper">
+    <main class="content">
+
+      <div class="chapter-header">
+        <div class="chapter-tag" style="background:#6d28d9;">Introduction</div>
+        <h1>Why This Book Exists</h1>
+        <p class="chapter-intro">A letter to everyone who has ever stared at C# documentation and felt completely lost.</p>
+      </div>
+
+      <h2>The Day I Almost Quit</h2>
+      <p>
+        I remember the exact moment I almost gave up on C#.
+      </p>
+      <p>
+        I was trying to understand what a <code>Dictionary</code> was. I found the official
+        Microsoft documentation. It said: <em>"Represents a collection of keys and values.
+        Namespace: System.Collections.Generic. The Dictionary&lt;TKey,TValue&gt; generic class provides
+        a mapping from a set of keys to a set of values."</em>
+      </p>
+      <p>
+        I stared at those words. I read them three times. What are generics? What is a namespace?
+        What does "mapping from a set of keys to a set of values" even mean in plain English?
+      </p>
+      <p>
+        I closed the laptop and went for a walk.
+      </p>
+
+      <h2>What Is Actually Happening</h2>
+      <p>
+        Here is what the documentation should have said: <em>A Dictionary is like a contact book.
+        Every entry has a name (the key) and a phone number (the value). You look someone up by
+        their name and you instantly get their number. That's it.</em>
+      </p>
+      <p>
+        The <code>&lt;TKey, TValue&gt;</code> part just means you get to choose what type the
+        name and phone number are — strings, numbers, whatever makes sense for your data.
+      </p>
+      <p>
+        This is the pattern you will find throughout this book: the concept is always
+        simple. The words used to describe it are sometimes not.
+      </p>
+
+      <h2>How This Book Works</h2>
+      <p>
+        Every chapter in this book follows a simple structure:
+      </p>
+      <ol>
+        <li><strong>A story or analogy</strong> — something from real life that works exactly like the C# concept we are about to learn.</li>
+        <li><strong>The concept explained</strong> — using plain language, building on the story.</li>
+        <li><strong>The C# code</strong> — now that you understand the idea, we look at how C# writes it.</li>
+        <li><strong>Key terms and summary</strong> — so you can revise quickly.</li>
+        <li><strong>Exercises</strong> — to make sure it actually stuck.</li>
+      </ol>
+
+      <h2>About the Code</h2>
+      <p>
+        All the code in this book is real C#. It will run on your computer.
+        You do not need any fancy setup for most of it — just install the .NET SDK
+        (version 8 or higher is recommended) and a code editor like Visual Studio,
+        Rider, or VS Code with the C# extension.
+      </p>
+      <p>
+        For the ASP.NET Core chapters (Parts 3 and 4), you will need a bit more setup.
+        Each chapter in those parts includes a note on what you need to have running.
+      </p>
+
+      <h2>A Word About "Advanced"</h2>
+      <p>
+        This book is called <em>Advanced C# for Newbies</em>. That sounds contradictory.
+        Here is what it means: we cover concepts that are considered "advanced" — things
+        like generics, LINQ, delegates, and JWT authentication. But we explain them in
+        the simplest possible way, for people who are new to these ideas.
+      </p>
+      <p>
+        You do not need to be an expert to read this book. You just need to be curious.
+      </p>
+      <p>
+        Let's begin.
+      </p>
+
+      <div class="chapter-nav">
+        <a href="../../index.html">
+          <span class="nav-label">← Previous</span>
+          <span class="nav-title">Table of Contents</span>
+        </a>
+        <a href="about-author.html" class="next">
+          <span class="nav-label">Next →</span>
+          <span class="nav-title">About the Author</span>
+        </a>
+      </div>
+
+    </main>
+  </div>
+</div>
+<button class="menu-btn" aria-label="Open menu">☰</button>
+<script src="../assets/auth.js"></script>
+<script src="../assets/nav.js"></script>
+</body>
+</html>

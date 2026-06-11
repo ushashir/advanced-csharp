@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chapter 1: What is C#? — Advanced C# &amp; .NET for Newbies</title>
+  <link rel="stylesheet" href="../../assets/style.css">
+  <script>(function(){var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);})()</script>
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-header"><a href="../../../index.html"><div class="book-title">Advanced C# &amp; .NET for Newbies</div><div class="book-subtitle">A beginner-friendly guide</div></a></div>
+    <nav>
+      <div class="nav-part"><a href="../../../index.html">📖 Table of Contents</a><a href="../introduction.html">Introduction</a><a href="../about-author.html">About the Author</a></div>
+      <div class="nav-part"><div class="nav-part-title">Part 0 — C# Fundamentals</div><a href="../part-0/chapter-1a.html">Ch A · C# Data Types</a><a href="../part-0/chapter-1b.html">Ch B · Data Structures</a><a href="../part-0/exercises.html">Part 0 Exercises</a></div>
+      <div class="nav-part">
+        <div class="nav-part-title">Part 1 — Object-Oriented Programming</div>
+        <a href="chapter-1.html">Ch 1 · What is C#?</a><a href="chapter-2.html">Ch 2 · Classes &amp; Objects</a><a href="chapter-3.html">Ch 3 · Encapsulation</a><a href="chapter-4.html">Ch 4 · Inheritance</a><a href="chapter-5.html">Ch 5 · Polymorphism</a><a href="chapter-6.html">Ch 6 · Abstraction</a><a href="exercises.html">Part 1 Exercises</a>
+      </div>
+      <div class="nav-part">
+        <div class="nav-part-title">Part 2 — Advanced C# Concepts</div>
+        <a href="../part-2/chapter-7.html">Ch 7 · Generics</a><a href="../part-2/chapter-8.html">Ch 8 · Collections</a><a href="../part-2/chapter-9.html">Ch 9 · Exceptions</a><a href="../part-2/chapter-10.html">Ch 10 · Interfaces vs Abstract</a><a href="../part-2/chapter-11.html">Ch 11 · LINQ</a><a href="../part-2/chapter-12.html">Ch 12 · Delegates &amp; Lambdas</a><a href="../part-2/chapter-13.html">Ch 13 · Nullable Types</a><a href="../part-2/exercises.html">Part 2 Exercises</a>
+      </div>
+      <div class="nav-part">
+        <div class="nav-part-title">Part 3 — ASP.NET Core Basics</div>
+        <a href="../part-3/chapter-14.html">Ch 14 · What is ASP.NET Core?</a><a href="../part-3/chapter-15.html">Ch 15 · Dependency Injection</a><a href="../part-3/chapter-16.html">Ch 16 · REST APIs</a><a href="../part-3/chapter-17.html">Ch 17 · Controllers, Services, Repos</a><a href="../part-3/chapter-18.html">Ch 18 · Entity Framework Core</a><a href="../part-3/chapter-19.html">Ch 19 · Configuration</a><a href="../part-3/exercises.html">Part 3 Exercises</a>
+      </div>
+      <div class="nav-part">
+        <div class="nav-part-title">Part 4 — ASP.NET Core Advanced</div>
+        <a href="../part-4/chapter-20.html">Ch 20 · Authentication &amp; Authorization</a><a href="../part-4/chapter-21.html">Ch 21 · JWT Authentication</a><a href="../part-4/chapter-22.html">Ch 22 · Exception Handling</a><a href="../part-4/chapter-23.html">Ch 23 · Validation</a><a href="../part-4/chapter-24.html">Ch 24 · Microservices</a><a href="../part-4/exercises.html">Part 4 Exercises</a>
+      </div>
+      <div class="nav-part">
+        <div class="nav-part-title">Part 5 — Conclusion</div>
+        <a href="../part-5/chapter-25.html">Ch 25 · The .NET Ecosystem</a><a href="../part-5/chapter-26.html">Ch 26 · What to Learn Next</a><a href="../part-5/conclusion.html">Conclusion</a>
+      </div>
+    </nav>
+  </aside>
+
+  <div class="content-wrapper">
+    <main class="content">
+
+      <div class="chapter-header">
+        <div class="chapter-tag part-1">Part 1 · Chapter 1</div>
+        <h1>What is C#? — The Universal Craftsman</h1>
+        <p class="chapter-intro">Before writing a single line of code, let's understand what C# actually is, where it came from, and why it has become one of the world's most powerful — and beloved — programming languages.</p>
+      </div>
+
+      <div class="learn-box">
+        <h4>What you'll learn in this chapter</h4>
+        <ul>
+          <li>What C# is and the story of its creation</li>
+          <li>What the .NET runtime (CLR) is and why it matters</li>
+          <li>How C# runs on Windows, Mac, and Linux</li>
+          <li>The difference between C# (the language) and .NET (the platform)</li>
+          <li>Why C# is a great choice for backend development</li>
+          <li>Your very first C# program</li>
+        </ul>
+      </div>
+
+      <h2>The Universal Craftsman</h2>
+      <p>
+        Imagine a master craftsman who can work in any workshop, anywhere in the world.
+        Whether the workshop is in Tokyo, Lagos, or New York — whatever tools are on the bench,
+        whatever the local customs — this craftsman adapts instantly and produces beautiful work.
+        The techniques in his head are universal. The workshop just needs to provide the right environment.
+      </p>
+      <p>
+        That is C# (pronounced "C sharp"). The code you write is the craftsman's technique — it doesn't
+        change. The .NET runtime is the workshop environment that makes everything work on whatever
+        machine you are running on.
+      </p>
+
+      <div class="box analogy">
+        <div class="box-title">🔨 The Craftsman Analogy</div>
+        <p>
+          A carpenter's knowledge of joinery doesn't change whether they are in a workshop in London
+          or Lagos. They need a local workbench (the operating system), local tools (the runtime),
+          but their skill — their code — is the same everywhere.
+          <br><br>
+          C# code you write on your laptop will run identically on a Windows server, a Mac, or a
+          Linux cloud container. The .NET runtime provides that consistent "workshop" in each environment.
+          This is the promise: <strong>Write it once. Run it everywhere .NET is installed.</strong>
+        </p>
+      </div>
+
+      <h2>A Short History of C#</h2>
+      <p>
+        The story of C# begins in the late 1990s at Microsoft. The internet was booming, and Java —
+        Sun Microsystems' cross-platform language — was becoming popular everywhere. Microsoft wanted
+        a modern, powerful language of their own for the new .NET platform they were building.
+      </p>
+      <p>
+        They hired <strong>Anders Hejlsberg</strong>, a legendary Danish software engineer who had
+        previously designed Turbo Pascal and later led the creation of Delphi — two hugely influential
+        languages. Hejlsberg led a small team, and in 2000 they released C# 1.0 alongside the first
+        version of the .NET Framework.
+      </p>
+      <p>
+        The language was designed from the start to be clean, strongly typed, object-oriented, and
+        safe. Over the following two decades, C# evolved rapidly. By 2024, it is on version 12 and is
+        considered one of the most feature-rich and thoughtfully designed languages in the world.
+      </p>
+
+      <div class="box fun-fact">
+        <div class="box-title">🎵 Fun Fact: The Name "COOL"</div>
+        <p>
+          During internal development at Microsoft, the language was codenamed <strong>COOL</strong> —
+          which stood for <em>C-like Object Oriented Language</em>. The name C# was chosen just before
+          public release. In music, a sharp (#) means "raise the pitch by a half step." The team was
+          signalling that C# was a step above C and C++ — a higher, cleaner version of the idea.
+        </p>
+      </div>
+
+      <h2>The .NET Runtime — C#'s Secret Engine</h2>
+      <p>
+        When you write C# and run it, your code doesn't speak directly to the computer's hardware.
+        Something sits between your code and the machine. That something is the
+        <strong>Common Language Runtime</strong>, or <strong>CLR</strong>.
+      </p>
+      <p>
+        Here is how it works: you write C# source code. A compiler translates it into an
+        intermediate form called <strong>CIL</strong> (Common Intermediate Language) — sometimes
+        also called MSIL. This CIL is stored in a <code>.dll</code> or <code>.exe</code> file.
+        When you run the program, the CLR reads the CIL and compiles it further — using a
+        <strong>JIT (Just-In-Time) compiler</strong> — into the native machine code for your
+        specific CPU. This happens at runtime, and the CLR caches the result so it's fast.
+      </p>
+
+      <div class="diagram">
+Your C# Code (.cs files)
+        ↓
+  C# Compiler (Roslyn)
+        ↓
+  CIL / Bytecode (.dll or .exe)   ← Same on every platform
+        ↓
+┌──────────────┬──────────────┬──────────────┐
+│     CLR      │     CLR      │     CLR      │
+│  (Windows)   │   (macOS)    │   (Linux)    │
+│  .NET 8      │   .NET 8     │   .NET 8     │
+└──────────────┴──────────────┴──────────────┘
+      </div>
+
+      <p>
+        Beyond running your code, the CLR also provides:
+      </p>
+      <ul>
+        <li><strong>Garbage Collection:</strong> automatically frees memory you are no longer using, so you don't have to manage it manually.</li>
+        <li><strong>Type Safety:</strong> enforces that you only use objects in ways their type allows, catching bugs before they crash your program.</li>
+        <li><strong>Exception Handling:</strong> provides a consistent system for errors across all .NET languages.</li>
+        <li><strong>Security:</strong> enforces access controls on what your code can do.</li>
+      </ul>
+
+      <div class="box key-term">
+        <div class="box-title">📚 Key Term: CLR</div>
+        <p>
+          The <strong>CLR (Common Language Runtime)</strong> is the execution engine of .NET.
+          It takes the compiled intermediate code from your C# program and runs it on your specific
+          machine. It also handles memory management, type safety, and exception handling automatically.
+          Think of the CLR as the "engine room" that runs below every .NET application.
+        </p>
+      </div>
+
+      <h2>C# vs .NET — Language vs Platform</h2>
+      <p>
+        Beginners often mix up C# and .NET. They are related but different things:
+      </p>
+      <ul>
+        <li>
+          <strong>C#</strong> is the <em>programming language</em>. It is the syntax and vocabulary
+          you use to write your instructions. C# is one of several languages that compile to CIL
+          and run on .NET — others include F# and Visual Basic.
+        </li>
+        <li>
+          <strong>.NET</strong> is the <em>platform</em>. It includes the CLR (runtime engine),
+          the Base Class Library (thousands of pre-built classes for everything from file I/O to
+          HTTP requests), and tooling like the <code>dotnet</code> CLI. .NET is the workshop;
+          C# is the craftsman's skill.
+        </li>
+      </ul>
+
+      <div class="box tip">
+        <div class="box-title">💡 Which .NET Should You Use?</div>
+        <p>
+          There have been multiple versions of .NET over the years, which can be confusing.
+          Here is the short version: use <strong>.NET 8</strong>. It is the current
+          Long-Term Support (LTS) release, meaning Microsoft will support it with security patches
+          until November 2026. All examples in this book use .NET 8 and C# 12.
+          <br><br>
+          If you see references to ".NET Core" or ".NET Framework" online — don't panic.
+          .NET Framework was the old Windows-only version. .NET Core (versions 1–3.1) was the
+          cross-platform reboot. From .NET 5 onwards they unified into simply ".NET."
+          Modern = .NET 8+.
+        </p>
+      </div>
+
+      <h2>Why C# for Backend Development?</h2>
+      <p>
+        C# and ASP.NET Core (the web framework we will cover in Parts 3 and 4) power the backends
+        of companies like Stack Overflow, GoDaddy, Microsoft's own Azure services, and thousands of
+        enterprise systems worldwide. Here is why developers choose C# for backend work:
+      </p>
+      <ul>
+        <li>
+          <strong>Enterprise-grade reliability:</strong> C# has been battle-tested in demanding
+          financial systems, healthcare software, and large-scale web services for over two decades.
+        </li>
+        <li>
+          <strong>Exceptional type safety:</strong> C# is a strongly, statically typed language.
+          The compiler catches a huge category of bugs before your code even runs.
+        </li>
+        <li>
+          <strong>High performance:</strong> .NET 8 is one of the fastest web application runtimes
+          in benchmarks like TechEmpower. It regularly outperforms Java and Node.js in raw throughput.
+        </li>
+        <li>
+          <strong>Modern language features:</strong> C# keeps gaining features — records, pattern
+          matching, nullable reference types, async/await — that make code safer and more expressive.
+        </li>
+        <li>
+          <strong>Rich ecosystem:</strong> NuGet (the .NET package manager) hosts hundreds of
+          thousands of libraries. Entity Framework Core, ASP.NET Core, SignalR — all world-class tools.
+        </li>
+        <li>
+          <strong>Jobs:</strong> C# is consistently in the top 10 most-used languages worldwide
+          and is the dominant language in Microsoft-ecosystem enterprises and game development (Unity).
+        </li>
+      </ul>
+
+      <h2>Your First C# Program</h2>
+      <p>
+        It is time to write some actual code. Every C# programmer has started with this. Let's
+        look at two versions — the classic full form and the modern minimal form.
+      </p>
+
+      <p><strong>Classic form (explicit namespace and class):</strong></p>
+      <pre><span class="kw">using</span> <span class="type">System</span>;
+
+<span class="kw">namespace</span> MyFirstApp
+{
+    <span class="kw">class</span> <span class="type">Program</span>
+    {
+        <span class="kw">static void</span> <span class="fn">Main</span>(<span class="type">string</span>[] args)
+        {
+            <span class="type">Console</span>.<span class="fn">WriteLine</span>(<span class="str">"Hello, World!"</span>);
+        }
+    }
+}</pre>
+
+      <p><strong>Modern minimal form (C# 10+ / .NET 6+):</strong></p>
+      <pre><span class="cmt">// Program.cs — the entire program!</span>
+<span class="type">Console</span>.<span class="fn">WriteLine</span>(<span class="str">"Hello, World!"</span>);</pre>
+
+      <p>
+        In modern .NET projects, the boilerplate class and Main method are generated for you
+        implicitly, so you can start writing logic directly. Both versions output:
+        <code>Hello, World!</code>
+      </p>
+
+      <p>Let's understand the key parts of the classic form:</p>
+      <ul>
+        <li>
+          <code>using System;</code> — This imports the <code>System</code> namespace, which
+          contains fundamental classes like <code>Console</code>. Without it, you would have to
+          write <code>System.Console.WriteLine</code> every time.
+        </li>
+        <li>
+          <code>namespace MyFirstApp</code> — A namespace is like a folder for your code. It
+          groups related classes together and prevents naming conflicts.
+        </li>
+        <li>
+          <code>class Program</code> — In C#, all code lives inside classes. <code>Program</code>
+          is just a name — you could call it anything, but Program is the convention.
+        </li>
+        <li>
+          <code>static void Main(string[] args)</code> — This is the entry point of every C#
+          application. When you run the program, the runtime looks for a method with exactly
+          this signature. It's the front door of the building.
+        </li>
+        <li>
+          <code>Console.WriteLine("Hello, World!")</code> — <code>Console</code> is a class in
+          the System namespace. <code>WriteLine</code> is a method that prints text followed by
+          a newline character.
+        </li>
+      </ul>
+
+      <div class="box tip">
+        <div class="box-title">💡 Don't Panic About the Boilerplate</div>
+        <p>
+          If <code>static void Main(string[] args)</code> looks overwhelming right now, that is
+          perfectly normal. Every C# beginner has that moment. For now, treat it as the required
+          opening spell to start your program. By Chapter 3, every word of it will make sense.
+          The modern top-level statement style hides this behind the scenes, which is why
+          new .NET projects use it by default.
+        </p>
+      </div>
+
+      <h2>A Taste of What C# Looks Like</h2>
+      <p>
+        Before we go deeper into all the concepts, here is a short taste of real C# code — a
+        simple program that asks for your name and greets you:
+      </p>
+
+      <pre><span class="kw">using</span> <span class="type">System</span>;
+
+<span class="type">Console</span>.<span class="fn">Write</span>(<span class="str">"What is your name? "</span>);
+<span class="type">string</span> name <span class="op">=</span> <span class="type">Console</span>.<span class="fn">ReadLine</span>() <span class="op">??</span> <span class="str">"stranger"</span>;
+<span class="type">Console</span>.<span class="fn">WriteLine</span>(<span class="op">$</span><span class="str">"Hello, {name}! Welcome to C#."</span>);
+
+<span class="cmt">// Output (if you type "Ada"):</span>
+<span class="cmt">// What is your name? Ada</span>
+<span class="cmt">// Hello, Ada! Welcome to C#.</span></pre>
+
+      <p>A few things to notice:</p>
+      <ul>
+        <li><code>string</code> is the type for text. In C# types are lowercase keywords (<code>string</code>, <code>int</code>, <code>bool</code>) or PascalCase class names (<code>Console</code>).</li>
+        <li><code>$"Hello, {name}!"</code> is an interpolated string — the <code>$</code> prefix lets you embed variables directly inside the string with curly braces.</li>
+        <li><code>??</code> is the null-coalescing operator — if <code>ReadLine()</code> returns null, use "stranger" instead. We will learn about null in Chapter 13.</li>
+      </ul>
+
+      <div class="box fun-fact">
+        <div class="box-title">📊 C# in the Real World</div>
+        <p>
+          According to the 2024 Stack Overflow Developer Survey, C# is used by about 27% of
+          professional developers, making it one of the top 5 most-used languages globally.
+          Unity — the game engine powering thousands of games from Pokémon GO to Hollow Knight —
+          uses C# as its scripting language. And ASP.NET Core regularly tops the TechEmpower
+          performance benchmarks for web framework speed.
+        </p>
+      </div>
+
+      <h2>.NET Versions at a Glance</h2>
+      <p>
+        You will see many version numbers when looking up C# resources. Here is the map:
+      </p>
+      <ul>
+        <li><strong>.NET Framework 1.0–4.8</strong> — the original, Windows-only platform (2002–2019). Still exists for legacy systems.</li>
+        <li><strong>.NET Core 1.0–3.1</strong> — the cross-platform reboot (2016–2019). Fast, modern, but a separate product.</li>
+        <li><strong>.NET 5</strong> — unification of Core and Framework under one brand (2020).</li>
+        <li><strong>.NET 6</strong> — LTS release, added top-level statements, massive performance gains.</li>
+        <li><strong>.NET 7</strong> — current non-LTS, further performance and language improvements.</li>
+        <li><strong>.NET 8</strong> — <strong>LTS (use this!)</strong> — current recommended version as of 2024. Supported until November 2026.</li>
+      </ul>
+
+      <div class="box key-term">
+        <div class="box-title">📚 Key Terms</div>
+        <p><strong>C#:</strong> A modern, strongly-typed, object-oriented programming language created by Anders Hejlsberg at Microsoft in 2000.</p>
+        <p><strong>.NET:</strong> The platform (runtime + libraries + tooling) on which C# programs run. Cross-platform: Windows, macOS, Linux.</p>
+        <p><strong>CLR (Common Language Runtime):</strong> The execution engine of .NET that runs your compiled C# code, manages memory, and provides type safety.</p>
+        <p><strong>CIL (Common Intermediate Language):</strong> The "middle language" your C# code compiles to before the CLR translates it to native machine code.</p>
+        <p><strong>JIT (Just-In-Time compiler):</strong> The component of the CLR that converts CIL to native CPU instructions at runtime.</p>
+        <p><strong>NuGet:</strong> The package manager for .NET — the equivalent of npm (Node) or Maven (Java).</p>
+        <p><strong>LTS (Long-Term Support):</strong> A version of .NET that Microsoft guarantees to support with security patches for at least 3 years.</p>
+      </div>
+
+      <div class="summary">
+        <h4>Chapter Summary</h4>
+        <ul>
+          <li>C# was created by Anders Hejlsberg at Microsoft and released in 2000, originally codenamed "COOL."</li>
+          <li>C# code compiles to CIL (intermediate bytecode), which the CLR (Common Language Runtime) executes on any platform.</li>
+          <li>C# is the language; .NET is the platform. They work together but are distinct things.</li>
+          <li>.NET 8 is the current LTS version — it is what you should use for new projects in 2024.</li>
+          <li>The CLR provides automatic garbage collection, type safety, and cross-platform execution.</li>
+          <li>A C# program's entry point is the <code>Main</code> method, though modern .NET allows top-level statements that hide this boilerplate.</li>
+          <li>C# is used for enterprise backends, cloud services, game development (Unity), and much more.</li>
+        </ul>
+      </div>
+
+      <div class="exercises">
+        <h3>Exercises</h3>
+
+        <div class="exercise">
+          <div class="exercise-num">Exercise 1.1 — Think It Through</div>
+          <p>
+            In your own words, explain what the CLR does. Imagine you are explaining it to a
+            friend who has never programmed. Do not use the craftsman analogy from this chapter
+            — come up with your own. (Hint: think about a universal power adapter, or a translator
+            at the United Nations, or a forklift in a warehouse.)
+          </p>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-num">Exercise 1.2 — Interactive Quiz</div>
+          <p>What does CLR stand for?</p>
+          <div class="interactive-exercise">
+            <input type="text" id="q1-2" placeholder="Type your answer here..." />
+            <button onclick="checkAnswer('q1-2', 'out1-2', 'Common Language Runtime', 'The CLR is the execution engine of .NET — it runs your compiled C# code on any machine.')">Check Answer</button>
+            <div class="exercise-output" id="out1-2"></div>
+          </div>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-num">Exercise 1.3 — C# vs Java</div>
+          <p>
+            Both C# and Java compile to a bytecode intermediate language and run on a virtual
+            machine runtime. List two similarities and two differences between how C# (.NET/CLR)
+            and Java (JVM) work. Use what you know — if you have studied Java before, this is
+            a great chance to compare. If not, research briefly online.
+          </p>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-num">Exercise 1.4 — Hello, You!</div>
+          <p>
+            Modify the name-greeting program from this chapter. Instead of printing one greeting
+            line, make it print three lines:
+          </p>
+          <ul>
+            <li>Line 1: "Hello, [name]! Welcome to C#."</li>
+            <li>Line 2: "Today is a great day to learn something new."</li>
+            <li>Line 3: "You are on Chapter 1 of 26. Keep going!"</li>
+          </ul>
+          <p>Use an interpolated string (<code>$"..."</code>) for Line 1 and plain strings for the others.</p>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-num">Exercise 1.5 — Reflection</div>
+          <p>
+            .NET 8 was released in November 2023. Its predecessor, .NET 7, reached end-of-life in May
+            2024. Why do you think companies standardise on LTS versions instead of always upgrading
+            to the latest? What would be the risks of always running the newest non-LTS version in
+            a production system? Think about stability, support, and cost.
+          </p>
+        </div>
+      </div>
+
+      <div class="chapter-nav">
+        <a href="../part-0/exercises.html">
+          <span class="nav-label">← Previous</span>
+          <span class="nav-title">Part 0 Exercises</span>
+        </a>
+        <a href="chapter-2.html" class="next">
+          <span class="nav-label">Next →</span>
+          <span class="nav-title">Chapter 2: Classes &amp; Objects</span>
+        </a>
+      </div>
+
+    </main>
+  </div>
+</div>
+<button class="menu-btn" aria-label="Open menu">☰</button>
+<script src="../../assets/auth.js"></script>
+<script src="../../assets/nav.js"></script>
+</body>
+</html>

@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Part 0 Exercises — Advanced C# &amp; .NET for Newbies</title>
+  <link rel="stylesheet" href="../../assets/style.css">
+  <script>(function(){var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);})()</script>
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-header"><a href="../../../index.html"><div class="book-title">Advanced C# &amp; .NET for Newbies</div><div class="book-subtitle">A beginner-friendly guide</div></a></div>
+    <nav>
+      <div class="nav-part"><a href="../../../index.html">📖 Table of Contents</a><a href="../introduction.html">Introduction</a><a href="../about-author.html">About the Author</a></div>
+      <div class="nav-part"><div class="nav-part-title">Part 0 — C# Fundamentals</div><a href="chapter-1a.html">Ch A · C# Data Types</a><a href="chapter-1b.html">Ch B · Data Structures</a><a href="exercises.html">Part 0 Exercises</a></div>
+      <div class="nav-part"><div class="nav-part-title">Part 1 — Object-Oriented Programming</div><a href="../part-1/chapter-1.html">Ch 1 · What is C#?</a><a href="../part-1/chapter-2.html">Ch 2 · Classes &amp; Objects</a><a href="../part-1/chapter-3.html">Ch 3 · Encapsulation</a><a href="../part-1/chapter-4.html">Ch 4 · Inheritance</a><a href="../part-1/chapter-5.html">Ch 5 · Polymorphism</a><a href="../part-1/chapter-6.html">Ch 6 · Abstraction</a><a href="../part-1/exercises.html">Part 1 Exercises</a></div>
+      <div class="nav-part"><div class="nav-part-title">Part 2 — Advanced C# Concepts</div><a href="../part-2/chapter-7.html">Ch 7 · Generics</a><a href="../part-2/chapter-8.html">Ch 8 · Collections</a><a href="../part-2/chapter-9.html">Ch 9 · Exceptions</a><a href="../part-2/chapter-10.html">Ch 10 · Interfaces vs Abstract</a><a href="../part-2/chapter-11.html">Ch 11 · LINQ</a><a href="../part-2/chapter-12.html">Ch 12 · Delegates &amp; Lambdas</a><a href="../part-2/chapter-13.html">Ch 13 · Nullable Types</a><a href="../part-2/exercises.html">Part 2 Exercises</a></div>
+      <div class="nav-part"><div class="nav-part-title">Part 3 — ASP.NET Core Basics</div><a href="../part-3/chapter-14.html">Ch 14 · What is ASP.NET Core?</a><a href="../part-3/chapter-15.html">Ch 15 · Dependency Injection</a><a href="../part-3/chapter-16.html">Ch 16 · REST APIs</a><a href="../part-3/chapter-17.html">Ch 17 · Controllers, Services, Repos</a><a href="../part-3/chapter-18.html">Ch 18 · Entity Framework Core</a><a href="../part-3/chapter-19.html">Ch 19 · Configuration</a><a href="../part-3/exercises.html">Part 3 Exercises</a></div>
+      <div class="nav-part"><div class="nav-part-title">Part 4 — ASP.NET Core Advanced</div><a href="../part-4/chapter-20.html">Ch 20 · Authentication &amp; Authorization</a><a href="../part-4/chapter-21.html">Ch 21 · JWT Authentication</a><a href="../part-4/chapter-22.html">Ch 22 · Exception Handling</a><a href="../part-4/chapter-23.html">Ch 23 · Validation</a><a href="../part-4/chapter-24.html">Ch 24 · Microservices</a><a href="../part-4/exercises.html">Part 4 Exercises</a></div>
+      <div class="nav-part"><div class="nav-part-title">Part 5 — Conclusion</div><a href="../part-5/chapter-25.html">Ch 25 · The .NET Ecosystem</a><a href="../part-5/chapter-26.html">Ch 26 · What to Learn Next</a><a href="../part-5/conclusion.html">Conclusion</a></div>
+    </nav>
+  </aside>
+
+  <div class="content-wrapper">
+    <main class="content">
+
+      <div class="chapter-header">
+        <div class="chapter-tag part-1">Part 0 · Exercises</div>
+        <h1>Part 0 Exercises</h1>
+        <p class="chapter-intro">Practise what you've learned about C# data types and data structures. Write the code, run it, reflect on the output.</p>
+      </div>
+
+      <div class="exercises">
+        <h3>Data Types Exercises</h3>
+
+        <div class="exercise">
+          <div class="exercise-num">Exercise A.1 — Pick the Right Type</div>
+          <p>
+            For each of the following pieces of data, choose the most appropriate C# type and explain why:
+          </p>
+          <ul>
+            <li>A person's age in years</li>
+            <li>The price of a product (e.g., £29.99)</li>
+            <li>Whether a user is logged in</li>
+            <li>A user's email address</li>
+            <li>The population of Earth (approximately 8 billion)</li>
+            <li>The letter grade of a student (e.g., 'A', 'B', 'C')</li>
+            <li>The temperature outside in Celsius with one decimal place</li>
+          </ul>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-num">Exercise A.2 — Interactive: Type Identification</div>
+          <p>What C# type would you use to store the value <code>3.14159</code> when you need maximum decimal precision (e.g., financial calculation)?</p>
+          <div class="interactive-exercise">
+            <input type="text" id="qA2" placeholder="Type the C# type name..." />
+            <button onclick="checkAnswer('qA2', 'outA2', 'decimal', 'Correct! decimal has ~28 significant digits and avoids floating-point rounding errors — always use it for money and precision calculations.')">Check Answer</button>
+            <div class="exercise-output" id="outA2"></div>
+          </div>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-num">Exercise A.3 — Value vs Reference</div>
+          <p>
+            Without running the code, predict the output of each snippet. Then run them to check:
+          </p>
+          <pre><span class="cmt">// Snippet 1</span>
+<span class="kw">int</span> x = <span class="num">5</span>;
+<span class="kw">int</span> y = x;
+y = <span class="num">100</span>;
+<span class="type">Console</span>.<span class="fn">WriteLine</span>(x);
+
+<span class="cmt">// Snippet 2</span>
+<span class="kw">int</span>[] arr1 = { <span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span> };
+<span class="kw">int</span>[] arr2 = arr1;
+arr2[<span class="num">0</span>] = <span class="num">99</span>;
+<span class="type">Console</span>.<span class="fn">WriteLine</span>(arr1[<span class="num">0</span>]);</pre>
+          <p>Were the results what you expected? Explain why each behaves the way it does.</p>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-num">Exercise A.4 — Type Conversion Challenge</div>
+          <p>
+            Write a small C# program that:
+          </p>
+          <ol>
+            <li>Asks the user to enter their age as a string.</li>
+            <li>Uses <code>int.TryParse</code> to safely convert it to an integer.</li>
+            <li>If the conversion succeeds, prints: <code>"In 10 years you will be X years old."</code></li>
+            <li>If the conversion fails, prints: <code>"That doesn't look like a valid age."</code></li>
+          </ol>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-num">Exercise A.5 — The Floating-Point Trap</div>
+          <p>
+            Run the following code and explain the result:
+          </p>
+          <pre><span class="type">Console</span>.<span class="fn">WriteLine</span>(<span class="num">0.1</span> + <span class="num">0.2</span>);
+<span class="type">Console</span>.<span class="fn">WriteLine</span>(<span class="num">0.1m</span> + <span class="num">0.2m</span>);</pre>
+          <p>
+            Why are the results different? When would you use <code>decimal</code> over <code>double</code>
+            in a real application?
+          </p>
+        </div>
+      </div>
+
+      <div class="exercises" style="margin-top: 2rem;">
+        <h3>Data Structures Exercises</h3>
+
+        <div class="exercise">
+          <div class="exercise-num">Exercise B.1 — Interactive: Choose the Structure</div>
+          <p>
+            You are building a task-management system. Users submit tasks and the system processes
+            them in the order they arrive. Which data structure should you use?
+          </p>
+          <div class="interactive-exercise">
+            <input type="text" id="qB1" placeholder="Type the structure name..." />
+            <button onclick="checkAnswer('qB1', 'outB1', 'Queue', 'Correct! A Queue&lt;T&gt; (FIFO) ensures tasks are processed in the order they were submitted — exactly what you need for fair task scheduling.')">Check Answer</button>
+            <div class="exercise-output" id="outB1"></div>
+          </div>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-num">Exercise B.2 — Word Frequency Counter</div>
+          <p>
+            Write a program that counts how many times each word appears in a sentence.
+            Use a <code>Dictionary&lt;string, int&gt;</code>. For the sentence
+            <code>"the cat sat on the mat and the cat"</code>, the output should show:
+            <code>the: 3, cat: 2, sat: 1, on: 1, mat: 1, and: 1</code>.
+          </p>
+          <p>
+            Hint: split the sentence with <code>sentence.Split(' ')</code>, then loop through
+            the words and either add them to the dictionary or increment their count.
+          </p>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-num">Exercise B.3 — The Undo Stack</div>
+          <p>
+            Build a simple text editor simulation using a <code>Stack&lt;string&gt;</code>:
+          </p>
+          <ol>
+            <li>Start with an empty document (empty string).</li>
+            <li>Each "type" operation pushes the new document state onto the stack.</li>
+            <li>Each "undo" operation pops the last state off the stack.</li>
+            <li>Simulate: Type "Hello", Type "Hello World", Undo, Undo — and print the document state after each step.</li>
+          </ol>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-num">Exercise B.4 — Deduplication with HashSet</div>
+          <p>
+            You have a list of email addresses with duplicates. Use a <code>HashSet&lt;string&gt;</code>
+            to remove all duplicates and then print the unique emails. Start with this list:
+          </p>
+          <pre><span class="kw">var</span> emails = <span class="kw">new</span> <span class="type">List</span>&lt;<span class="kw">string</span>&gt;
+{
+    <span class="str">"alice@example.com"</span>, <span class="str">"bob@example.com"</span>, <span class="str">"alice@example.com"</span>,
+    <span class="str">"carol@example.com"</span>, <span class="str">"bob@example.com"</span>, <span class="str">"david@example.com"</span>
+};</pre>
+          <p>
+            How many unique emails are there? Use <code>new HashSet&lt;string&gt;(emails)</code>
+            to construct the set from the list in one line.
+          </p>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-num">Exercise B.5 — Structure Performance Thought Experiment</div>
+          <p>
+            You are building a system that checks whether a user ID is on a blocklist.
+            The blocklist has 1,000,000 entries. You need to check membership thousands of
+            times per second. Which structure should you use — <code>List&lt;int&gt;</code>
+            or <code>HashSet&lt;int&gt;</code>? Explain why, referencing the performance
+            characteristics of each.
+          </p>
+        </div>
+      </div>
+
+      <div class="chapter-nav">
+        <a href="chapter-1b.html">
+          <span class="nav-label">← Previous</span>
+          <span class="nav-title">Chapter B: Data Structures</span>
+        </a>
+        <a href="../part-1/chapter-1.html" class="next">
+          <span class="nav-label">Next →</span>
+          <span class="nav-title">Chapter 1: What is C#?</span>
+        </a>
+      </div>
+
+    </main>
+  </div>
+</div>
+<button class="menu-btn" aria-label="Open menu">☰</button>
+<script src="../../assets/auth.js"></script>
+<script src="../../assets/nav.js"></script>
+</body>
+</html>
